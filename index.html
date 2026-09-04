@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ParaView Catalyst — in situ analysis for HPC simulations</title>
+<meta name="description" content="Analyse simulation data where it is computed. Three function calls, an ABI-stable C API, and ParaView never enters your build. 27 adopting codes, every claim linked to its evidence.">
+<meta property="og:title" content="ParaView Catalyst — analyse the data where it is computed">
+<meta property="og:description" content="Compute bandwidth outgrew storage by orders of magnitude. Catalyst decides which results land on disk — then you post-process the results you chose.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#14121f;
+  --slab:#1e1b2e;
+  --rule:#332e4a;
+  --text:#e8e6f0;
+  --muted:#9a94b3;
+  --produced:#f0c05a;
+  --written:#cb4f7d;
+  --violet:#5b53a8;
+  --sans:"IBM Plex Sans",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --gut:clamp(1.25rem,4vw,4.5rem);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--void);color:var(--text);
+  font:400 17px/1.65 var(--sans);
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 var(--gut)}
+
+/* ---------- nav ---------- */
+.nav{
+  position:sticky;top:0;z-index:50;
+  background:color-mix(in srgb,var(--void) 88%,transparent);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--rule);
+}
+.nav .wrap{display:flex;align-items:baseline;gap:2rem;height:60px}
+.brand{font-weight:600;letter-spacing:-.02em;margin-right:auto}
+.brand span{color:var(--muted);font-weight:300}
+.nav a:not(.brand){
+  color:var(--muted);text-decoration:none;font-size:.9rem;
+}
+.nav a:not(.brand):hover{color:var(--text)}
+
+/* ---------- hero ---------- */
+.hero{padding:clamp(3.5rem,9vw,7rem) 0 clamp(2.5rem,6vw,4rem)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(2rem,5vw,4.5rem);align-items:center}
+h1{
+  font-weight:300;font-size:clamp(2.1rem,4.6vw,3.5rem);
+  line-height:1.08;letter-spacing:-.035em;margin:0 0 1.4rem;
+  max-width:20ch;
+}
+.lede{color:var(--muted);font-size:1.06rem;max-width:44ch;margin:0 0 2rem}
+.btns{display:flex;flex-wrap:wrap;gap:.7rem}
+.btn{
+  display:inline-block;padding:.7rem 1.15rem;border-radius:2px;
+  text-decoration:none;font-size:.95rem;border:1px solid var(--rule);
+  transition:border-color .15s,background .15s;
+}
+.btn:hover{border-color:var(--muted)}
+.btn.solid{background:var(--produced);color:#1a1508;border-color:var(--produced);font-weight:600}
+.btn.solid:hover{background:#f6cd75;border-color:#f6cd75}
+.figure{border:1px solid var(--rule);background:#0f0d18;position:relative}
+.figure svg{display:block;width:100%;height:auto}
+.figure figcaption{
+  border-top:1px solid var(--rule);padding:.6rem .85rem;
+  font:400 .78rem/1.4 var(--mono);color:var(--muted);
+}
+
+/* ---------- counter: the one loud moment ---------- */
+.counter{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);background:var(--slab)}
+.counter .wrap{padding:clamp(2.25rem,5vw,3.25rem) var(--gut)}
+.counter h2{
+  font-weight:300;font-size:clamp(1.4rem,2.6vw,1.9rem);letter-spacing:-.025em;
+  margin:0 0 .5rem;max-width:26ch;
+}
+.counter p.sub{color:var(--muted);margin:0 0 2rem;max-width:56ch;font-size:.98rem}
+.gauge{display:grid;gap:1.1rem;margin-bottom:1.6rem}
+.row{display:grid;grid-template-columns:8.5rem minmax(0,1fr);gap:1rem;align-items:center}
+.row .lbl{font:400 .9rem/1.3 var(--sans);color:var(--muted)}
+.track{position:relative;height:34px;background:#171426;border:1px solid var(--rule);overflow:hidden}
+.fill{position:absolute;inset:0 auto 0 0;width:0;transition:width .28s linear}
+.fill.p{background:linear-gradient(90deg,var(--violet),var(--produced))}
+.fill.w{background:linear-gradient(90deg,#3c2a3d,var(--written))}
+.val{
+  position:absolute;right:.7rem;top:50%;transform:translateY(-50%);
+  font:500 .95rem/1 var(--mono);color:var(--text);
+  text-shadow:0 1px 3px rgba(10,8,18,.9);
+}
+.modes{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.mode{
+  padding:.5rem .95rem;border:1px solid var(--rule);background:transparent;
+  color:var(--muted);font:400 .9rem var(--sans);cursor:pointer;border-radius:2px;
+}
+.mode[aria-pressed="true"]{border-color:var(--produced);color:var(--text);background:#241f1a}
+.mode:focus-visible,.btn:focus-visible,a:focus-visible{outline:2px solid var(--produced);outline-offset:2px}
+.readout{font:400 .82rem/1.5 var(--mono);color:var(--muted);margin:1.1rem 0 0}
+.readout b{color:var(--text);font-weight:500}
+
+/* ---------- KPI band: every number links to its source ---------- */
+.kpiband{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);background:#181524}
+.kpiband .wrap{padding:0 var(--gut)}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.kpi{
+  display:block;text-decoration:none;padding:1.5rem 1.4rem 1.35rem;
+  border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  transition:background .15s;
+}
+.kpi:nth-child(3n){border-right:0}
+.kpi:nth-last-child(-n+3){border-bottom:0}
+.kpi:hover{background:#1f1b30}
+.kpi b{
+  display:block;font:500 clamp(1.5rem,3vw,2.1rem)/1 var(--mono);
+  color:var(--produced);letter-spacing:-.03em;margin-bottom:.5rem;
+}
+.kpi .lb{display:block;font-size:.95rem;line-height:1.4;margin-bottom:.65rem;max-width:26ch}
+.kpi .src{
+  display:block;font:400 .74rem/1.4 var(--mono);color:var(--muted);
+  border-top:1px dotted var(--rule);padding-top:.5rem;
+}
+.kpi:hover .src{color:var(--produced)}
+@media (max-width:820px){
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .kpi:nth-child(3n){border-right:1px solid var(--rule)}
+  .kpi:nth-child(2n){border-right:0}
+  .kpi:nth-last-child(-n+3){border-bottom:1px solid var(--rule)}
+  .kpi:last-child{border-bottom:0}
+}
+
+/* ---------- workflows ---------- */
+.wide{padding:var(--pad) 0;border-top:1px solid var(--rule)}
+.wide .wrap{padding:0 var(--gut)}
+.wide .lead{max-width:64ch;margin-bottom:2.6rem}
+.wide .lead h2{margin:0 0 .9rem}
+.wide .lead p{margin:0 0 .8rem;color:var(--muted);line-height:1.65}
+.wide .lead p.quiet{font-size:.87rem}
+.wide .lead a{color:var(--produced);text-decoration:none;white-space:nowrap}
+.wide .lead a:hover{text-decoration:underline}
+.flows{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(19rem,1fr));
+  gap:2.2rem 3rem;align-items:start;
+}
+.flowgroup{break-inside:avoid}
+.flowgroup > h3{
+  margin:0 0 .1rem;font:600 .95rem/1.3 var(--sans);color:var(--text);
+}
+.flowgroup > .gd{margin:0 0 .55rem;color:var(--muted);font-size:.85rem}
+.flow{
+  display:block;padding:.6rem 0;border-top:1px solid var(--rule);
+}
+.flow .fn{
+  display:block;font:500 .87rem/1.35 var(--mono);color:var(--text);
+  text-decoration:none;margin-bottom:.2rem;
+}
+.flow a.fn{border-bottom:1px dotted var(--muted);width:fit-content}
+.flow a.fn:hover{color:var(--produced);border-bottom-color:var(--produced)}
+.flow .fn.todo{color:var(--muted)}
+.flow .fd{margin:0;color:var(--muted);font-size:.88rem;line-height:1.5}
+
+/* ---------- symptoms ---------- */
+.symp{display:grid;gap:0;border-top:1px solid var(--rule)}
+.symp li{
+  list-style:none;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.85fr);
+  gap:clamp(1rem,3vw,2.5rem);padding:1.2rem 0;border-bottom:1px solid var(--rule);
+}
+.symp .said{font-size:1.02rem;max-width:44ch;margin:0}
+.symp .cost{margin:0;color:var(--muted);font-size:.9rem;max-width:40ch}
+.symp .cost b{color:var(--produced);font-weight:500;font-family:var(--mono);font-size:.85rem}
+@media (max-width:820px){ .symp li{grid-template-columns:1fr;gap:.45rem} }
+
+/* ---------- publications ---------- */
+.pubgroups{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(24rem,1fr));
+  gap:1.8rem 3rem;align-items:start;
+}
+.pubs{display:grid;gap:0;border-top:1px solid var(--rule)}
+.pub{display:block;padding:.85rem 0;border-bottom:1px solid var(--rule);text-decoration:none}
+.pub .t{display:block;font-size:.97rem;line-height:1.4;margin-bottom:.2rem}
+.pub:hover .t{color:var(--produced)}
+.pub .m{display:block;font:400 .8rem/1.5 var(--mono);color:var(--muted)}
+.pubgroup{margin-bottom:1.6rem}
+.pubgroup > h3{
+  margin:0 0 .2rem;font:400 .95rem/1.3 var(--sans);color:var(--muted);
+}
+.pubgroup > p{margin:0 0 .3rem;color:var(--muted);font-size:.85rem;max-width:52ch}
+.cite{border:1px solid var(--rule);background:#0f0d18;padding:1.05rem 1.2rem;margin-top:.4rem}
+.cite h3{margin:0 0 .5rem;font:600 .95rem var(--sans)}
+.cite p{margin:0;color:var(--muted);font:400 .82rem/1.7 var(--mono)}
+
+/* ---------- claim / evidence rows ---------- */
+.row2{border-bottom:1px solid var(--rule)}
+.row2 .wrap{
+  display:grid;grid-template-columns:minmax(0,.62fr) minmax(0,1fr);
+  gap:clamp(1.5rem,4vw,3.5rem);
+  padding:clamp(2.5rem,5.5vw,4rem) var(--gut);
+}
+.claim h2{
+  font-weight:300;font-size:clamp(1.45rem,2.8vw,2.1rem);letter-spacing:-.03em;
+  line-height:1.14;margin:0 0 .9rem;
+}
+.claim p{color:var(--muted);margin:0 0 .8rem;font-size:1rem;max-width:38ch}
+.claim p:last-child{margin-bottom:0}
+.claim .quiet{font-size:.88rem}
+
+pre{
+  margin:0;padding:1.15rem 1.25rem;background:#0f0d18;border:1px solid var(--rule);
+  overflow-x:auto;font:400 .84rem/1.75 var(--mono);color:#cfc9e0;
+}
+pre .c{color:#6f688a}
+pre .fn{color:var(--produced)}
+pre .s{color:#8fb8a8}
+
+/* ---------- code wall ---------- */
+.domains{display:grid;gap:1.35rem}
+.dom h3{
+  margin:0 0 .5rem;font:400 .95rem/1.3 var(--sans);color:var(--muted);
+  border-bottom:1px solid var(--rule);padding-bottom:.4rem;
+}
+.names{display:flex;flex-wrap:wrap;gap:.4rem}
+.names a,.names span{
+  font:500 .87rem/1 var(--mono);text-decoration:none;
+  padding:.42rem .6rem;border:1px solid var(--rule);border-radius:2px;color:var(--text);
+}
+.names a:hover{border-color:var(--produced);color:var(--produced)}
+.names span{color:var(--muted);border-style:dashed}
+
+/* ---------- effort table ---------- */
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+th,td{text-align:left;padding:.62rem .7rem;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:.85rem}
+td.n{font:500 .9rem var(--mono);color:var(--produced);white-space:nowrap}
+caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted);font-size:.83rem}
+
+/* ---------- engagement ---------- */
+.offers{display:grid;gap:0;border:1px solid var(--rule)}
+.offer{padding:1.35rem 1.4rem;border-bottom:1px solid var(--rule)}
+.offer:last-child{border-bottom:0}
+.offer h3{margin:0 0 .35rem;font:600 1.02rem var(--sans)}
+.offer p{margin:0;color:var(--muted);font-size:.94rem;max-width:52ch}
+.offer .dur{font:400 .82rem var(--mono);color:var(--produced);display:block;margin-top:.5rem}
+
+/* ---------- foot ---------- */
+.foot{padding:3rem 0 4rem;color:var(--muted);font-size:.9rem}
+.foot .wrap{display:flex;flex-wrap:wrap;gap:1.5rem;justify-content:space-between}
+.foot a{color:var(--muted)}
+
+@media (max-width:820px){
+  .hero .wrap,.row2 .wrap{grid-template-columns:1fr}
+  .row{grid-template-columns:5.5rem minmax(0,1fr)}
+  h1{max-width:none}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .fill{transition:none}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">ParaView&nbsp;<span>Catalyst</span></a>
+    <a href="#why">The problem</a>
+    <a href="#running">Live run</a>
+    <a href="#architecture">Architecture</a>
+    <a href="#workflows">Workflows</a>
+    <a href="#adopters">Adopters</a>
+    <a href="#papers">Papers</a>
+    <a href="#docs">Docs</a>
+    <a href="#talk">Talk to us</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <h1>Your simulation now outruns your filesystem by orders of magnitude.</h1>
+      <p class="lede">Compute scaled. Storage bandwidth didn't. So the disk decides what
+        your science looks like — you keep the timesteps you can afford to write, not the
+        ones that matter, and that choice gets made before anyone knows which is which.
+        Catalyst analyses the data in situ — where it is computed — so you stop choosing.</p>
+      <div class="btns">
+        <a class="btn solid" href="#running">See it running</a>
+        <a class="btn" href="#architecture">Integration architecture</a>
+      </div>
+      <p class="lede" style="margin:1.6rem 0 0;font-size:.95rem">
+        On Titan, compute bandwidth was <b style="color:var(--produced);font-weight:500;font-family:var(--mono)">125 PB/s</b>
+        against <b style="color:var(--written);font-weight:500;font-family:var(--mono)">1.4 TB/s</b> to storage —
+        a gap near 89,000&#8239;:&#8239;1, and widening.
+        <a href="https://www.kennethmoreland.com/documents/InSituTensions.pdf"
+           style="color:var(--muted);font:400 .8rem var(--mono);display:block;margin-top:.4rem">Moreland, IEEE CG&amp;A 36(2), 2016 &mdash; Fig. 1</a>
+      </p>
+    </div>
+
+    <!-- PLACEHOLDER: replace with real products of a Catalyst-instrumented run.
+         Not necessarily one render: the strongest version is probably a small composite
+         showing the range of products — a rendered frame, a KPI trace over timesteps,
+         and a model-prediction-vs-ground-truth panel — because the page's argument is
+         that one adaptor yields many product types (images, quantities, extracts,
+         databases, trained models, steering decisions). A single stock illustration
+         undercuts that. This SVG is scaffolding only.
+         REUSABLE ASSETS: since this page replaces kitware.com/in-situ, its existing
+         renders are available and already published:
+           /main/wp-content/uploads/2026/06/ai-ml-1.jpg        (aircraft + flow)
+           /main/wp-content/uploads/2026/06/aerodynamics.jpg   (tail vortices)
+           /main/wp-content/uploads/2026/06/exascale.jpg       (coastal urban flow)
+           /main/wp-content/uploads/2026/06/multiphysics.jpg   (car external aero)
+           /main/wp-content/uploads/2026/06/digital-twinds.jpg (engine - fix filename)
+           /main/wp-content/uploads/2026/06/experiments.jpg    (tornado/buildings)
+           /main/wp-content/uploads/2026/04/image-5-1.png      (helicopter rotor)
+         Verify each is genuinely Catalyst-produced before captioning it as such. -->
+    <figure class="figure">
+      <svg viewBox="0 0 640 420" role="img" aria-label="Placeholder for a Catalyst-rendered simulation frame">
+        <defs>
+          <linearGradient id="pl" x1="0" y1="1" x2="1" y2="0">
+            <stop offset="0" stop-color="#2b1f52"/><stop offset=".45" stop-color="#cb4f7d"/>
+            <stop offset="1" stop-color="#f0c05a"/>
+          </linearGradient>
+        </defs>
+        <rect width="640" height="420" fill="#0f0d18"/>
+        <g fill="none" stroke="url(#pl)" stroke-width="1.15" opacity=".85">
+          <path d="M-10 300 C 150 300 190 150 330 150 C 470 150 520 232 660 232"/>
+          <path d="M-10 316 C 150 316 196 176 330 172 C 468 168 520 246 660 246"/>
+          <path d="M-10 332 C 150 332 202 202 330 194 C 466 186 520 260 660 260"/>
+          <path d="M-10 348 C 150 348 208 228 330 216 C 464 204 520 274 660 274"/>
+          <path d="M-10 364 C 150 364 214 254 330 238 C 462 222 520 288 660 288"/>
+          <path d="M-10 284 C 150 284 184 124 330 128 C 472 132 520 218 660 218"/>
+          <path d="M-10 268 C 150 268 178 98 330 106 C 474 114 520 204 660 204"/>
+        </g>
+        <ellipse cx="330" cy="172" rx="46" ry="72" fill="#14121f" stroke="#4a4270"/>
+      </svg>
+      <figcaption>placeholder — swap for a real rendered frame</figcaption>
+    </figure>
+  </div>
+</header>
+
+<section class="kpiband">
+  <div class="wrap">
+    <div class="kpis">
+      <a class="kpi" href="https://doi.org/10.1177/10943420241286521">
+        <b>4,416</b>
+        <span class="lb">GPUs across 552 Frontier nodes, rendering in situ</span>
+        <span class="src">ECP ALPINE, IJHPCA 2024</span></a>
+      <a class="kpi" href="https://doi.org/10.1177/10943420241286521">
+        <b>1.16 TB</b>
+        <span class="lb">one WarpX timestep — a 5.75 billion element AMR mesh, analysed in memory</span>
+        <span class="src">ECP ALPINE, IJHPCA 2024</span></a>
+      <a class="kpi" href="#adopters">
+        <b>27</b>
+        <span class="lb">simulation codes with a Catalyst adaptor, across seven domains</span>
+        <span class="src">every one linked to its evidence</span></a>
+      <a class="kpi" href="https://doi.org/10.1007/978-3-030-90539-2_33">
+        <b>3</b>
+        <span class="lb">function calls is the entire integration surface</span>
+        <span class="src">Catalyst Revised, ISC HPC 2021</span></a>
+      <a class="kpi" href="https://doi.org/10.1007/978-3-030-90539-2_33">
+        <b>325&thinsp;→&thinsp;155</b>
+        <span class="lb">lines to instrument LULESH, moving to the 2.0 API</span>
+        <span class="src">Catalyst Revised, ISC HPC 2021</span></a>
+      <a class="kpi" href="https://arxiv.org/abs/2608.30696">
+        <b>0.41&thinsp;→&thinsp;0.91</b>
+        <span class="lb">interpretation accuracy when an ontology grounds the AI planner</span>
+        <span class="src">arXiv:2608.30696, 2026</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="counter" id="running">
+  <div class="wrap">
+    <h2>The Data Problem.</h2>
+    <p class="sub">A WarpX timestep on Frontier produces a 5.75&nbsp;billion element mesh —
+      1.16&nbsp;TB. Post-hoc, all of it has to land on disk before you can look at any of
+      it, and then be read back again to do the analysis. In situ, only the results you
+      asked for are ever written.</p>
+
+    <div class="gauge">
+      <div class="row">
+        <div class="lbl">Solver produced</div>
+        <div class="track"><div class="fill p" id="fp"></div><div class="val" id="vp">0 GB</div></div>
+      </div>
+      <div class="row">
+        <div class="lbl">Written to disk</div>
+        <div class="track"><div class="fill w" id="fw"></div><div class="val" id="vw">0 GB</div></div>
+      </div>
+    </div>
+
+    <div class="modes" role="group" aria-label="Output mode">
+      <button class="mode" id="mInsitu" aria-pressed="true">In situ</button>
+      <button class="mode" id="mPost" aria-pressed="false">Post-hoc</button>
+      <button class="mode" id="mReset">Restart run</button>
+    </div>
+
+    <p class="readout">timestep <b id="ts">0</b> &nbsp;·&nbsp; reduction <b id="rx">—</b>
+      &nbsp;·&nbsp; pipeline <b id="pl">extract isosurface + integrate field energy</b></p>
+    <p class="sub" style="margin:1.4rem 0 0">This is not a choice between in situ visualization and
+      post-processing. You may still write files, still load them in ParaView, still explore
+      them afterwards. In situ is allows you to decide <em>what</em> gets extracted and <em>which</em> files — so what lands on disk is your say.</p>
+  </div>
+</section>
+
+<section class="row2" id="why">
+  <div class="wrap">
+    <div class="claim">
+      <h2>You probably arrived here with one of these.</h2>
+      <p>Nobody goes looking for in situ analysis. They go looking because the
+        write-then-look workflow has started costing them something they can name.</p>
+      <p class="quiet">They are all the same problem wearing different clothes: the
+        decision about what to keep is made before anyone knows what matters.</p>
+    </div>
+    <ul class="symp">
+      <li>
+        <p class="said">Every run, someone decides which handful of timesteps we can
+          afford to keep. We are guessing, and sometimes we guess wrong and rerun.</p>
+        <p class="cost"><b>schedule</b> — a rerun is not a storage problem. It is weeks
+          and a second allocation.</p>
+      </li>
+      <li>
+        <p class="said">Our engineering results come from sparse snapshots. Forces and
+          flow structures between them are simply not measured.</p>
+        <p class="cost"><b>fidelity</b> — you are reporting on a sampled version of a
+          simulation you paid to run in full.</p>
+      </li>
+      <li>
+        <p class="said">A three-day job diverged in hour four and nobody knew until it
+          finished.</p>
+        <p class="cost"><b>machine time</b> — nothing was watching, because watching
+          meant waiting for the write.</p>
+      </li>
+      <li>
+        <p class="said">An optimisation campaign is hundreds of runs. Storing full-field
+          output for every ensemble member is not something we can do.</p>
+        <p class="cost"><b>design cycle</b> — the size of the space you can explore is
+          set by your disk, not your solver.</p>
+      </li>
+      <li>
+        <p class="said">We want to train a surrogate on the high-fidelity runs. The data
+          it needs was thrown away at write time.</p>
+        <p class="cost"><b>capability</b> — you cannot train on timesteps that were
+          never written.</p>
+      </li>
+      <li>
+        <p class="said">Two solvers exchange fields every timestep, through the disk,
+          across coupling code we wrote and now maintain ourselves.</p>
+        <p class="cost"><b>headcount</b> — bespoke plumbing that no one else can
+          support and no one wants to own.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="row2" id="architecture">
+  <div class="wrap">
+    <div class="claim">
+      <h2>You link a stub. ParaView loads at runtime.</h2>
+      <p>The Catalyst API is an ABI-stable C interface. Your solver links
+        <code>libcatalyst</code>, a small BSD-licensed library with one header. The
+        ParaView implementation is discovered at run time.</p>
+      <p>ParaView is not in your build system, not in your dependency tree, and not in
+        your support matrix. Users who don't want visualisation don't pay for it.</p>
+      <p>A C interface because everything binds to C. Adaptors exist today in
+        <b>C</b>, <b>C++</b>, <b>Fortran</b> and <b>Python</b> — LFRic's is C++ against a
+        Fortran-lineage model, PLUTO's is C, the LBM proxies are Python. Your solver's
+        language is not the question; whether it can describe its mesh is.</p>
+      <p class="quiet">Swap implementations by pointing an environment variable at a
+        different <code>libcatalyst.so.2</code>. No recompile.</p>
+    </div>
+    <div>
+<pre><span class="c">/* the entire integration surface */</span>
+#include &lt;catalyst.h&gt;
+
+<span class="c">// once, at startup</span>
+<span class="fn">catalyst_initialize</span>(params);
+
+<span class="c">// every timestep — describe the mesh you already have</span>
+conduit_node_set_path_external_float64_ptr(
+    mesh, <span class="s">"fields/pressure/values"</span>, p, ncells);
+<span class="fn">catalyst_execute</span>(params);
+
+<span class="c">// once, at shutdown</span>
+<span class="fn">catalyst_finalize</span>(params);</pre>
+      <p class="claim quiet" style="margin-top:.9rem">Fields are passed by pointer.
+        Catalyst reads your arrays in place — no copy, no reformat, GPU-resident data
+        stays on the GPU.</p>
+    </div>
+  </div>
+</section>
+
+<section class="row2" id="product">
+  <div class="wrap">
+    <div class="claim">
+      <h2>If you sell simulation software, the argument is different.</h2>
+      <p>Your problem isn't the filesystem. It's that visualisation is a permanent line
+        item on your roadmap and it never stops asking for headcount.</p>
+      <p class="quiet">Catalyst is BSD, so it ships inside your product with no royalty
+        and no copyleft. See the licence table below.</p>
+    </div>
+    <div class="offers">
+      <div class="offer">
+        <h3>You stop taking visualisation feature requests</h3>
+        <p>Ship one adaptor and the pipeline becomes a Python script. "Can you add this
+          plot, this export, this derived metric" turns into something your customer
+          writes for themselves, on their own schedule, without a release from you.</p>
+      </div>
+      <div class="offer">
+        <h3>You stop maintaining a rendering engine</h3>
+        <p>Parallel rendering, unstructured meshes, AMR, GPU pipelines, twenty file
+          formats. That is a quarter century of work in VTK and ParaView that you can
+          link instead of rebuild — and keep getting for free as it improves.</p>
+      </div>
+      <div class="offer">
+        <h3>Your customers already know the interface</h3>
+        <p>Engineers author pipelines in the ParaView GUI they have used for years and
+          hand the script to your solver. There is no new tool for them to learn and no
+          training material for you to write.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="wide" id="workflows">
+  <div class="wrap">
+    <div class="lead">
+      <h2>Instrument once. All of this follows.</h2>
+      <p>These are not separate products or separate integrations. Each one is a Python
+        pipeline against the same three calls, chosen at run time — and the products span
+        the same range: rendered frames, integrated engineering quantities, geometric
+        extracts, explorable databases, training data, trained models, corrections steered
+        back into the solver, and artifacts small enough to email a collaborator.</p>
+      <p>That is the part worth sitting with if you ship simulation software. You
+        instrument once; your users reach all of it without another release from you.</p>
+      <p class="quiet">Linked names go to published work using that pattern. Grey names
+        are established practice we have not yet pinned to a public reference.
+        <a href="#talk">Talk about your workflow &rarr;</a></p>
+    </div>
+    <div class="flows">
+
+      <div class="flowgroup">
+        <h3>Where the analysis runs</h3>
+        <p class="gd">The same instrumentation supports all three. Switching is a
+          deployment decision, not a code change.</p>
+        <div class="flow"><span class="fn">In line</span>
+          <p class="fd">Analysis executes on the solver's own ranks, sharing its CPUs and
+            GPUs. Nothing moves.</p></div>
+        <div class="flow"><a class="fn" href="https://doi.org/10.1007/978-3-031-40843-4_20">In transit</a>
+          <p class="fd">Data is staged to dedicated analysis nodes, so heavy rendering
+            never blocks the solver and can use hardware the compute nodes lack.</p></div>
+        <div class="flow"><a class="fn" href="https://arxiv.org/abs/2406.18112">Hybrid</a>
+          <p class="fd">Reduce in line, then move only the reduction and render in
+            transit. Cuts transfer time by two orders of magnitude on tested pipelines.</p></div>
+      </div>
+
+      <div class="flowgroup">
+        <h3>Analysis and extraction</h3>
+        <p class="gd">Turning a running simulation into results rather than into files.</p>
+        <div class="flow"><span class="fn">Quantitative KPIs</span>
+          <p class="fd">Lift and drag integration, boundary-layer metrics, field energy —
+            engineering numbers at every timestep, not every hundredth.</p></div>
+        <div class="flow"><span class="fn">Feature extraction</span>
+          <p class="fd">Isosurfaces, vortex cores, streamlines, thresholds. Keep the
+            structure, discard the volume it came from.</p></div>
+        <div class="flow"><a class="fn" href="https://doi.org/10.1007/978-3-031-40843-4_19">Region of interest</a>
+          <p class="fd">Detect what matters while it happens and save only that. Used to
+            track a cyclone through a running forecast.</p></div>
+        <div class="flow"><a class="fn" href="https://www.kennethmoreland.com/documents/InSituTensions.pdf">Image databases</a>
+          <p class="fd">Render many viewpoints and parameters in situ, then explore the
+            resulting database interactively afterwards — the Cinema approach, for when
+            you cannot say in advance what will matter.</p></div>
+        <div class="flow"><span class="fn">Shareable results</span>
+          <p class="fd">Images, extracts and KPI tables produced automatically during the
+            run — circulated to the team, or dropped into a report, before the job has
+            finished.</p></div>
+        <div class="flow"><a class="fn" href="https://arxiv.org/abs/2110.15427">Reduced archival</a>
+          <p class="fd">Write a compact derived representation instead of full fields, so
+            the run is still analysable next year.</p></div>
+      </div>
+
+      <div class="flowgroup">
+        <h3>AI in the loop</h3>
+        <p class="gd">Models that learn from, explain, and act on the running solver.</p>
+        <div class="flow"><a class="fn" href="https://github.com/aymanzyy/catalystml">Training</a>
+          <p class="fd">Surrogates, reduced-order models and data-driven closures trained
+            on runtime data, with no disk round trip.</p></div>
+        <div class="flow"><a class="fn" href="https://github.com/aymanzyy/catalystml">Inference and passback</a>
+          <p class="fd">Query a trained model mid-run and return a correction to the
+            solver — a closure coefficient, a compressed field.</p></div>
+        <div class="flow"><a class="fn" href="https://hal.science/hal-04692246/file/Ribes-Mazen-Meyer-ISAV-2022_in_situ_metamodel_training-v2.pdf">Explainable AI</a>
+          <p class="fd">Watch a surrogate converge in space against ground truth, not
+            just as a loss curve. Two runs with identical loss can be visibly different.</p></div>
+        <div class="flow"><a class="fn" href="https://arxiv.org/abs/2608.30696">LLM-guided analysis</a>
+          <p class="fd">Ask a question in plain language; deterministic filters compute
+            the answer; the model explains it. It never writes the analysis code.</p></div>
+      </div>
+
+      <div class="flowgroup">
+        <h3>Interaction and control</h3>
+        <p class="gd">Putting a person back in a loop that post-hoc workflows lock them
+          out of.</p>
+        <div class="flow"><span class="fn">Live monitoring</span>
+          <p class="fd">See divergence in hour four of a three-day job instead of on
+            Friday. Kill it, or fix it.</p></div>
+        <div class="flow"><a class="fn" href="https://hal.science/hal-04692246/file/Ribes-Mazen-Meyer-ISAV-2022_in_situ_metamodel_training-v2.pdf">Computational steering</a>
+          <p class="fd">Change a parameter or boundary condition mid-run and watch the
+            field respond. Catalyst carries results back to the solver.</p></div>
+        <div class="flow"><a class="fn" href="https://github.com/aymanzyy/catalystml">Notebooks and dashboards</a>
+          <p class="fd">Jupyter and trame front ends over a live run, so the interaction
+            is a browser tab rather than a queue submission.</p></div>
+        <div class="flow"><a class="fn" href="https://doi.org/10.1007/978-3-031-73716-9_33">Immersive and VR</a>
+          <p class="fd">Hybrid visualization through a game engine, for walkthroughs of a
+            running domain.</p></div>
+      </div>
+
+      <div class="flowgroup">
+        <h3>Coupled and multi-run</h3>
+        <p class="gd">Where the simulation is not one solver producing one answer.</p>
+        <div class="flow"><span class="fn">Co-simulation</span>
+          <p class="fd">Two or more solvers exchange fields every timestep through a
+            common in-memory mesh description, instead of through disk and bespoke glue.
+            What makes it work in practice: consistent schema, careful partition
+            handling, and complete metadata across the coupled codes.</p></div>
+        <div class="flow"><span class="fn todo">Digital twins</span>
+          <p class="fd">Assimilate live telemetry, steer the model to track the asset, and
+            stay faster than real time using surrogates.</p></div>
+        <div class="flow"><span class="fn todo">Ensembles and DoE</span>
+          <p class="fd">Hundreds of runs where full-field output per member is impossible.
+            Extract quantities of interest at full temporal fidelity instead.</p></div>
+        <div class="flow"><span class="fn todo">Adaptive sampling</span>
+          <p class="fd">Feed those summaries to an optimiser that decides where in the
+            design space to run next.</p></div>
+      </div>
+
+      <div class="flowgroup">
+        <h3>Scale and mission</h3>
+        <p class="gd">Where post-hoc stopped being an option rather than a preference.</p>
+        <div class="flow"><a class="fn" href="https://doi.org/10.1177/10943420241286521">Exascale</a>
+          <p class="fd">Runs whose per-timestep output exceeds what the filesystem can
+            absorb. Analysis happens where the data is because it cannot go anywhere.</p></div>
+        <div class="flow"><span class="fn">Multiphysics at scale</span>
+          <p class="fd">Coupled physics on exascale machines, where both the coupling and
+            the analysis have to avoid the filesystem.</p></div>
+        <div class="flow"><span class="fn todo">Urgent computing</span>
+          <p class="fd">Wildfire, cyclone, tsunami, contaminant release — decisions made
+            while the simulation is still running, because afterwards is too late.</p></div>
+        <div class="flow"><a class="fn" href="https://doi.org/10.1007/978-3-030-48340-1_31">Performance analysis</a>
+          <p class="fd">Route profiler data through the same path and see load imbalance
+            painted on the mesh that caused it.</p></div>
+        <div class="flow"><a class="fn" href="https://doi.org/10.1007/978-3-032-07612-0_6">Composed workflows</a>
+          <p class="fd">Chain and orchestrate several of the above as modular stages in
+            one run.</p></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="row2" id="ai">
+  <div class="wrap">
+    <div class="claim">
+      <h2>The newest of those, in detail.</h2>
+      <p>Take the AI group in the list above and look closely at LLM-guided analysis, because it is the one people assume cannot be made trustworthy. An engineer types what they want to know. A language model interprets the
+        intent and plans; deterministic ParaView filters do the computing; the model
+        explains the result it is handed. It never writes the analysis code.</p>
+      <p>A domain ontology constrains planning to valid analysis chains, so whole classes
+        of failure disappear by construction — no hallucinated API calls, no silently
+        missing pipeline stage, no script that runs cleanly and returns the wrong number.</p>
+      <p>Point that at a Catalyst-instrumented run and the loop closes: extract, steer and
+        monitor a live simulation from a browser, with a scalable pvserver backend
+        carrying it to production-scale data.</p>
+      <p class="quiet">Kitware is extending this with NASA and the University of Colorado
+        Boulder, so validated solvers gain modern AI workflows without being rewritten.</p>
+      <div class="btns" style="margin-top:1.2rem">
+        <a class="btn" href="#talk">Talk about AI in the loop</a>
+      </div>
+    </div>
+    <div>
+      <pre><span class="c">// intent, execution and explanation stay separate</span>
+engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(constrained by ontology)</span>
+          <span class="fn">&rarr;</span>  MCP
+          <span class="fn">&rarr;</span>  ParaView filters <span class="c">(deterministic)</span>
+          <span class="fn">&rarr;</span>  Catalyst         <span class="c">(the live solver)</span>
+          <span class="fn">&rarr;</span>  LLM explains what came back</pre>
+      <table style="margin-top:1.3rem">
+        <caption>The ablation locates the ontology's effect precisely: it does not change
+          which tools get selected — that was already reliable — it corrects how results
+          are read.</caption>
+        <thead><tr><th>Measure</th><th>Without ontology</th><th>With ontology</th></tr></thead>
+        <tbody>
+          <tr><td>Interpretation accuracy</td><td class="n">0.41</td><td class="n">0.91</td></tr>
+        </tbody>
+      </table>
+      <table style="margin-top:1.6rem">
+        <caption>NEEDS CITATION before publishing — link the benchmark, workload and
+          hardware. Currently the least supported numbers on the page.</caption>
+        <thead><tr><th>Training extract path</th><th>Representative workload</th></tr></thead>
+        <tbody>
+          <tr><td>Synchronous</td><td class="n">9.14 s</td></tr>
+          <tr><td>Asynchronous</td><td class="n">0.65 s</td></tr>
+          <tr><td>Sustained throughput on GPU</td><td class="n">80,000+ steps/s</td></tr>
+        </tbody>
+      </table>
+      <p class="claim quiet" style="margin-top:1.1rem">Surrogates and reduced-order models
+        train on the same runtime stream, with no disk round trip and GPU-resident data
+        staying on the GPU. That gap is training that keeps pace with the solver versus
+        training that throttles it.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wide" id="adopters">
+  <div class="wrap">
+    <div class="lead">
+      <h2>Twenty-seven codes already ship a Catalyst adaptor.</h2>
+      <p>Across CFD, combustion, shock physics, plasma, climate, biomedical and
+        astrophysics — in national labs, national weather services, universities and
+        commercial products.</p>
+      <p>And on the machines that matter: the runs behind this page's numbers executed
+        on <a href="https://doi.org/10.1177/10943420241286521" style="color:var(--text)">Frontier</a>,
+        <a href="https://www.kennethmoreland.com/documents/InSituTensions.pdf" style="color:var(--text)">Titan</a>,
+        <a href="https://doi.org/10.1145/2597652.2597668" style="color:var(--text)">Cielo</a> and
+        <a href="https://doi.org/10.1007/s11227-021-03990-3" style="color:var(--text)">Beskow</a> —
+        workstation to exascale on the same three calls.</p>
+      <p class="quiet">Every linked name goes straight to its evidence — a paper, a lab
+        report, or the adaptor source. Dashed names are confirmed integrations whose
+        public reference we are still pinning down.</p>
+    </div>
+    <div class="domains">
+      <div class="dom">
+        <h3>Computational fluid dynamics</h3>
+        <div class="names">
+          <a href="https://www.kennethmoreland.com/documents/InSituTensions.pdf">PHASTA</a>
+          <a href="https://doi.org/10.1007/s11227-021-03990-3">Nek5000</a>
+          <a href="https://www.openfoam.com/news/main-news/openfoam-v1806/post-processing">OpenFOAM</a>
+          <a href="https://doi.org/10.1007/978-3-662-44900-4_2">Code_Saturne</a>
+          <a href="https://www.osti.gov/biblio/1481596">SPARC</a>
+          <a href="https://www.osti.gov/servlets/purl/1643316">Nalu</a>
+          <span>Alya</span>
+          <a href="https://www.kennethmoreland.com/documents/InSituTensions.pdf">Hydra-TH</a>
+        </div>
+      </div>
+      <div class="dom">
+        <h3>Combustion and engines</h3>
+        <div class="names">
+          <a href="https://kitware.github.io/paraview-catalyst/usecase/combustion.html">CONVERGE</a>
+          <a href="https://github.com/AMReX-Combustion/PeleLM/blob/development/Docs/source/manual/Visualization.rst">PeleLM</a>
+        </div>
+      </div>
+      <div class="dom">
+        <h3>Shock and multi-material physics</h3>
+        <div class="names">
+          <a href="https://www.sandia.gov/cth/">CTH</a>
+          <a href="https://www.paraview.org/paraview-docs/latest/cxx/files.html">Pagosa</a>
+          <span>xRAGE</span>
+          <a href="https://doi.org/10.1007/978-3-030-90539-2_33">LULESH</a>
+        </div>
+      </div>
+      <div class="dom">
+        <h3>Plasma and accelerator physics</h3>
+        <div class="names">
+          <a href="https://doi.org/10.1177/10943420241286521">WarpX</a>
+          <a href="https://www.paraview.org/paraview-docs/latest/cxx/files.html">NPIC</a>
+          <span>UH3D</span><span>VPIC</span>
+          <a href="https://doi.org/10.1177/10943420241286521">MFIX-Exa</a>
+        </div>
+      </div>
+      <div class="dom">
+        <h3>Climate, ocean and weather</h3>
+        <div class="names">
+          <span>MPAS-Ocean</span>
+          <a href="https://www.cisl.ucar.edu/siparcs-2019-omeara">MPAS-Atmosphere</a>
+          <a href="https://www.paraview.org/paraview-docs/latest/cxx/files.html">CAM</a>
+          <a href="https://github.com/niwa/lfric_catalyst_adaptor">LFRic</a>
+          <span>ICON</span>
+        </div>
+      </div>
+      <div class="dom">
+        <h3>Biomedical and hemodynamics</h3>
+        <div class="names">
+          <a href="https://github.com/aymanzyy/catalystml">HARVEY proxy</a>
+        </div>
+      </div>
+      <div class="dom">
+        <h3>Astrophysics</h3>
+        <div class="names">
+          <a href="https://github.com/RitaliG/rps_cgm_hydro">PLUTO</a>
+          <a href="https://arxiv.org/abs/2110.15427">Cosmic string networks</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="wide" id="papers">
+  <div class="wrap">
+    <div class="lead">
+      <h2>And a decade of peer-reviewed work behind it.</h2>
+      <p>The papers below are the ones to read before committing engineering time. Every
+        entry links to its DOI or an open-access copy.</p>
+      <div class="cite">
+        <h3>Citing Catalyst</h3>
+        <p>Cite the AIAA 2026 paper for current capability, the 2021 ISC paper for the
+          API itself, and the 2015 ISAV paper for the original design. If you publish
+          work that uses Catalyst, tell us — we keep this list.</p>
+      </div>
+    </div>
+    <div>
+      <div class="pubgroups">
+      <div class="pubgroup">
+        <h3>Design of the API itself</h3>
+        <div class="pubs">
+          <a class="pub" href="https://doi.org/10.2514/6.2026-0766">
+            <span class="t">Catalyst: Expanding In Situ Analysis and Visualization Workflows for Exascale Computing</span>
+            <span class="m">Wetterer-Nelson, Tsolakis, Lee, Tsalikis, Wittenburg, Yenpure, Ross, Lipsa, Panchumarti, Geveci · AIAA SCITECH 2026 · where Catalyst is now</span></a>
+          <a class="pub" href="https://doi.org/10.1007/978-3-030-90539-2_33">
+            <span class="t">Catalyst Revised: Rethinking the ParaView in Situ Analysis and Visualization API</span>
+            <span class="m">Ayachit et al. · ISC High Performance 2021 · LNCS 12761 · the 2.0 API</span></a>
+          <a class="pub" href="https://doi.org/10.1145/2828612.2828624">
+            <span class="t">ParaView Catalyst: Enabling In Situ Data Analysis and Visualization</span>
+            <span class="m">Ayachit, Bauer, Geveci, O'Leary, Moreland, Fabian, Mauldin · ISAV 2015 · the original design</span></a>
+        </div>
+      </div>
+
+      <div class="pubgroup">
+        <h3>Driving a live run with AI</h3>
+        <p>The architecture behind the section above, and independent work on the same
+          idea.</p>
+        <div class="pubs">
+          <a class="pub" href="https://arxiv.org/abs/2608.30696">
+            <span class="t">Domain-Grounded Tool Orchestration for LLM-Guided Scientific Analysis</span>
+            <span class="m">Lee, Jourdain, Quammen, O'Leary, Geveci · arXiv:2608.30696 · 2026 · ontology-grounded MCP over ParaView and Catalyst; interpretation accuracy 0.41 → 0.91</span></a>
+          <a class="pub" href="https://hal.science/hal-04692246/file/Ribes-Mazen-Meyer-ISAV-2022_in_situ_metamodel_training-v2.pdf">
+            <span class="t">In situ monitoring and steering deep learning training from numerical simulations in ParaView-Catalyst</span>
+            <span class="m">Ribés, Mazen, Meyer · EDF R&amp;D · ISAV 2022 · built on Catalyst 2; watching a surrogate converge in space, not just as a loss curve</span></a>
+        </div>
+      </div>
+
+      <div class="pubgroup">
+        <h3>Where the field stands</h3>
+        <p>Start here if you are deciding between in situ approaches rather than
+          evaluating Catalyst specifically.</p>
+        <div class="pubs">
+          <a class="pub" href="https://www.kennethmoreland.com/documents/InSituTensions.pdf">
+            <span class="t">The tensions of in situ visualization</span>
+            <span class="m">Moreland · IEEE Computer Graphics and Applications 36(2) · 2016 · the tradeoffs named honestly, by one of Catalyst's own authors. Describes the 1.0 API; read it alongside the 2021 redesign above.</span></a>
+          <a class="pub" href="https://doi.org/10.1111/cgf.12930">
+            <span class="t">In situ methods, infrastructures, and applications on high performance computing platforms</span>
+            <span class="m">Bauer et al. · Computer Graphics Forum 35(3) · 2016 · state-of-the-art report</span></a>
+          <a class="pub" href="https://doi.org/10.1145/2597652.2597668">
+            <span class="t">Evaluation of methods to integrate analysis into a large-scale shock physics code</span>
+            <span class="m">Oldfield, Moreland, Fabian, Rogers · ICS 2014 · the rigorous three-way comparison: in situ, in transit and post-processing on CTH, 10.58M processor-hours. Concludes all three are needed — we agree, and Catalyst supports all three.</span></a>
+          <a class="pub" href="https://www.osti.gov/servlets/purl/1649280">
+            <span class="t">Opportunities for cost savings with in-transit visualization</span>
+            <span class="m">Kress et al. · ISC HPC 2020 · the cost model: in-line visualization cost grows 0.6× → 2.2× of solver cycle time with scale while transfer cost barely moves; volume rendering 4× cheaper at lower concurrency</span></a>
+          <a class="pub" href="https://doi.org/10.1177/10943420241286521">
+            <span class="t">The ECP ALPINE project: in situ and post hoc visualization infrastructure for exascale</span>
+            <span class="m">Ahrens et al. · Int. J. High Performance Computing Applications · 2024</span></a>
+        </div>
+      </div>
+
+      <div class="pubgroup">
+        <h3>Teams reporting their own integration</h3>
+        <p>Written by the people who did the work, not by us.</p>
+        <div class="pubs">
+          <a class="pub" href="https://doi.org/10.1007/s11227-021-03990-3">
+            <span class="t">In situ visualization of large-scale turbulence simulations in Nek5000 with ParaView Catalyst</span>
+            <span class="m">Atzori et al. · Journal of Supercomputing · 2021 · where the time goes in a compositing-heavy pipeline, and how to tune it</span></a>
+          <a class="pub" href="https://doi.org/10.1007/978-3-662-44900-4_2">
+            <span class="t">In-situ visualization in CFD using open-source tools: integration of Catalyst into Code_Saturne</span>
+            <span class="m">Ribés, Lorendeau, Fournier · EDF R&amp;D · 2015</span></a>
+          <a class="pub" href="https://doi.org/10.1007/978-3-030-48340-1_31">
+            <span class="t">In situ visualization of performance-related data in parallel CFD applications</span>
+            <span class="m">Score-P plugin routing profiling data through Catalyst · 2020</span></a>
+          <a class="pub" href="https://superfri.org/index.php/superfri/article/view/317">
+            <span class="t">Enhancing the in situ visualization of performance data in parallel CFD applications</span>
+            <span class="m">Supercomputing Frontiers and Innovations · 2020 · follow-on work</span></a>
+          <a class="pub" href="https://arxiv.org/abs/2110.15427">
+            <span class="t">High resolution calibration of cosmic string network evolution</span>
+            <span class="m">arXiv:2110.15427 · Catalyst v5.8.0 used to reduce output at 4096³</span></a>
+          <a class="pub" href="https://arxiv.org/abs/2208.07767">
+            <span class="t">Enhancing dynamic mode decomposition workflow with in-situ visualization and data compression</span>
+            <span class="m">arXiv:2208.07767 · adaptor written against the initialize / co-process / finalize cycle</span></a>
+        </div>
+      </div>
+
+      <div class="pubgroup">
+        <h3>Built on top of Catalyst</h3>
+        <p>Evidence that the API is stable enough for other people to build products
+          against.</p>
+        <div class="pubs">
+          <a class="pub" href="https://arxiv.org/abs/2406.18112">
+            <span class="t">In situ, in transit hybrid analysis with Catalyst-ADIOS2</span>
+            <span class="m">arXiv:2406.18112 · 2024 · relies explicitly on the ABI guarantee to swap implementations per cluster</span></a>
+          <a class="pub" href="https://doi.org/10.1007/978-3-032-07612-0_6">
+            <span class="t">Enabling modular in-situ workflows through CatalystMaestro and CatalystComposer</span>
+            <span class="m">2025</span></a>
+          <a class="pub" href="https://doi.org/10.1007/978-3-031-73716-9_33">
+            <span class="t">InsitUE: enabling hybrid in-situ visualizations through Unreal Engine and Catalyst</span>
+            <span class="m">2024</span></a>
+          <a class="pub" href="https://doi.org/10.1007/978-3-030-81627-8_10">
+            <span class="t">Leveraging production visualization tools in situ</span>
+            <span class="m">2021</span></a>
+          <a class="pub" href="https://doi.org/10.1007/978-3-031-40843-4_19">
+            <span class="t">Inshimtu: a lightweight in situ visualization shim</span>
+            <span class="m">KAUST · 2023 · in situ without modifying the solver</span></a>
+        </div>
+      </div>
+
+      <!-- PENDING / VERIFY BEFORE PUBLISHING.
+           In review, do not list publicly until accepted:
+             Yousef, Lee, Wittenburg, Randles, "A Lightweight, Modular In Transit Data
+             Framework for Interactive, Interpretable AI-Coupled Workflows", IPDPS '27
+             (submitted). Repo is public: github.com/aymanzyy/catalystml
+           Published but no DOI confirmed in this pass:
+             Yousef, Wetterer-Nelson, Han, Mateevitsi, Insley, Rizzi, Knowles, Papka,
+             Randles, "Instrumenting lightweight, modular ML training and inference in
+             parallel solvers", ICCS 2026, Springer, pp. 123-137
+             Pugmire, Ross, Thompson, Kress, Atkins, Klasky, Geveci, "Fides: a general
+             purpose data model library for streaming data", HPC 2021, pp. 495-507
+             Jourdain, O'Leary, Schroeder, "Trame", IEEE CG&A, March 2025
+             Mazen, Gombert, Givord, Gueunet, Catalyst-ADIOS2, HPC 2023, pp. 482-489
+             (arXiv version already linked above)
+           Strong candidates from the corpus, DOI not confirmed:
+             Fabian et al., The ParaView Coprocessing Library, LDAV 2011
+             Oldfield/Moreland/Fabian/Rogers, shock physics in situ/in-transit, ICS 2014
+             O'Leary et al., In-situ visualization for global hybrid simulations, XSEDE 2013
+             Woodring et al., MPAS-Ocean in situ eddy analysis (LDAV/ISAV)
+           Also: SPARC/Nalu/CTH items are OSTI reports, not papers - consider a separate
+           "lab reports" group rather than mixing them in here. -->
+    </div>
+      </div>
+  </div>
+</section>
+
+<section class="row2" id="effort">
+  <div class="wrap">
+    <div class="claim">
+      <h2>What it actually costs to adopt.</h2>
+      <p>Effort scales with mesh complexity, not with how much analysis you want.
+        A structured-mesh adaptor is a few hundred lines. Unstructured with AMR is more.</p>
+      <p>Once the adaptor exists, every pipeline your users will ever want is a Python
+        script they write themselves — no further solver changes.</p>
+      <p class="quiet">The clearest number we have: converting LULESH from the legacy
+        API to Catalyst 2.0 cut the adaptor roughly in half.</p>
+      <p class="quiet">On runtime cost, be careful what you compare against. A solve with
+        nothing attached is a floor, not an option — you still have to get the data out.
+        The real comparison is the whole post-hoc pipeline: write every timestep, move it,
+        read it back, then post-process. Amortised over a run, in situ usually wins by a
+        lot.</p>
+      <p class="quiet">But it depends entirely on what you ask the session to do. Catalyst
+        costs whatever your pipeline costs, however often you run it. Integrating a
+        quantity of interest is close to free. Rendering 4K volumes every timestep is not.
+        Nobody should tell you the answer without knowing your pipeline.</p>
+      <!-- HOLD FOR PUBLICATION. The IPDPS '27 submission measures per-step
+           instrumentation overhead on a 2D finite-element proxy against an
+           uninstrumented solve. Add a table row once accepted:
+             "Per-step overhead, 2D FE proxy | uninstrumented | Catalyst BP | Catalyst SST"
+           Resolve the Fig. 6 legend / caption / body-text disagreement first — the third
+           series is called both "No Catalyst" and "Redis" in the same draft, and only one
+           of those gives a real baseline. -->
+    </div>
+    <div>
+      <table>
+        <caption>Reported from published conversions and third-party integrations.</caption>
+        <thead><tr><th>Measure</th><th>Legacy API</th><th>Catalyst 2.0</th></tr></thead>
+        <tbody>
+          <tr><td>LULESH adaptor size</td><td class="n">325 lines</td><td class="n">155 lines</td></tr>
+          <tr><td>Headers to include</td><td class="n">13</td><td class="n">1</td></tr>
+          <tr><td>Build system change</td><td>CMake conversion required</td><td>two variables in the Makefile</td></tr>
+          <tr><td>ParaView SDK at build time</td><td>required</td><td>not required</td></tr>
+          <tr><td>PLUTO adaptor (third party)</td><td>—</td><td class="n">273 lines</td></tr>
+        </tbody>
+      </table>
+      <p class="claim quiet" style="margin-top:1.1rem">The PLUTO adaptor was written by one
+        graduate student for a code with no official Catalyst support, who then published
+        a walkthrough so others could repeat it. PLUTO's polar grid, zero-copy field
+        passing and all.</p>
+
+      <div class="offers" style="margin-top:1.6rem">
+        <div class="offer">
+          <h3>What drives the runtime cost</h3>
+          <p>Four things, roughly in order. Tune the first two and most workloads land
+            where you want them.</p>
+        </div>
+        <div class="offer">
+          <h3>What the pipeline computes</h3>
+          <p>A scalar integral over the field is nearly free. Isosurface extraction is
+            modest. Volume rendering at high resolution is a real cost, and should be
+            budgeted like one.</p>
+        </div>
+        <div class="offer">
+          <h3>How often it runs</h3>
+          <p>Every timestep is a choice, not a requirement. Most teams run the expensive
+            parts on a stride and the cheap KPIs every step.</p>
+        </div>
+        <div class="offer">
+          <h3>Mesh conversion</h3>
+          <p>Translating your native domain into the Conduit Mesh Blueprint is typically
+            the most expensive part of the adaptor itself. Fields can be passed by
+            pointer; topology usually cannot.</p>
+        </div>
+        <div class="offer">
+          <h3>Where the data already is</h3>
+          <p>GPU-resident data that stays on the GPU avoids the transfer entirely. Data
+            that has to be marshalled across the bus does not.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="row2" id="licence">
+  <div class="wrap">
+    <div class="claim">
+      <h2>BSD 3-Clause. Ship it in your product.</h2>
+      <p>Catalyst and ParaView are both BSD 3-Clause. Redistribute inside a commercial
+        product, royalty free, with no copyleft obligation and no per-seat licence.</p>
+    </div>
+    <div>
+      <table>
+        <caption>Ask us for the full transitive dependency list in writing — legal review
+          usually wants it, and we would rather send it up front.</caption>
+        <thead><tr><th>Component</th><th>Licence</th></tr></thead>
+        <tbody>
+          <tr><td>Catalyst (the stub you link)</td><td class="n">BSD 3-Clause</td></tr>
+          <tr><td>ParaView implementation</td><td class="n">BSD 3-Clause</td></tr>
+          <tr><td>VTK</td><td class="n">BSD 3-Clause</td></tr>
+          <tr><td>Conduit</td><td class="n">BSD 3-Clause</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="row2" id="talk">
+  <div class="wrap">
+    <div class="claim">
+      <h2>Or have the people who wrote it do the integration.</h2>
+      <p>Kitware develops ParaView and Catalyst. Start with a bounded piece of work
+        rather than an open-ended project.</p>
+      <p class="quiet">Every engagement begins with the assessment, so you get an
+        architecture and an effort estimate before committing to the larger work.</p>
+    </div>
+    <div>
+      <div class="offers">
+        <div class="offer">
+          <h3>Integration assessment</h3>
+          <p>We review your solver's data structures and parallel decomposition, then
+            deliver an adaptor architecture, an effort estimate in engineer-weeks, and the
+            performance risks worth knowing about first.</p>
+          <span class="dur">fixed fee · 2–3 weeks · written deliverable</span>
+        </div>
+        <div class="offer">
+          <h3>Adaptor implementation</h3>
+          <p>We write the adaptor against your build, upstream it if you want it
+            upstreamed, and hand over with your engineers able to maintain it.</p>
+          <span class="dur">fixed scope, priced from the assessment</span>
+        </div>
+        <div class="offer">
+          <h3>Support subscription</h3>
+          <p>Named response commitment, version-migration help, and priority on fixes that
+            block your release. For teams shipping Catalyst inside a product.</p>
+          <span class="dur">annual · response commitment in contract</span>
+        </div>
+      </div>
+      <div class="btns" style="margin-top:1.4rem">
+        <!-- TODO: replace with the real assessment intake link (dedicated form or
+             calendar), not the generic contact page, once one exists. Generic contact
+             is the interim so the primary CTA is at least not dead. -->
+        <a class="btn solid" href="https://www.kitware.com/contact/">Book an assessment</a>
+        <a class="btn" href="#docs">Try it yourself first</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="row2" id="docs">
+  <div class="wrap">
+    <div class="claim">
+      <h2>Five minutes to a first result.</h2>
+      <p>One command gets you a running instrumented solver writing images. Then point
+        it at your own code.</p>
+    </div>
+    <div>
+      <pre>docker run --rm -v $PWD/out:/out \
+  kitware/catalyst-demo</pre>
+      <p class="claim quiet" style="margin-top:.9rem">No ParaView build, no CMake flags.
+        The full from-source instructions are in the guide when you need them —
+        and you will only need them at deployment, not at evaluation.</p>
+      <div class="btns" style="margin-top:1.2rem">
+        <a class="btn" href="https://kitware.github.io/paraview-catalyst/">Documentation</a>
+        <a class="btn" href="https://gitlab.kitware.com/paraview/catalyst-examples">Examples</a>
+        <a class="btn" href="https://discourse.paraview.org/c/in-situ-support">Ask on Discourse</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>Catalyst is developed by <a href="https://www.kitware.com/">Kitware</a> and released under BSD 3-Clause.</div>
+    <div><a href="https://kitware.github.io/paraview-catalyst/">Docs</a> · <a href="https://www.paraview.org/">ParaView</a> · <a href="https://catalyst-in-situ.readthedocs.io/">API reference</a></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var TB = 1160;                 // GB produced per timestep (1.16 TB, WarpX on Frontier)
+  var MAX = 24;                  // timesteps in the visualised run
+  var insitu = true, ts = 0, produced = 0, written = 0, timer = null, rx = 0;
+  var fp=document.getElementById('fp'), fw=document.getElementById('fw'),
+      vp=document.getElementById('vp'), vw=document.getElementById('vw'),
+      tsEl=document.getElementById('ts'), rxEl=document.getElementById('rx');
+
+  function fmt(gb){
+    if(gb >= 1000) return (gb/1000).toFixed(2)+' TB';
+    if(gb >= 1)    return gb.toFixed(0)+' GB';
+    return (gb*1000).toFixed(0)+' MB';
+  }
+
+  function paint(){
+    var cap = MAX * TB;
+    fp.style.width = (produced/cap*100)+'%';
+    fw.style.width = (written/cap*100)+'%';
+    vp.textContent = fmt(produced);
+    vw.textContent = fmt(written);
+    tsEl.textContent = ts;
+    rxEl.textContent = rx+'%';
+  }
+
+  function step(){
+    if(ts >= MAX){ stop(); return; }
+    ts++;
+    produced += TB;
+    // in situ: one 4K frame plus a scalar energy integral per step.
+    // post-hoc: the whole timestep has to land before anything can be looked at.
+    written += insitu ? 10.5 : TB;
+    rx = 1 - (written/produced);
+    paint();
+  }
+
+  function start(){ if(!timer) timer = setInterval(step, 320); }
+  function stop(){ clearInterval(timer); timer = null; }
+  function reset(){ stop(); ts=0; produced=0; written=0; paint(); start(); }
+
+  function setMode(on){
+    insitu = on;
+    document.getElementById('mInsitu').setAttribute('aria-pressed', String(on));
+    document.getElementById('mPost').setAttribute('aria-pressed', String(!on));
+    document.getElementById('pl').textContent = on
+      ? 'extract isosurface + integrate field energy'
+      : 'dump full timestep, read it all back to analyse';
+    reset();
+  }
+
+  document.getElementById('mInsitu').onclick = function(){ setMode(true); };
+  document.getElementById('mPost').onclick  = function(){ setMode(false); };
+  document.getElementById('mReset').onclick = reset;
+
+  paint();
+  // only run when the panel is actually on screen
+  var sec = document.getElementById('running');
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(e){
+      e[0].isIntersecting ? start() : stop();
+    },{threshold:.25}).observe(sec);
+  } else { start(); }
+})();
+</script>
+</body>
+</html>
