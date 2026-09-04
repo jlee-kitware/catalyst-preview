@@ -241,6 +241,7 @@ pre{
 pre .c{color:#6f688a}
 pre .fn{color:var(--produced)}
 pre .s{color:#8fb8a8}
+pre .kw{color:#a99ad6}
 
 /* ---------- code wall ---------- */
 .domains{display:grid;gap:1.35rem}
@@ -490,12 +491,17 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
         ParaView implementation is discovered at run time.</p>
       <p>ParaView is not in your build system, not in your dependency tree, and not in
         your support matrix.</p>
-      <p>What loads at run time is a choice, and it is not only about pictures. The
-        ParaView implementation brings two decades of VTK: hundreds of filters, data
-        reduction and resampling, temporal and unsteady analysis, statistics, particle
-        tracking and parallel rendering. Or write your own implementation against the
-        same API — several groups have, including ADIOS2/Fides staging, a workflow
-        composer, and a game-engine bridge.</p>
+      <p>What runs at run time is a Python pipeline, and that is a wider door than it
+        sounds. Your solver's arrays arrive as NumPy — so NumPy, SciPy, pandas, PyTorch,
+        scikit-learn, Matplotlib and any wrapped C++ library are all in scope, operating
+        on live simulation state. Published in-situ training work does exactly this:
+        <code>vtk_to_numpy</code> on the field, <code>torch.from_numpy</code>, train,
+        plot the loss, render the prediction against ground truth — one script.</p>
+      <p>The ParaView implementation adds two decades of VTK on top: hundreds of filters,
+        data reduction and resampling, temporal and unsteady analysis, statistics,
+        particle tracking and parallel rendering. Or write your own implementation
+        against the same API — several groups have, including ADIOS2/Fides staging, a
+        workflow composer, and a game-engine bridge.</p>
       <p>A site that wants none of it ships nothing extra; a site that wants all of it
         sets an environment variable.</p>
       <p>A C interface because everything binds to C. Adaptors exist today in
@@ -522,6 +528,21 @@ conduit_node_set_path_external_float64_ptr(
       <p class="claim quiet" style="margin-top:.9rem">Fields are passed by pointer.
         Catalyst reads your arrays in place — no copy, no reformat, GPU-resident data
         stays on the GPU.</p>
+<pre style="margin-top:1.4rem"><span class="c"># the other side: your pipeline script, in Python</span>
+<span class="kw">from</span> paraview.simple <span class="kw">import</span> *
+<span class="kw">from</span> vtk.util.numpy_support <span class="kw">import</span> vtk_to_numpy
+<span class="kw">import</span> numpy <span class="kw">as</span> np, torch
+
+<span class="kw">def</span> <span class="fn">catalyst_execute</span>(info):
+    data = servermanager.Fetch(<span class="fn">MergeBlocks</span>(producer))
+    omega = vtk_to_numpy(data.GetPointData().GetArray(<span class="s">"omega"</span>))
+
+    <span class="c"># it is just an array now — do whatever you do</span>
+    loss = model.<span class="fn">train_step</span>(torch.from_numpy(omega).float())
+    np.<span class="fn">save</span>(<span class="s">f"kpi_{info.cycle}.npy"</span>, omega.<span class="fn">mean</span>(axis=<span class="s">0</span>))</pre>
+      <p class="claim quiet" style="margin-top:.9rem">No C++ to write, no rebuild to
+        change the analysis, and nothing stopping you importing whatever the rest of your
+        field already uses.</p>
     </div>
   </div>
 </section>
