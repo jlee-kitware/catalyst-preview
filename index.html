@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ParaView Catalyst — in situ analysis for HPC simulations</title>
-<meta name="description" content="Analyse simulation data where it is computed. Three function calls, an ABI-stable C API, and ParaView never enters your build. 27 adopting codes, every claim linked to its evidence.">
+<meta name="description" content="Analyse simulation data where it is computed. Three function calls, an ABI-stable C API, and ParaView never enters your build. 28 adopting codes, every claim linked to its evidence.">
 <meta property="og:title" content="ParaView Catalyst — analyse the data where it is computed">
 <meta property="og:description" content="Compute bandwidth outgrew storage by orders of magnitude. Catalyst decides which results land on disk — then you post-process the results you chose.">
 <meta property="og:type" content="website">
@@ -158,6 +158,27 @@ h1{
   margin-top:.45rem;font:400 .74rem/1.45 var(--mono);color:var(--muted);
 }
 .prod b{color:var(--produced);font-weight:500;display:block}
+
+
+/* ---------- media ---------- */
+.figure video{
+  display:block;width:100%;height:auto;border:1px solid var(--rule);background:#0f0d18;
+}
+.gallery{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));
+  gap:1.1rem;margin-top:2.2rem;
+}
+.tile{margin:0;text-decoration:none;display:block}
+.tile video,.tile img{
+  display:block;width:100%;aspect-ratio:16/10;object-fit:cover;
+  border:1px solid var(--rule);background:#0f0d18;
+}
+.tile:hover video,.tile:hover img{border-color:var(--produced)}
+.tile figcaption{
+  margin-top:.5rem;font:400 .78rem/1.5 var(--mono);color:var(--muted);
+}
+.tile figcaption b{display:block;color:var(--text);font-weight:500}
+.tile:hover figcaption b{color:var(--produced)}
 
 /* ---------- decision guide ---------- */
 .guide{
@@ -368,14 +389,12 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
            /main/wp-content/uploads/2026/04/image-5-1.png      (helicopter rotor)
          Verify each is genuinely Catalyst-produced before captioning it as such. -->
     <figure class="figure">
-      <img src="assets/vortices-q.jpg" width="1024" height="768" loading="eager"
-           alt="Q-criterion vortex structures extracted from a running CFD simulation">
-      <figcaption>Q-criterion vortex structures, extracted during the run.
-        <!-- PROVENANCE: from ~/gitsync/trame-cfd-mcp/docs/images/vortices_q.png.
-             CONFIRM this was produced through a Catalyst pipeline before captioning it
-             as in situ output. If it came from a post-hoc ParaView session, either
-             re-render it in situ or change the caption. -->
-      </figcaption>
+      <video src="assets/warpx.mp4" poster="assets/warpx.jpg"
+             autoplay muted loop playsinline preload="metadata"
+             width="1280" height="720"
+             aria-label="WarpX plasma accelerator simulation rendered in situ"></video>
+      <figcaption>WarpX, rendered in situ on Frontier —
+        <a href="https://kitware.github.io/paraview-catalyst/usecase/warpx.html" style="color:var(--muted)">use case &rarr;</a></figcaption>
     </figure>
 
     <div class="products">
@@ -413,8 +432,8 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
         <span class="lb">one WarpX timestep — a 5.75 billion element AMR mesh, analysed in memory</span>
         <span class="src">ECP ALPINE, IJHPCA 2024</span></a>
       <a class="kpi" href="#adopters">
-        <b>27</b>
-        <span class="lb">simulation codes with a Catalyst adaptor, across seven domains</span>
+        <b>28</b>
+        <span class="lb">simulation codes with a Catalyst adaptor, across eight domains</span>
         <span class="src">every one linked to its evidence</span></a>
       <a class="kpi" href="https://doi.org/10.1007/978-3-030-90539-2_33">
         <b>3</b>
@@ -740,7 +759,7 @@ conduit_node_set_path_external_float64_ptr(
         <div class="flow"><span class="fn">Multiphysics at scale</span>
           <p class="fd">Coupled physics on exascale machines, where both the coupling and
             the analysis have to avoid the filesystem.</p></div>
-        <div class="flow"><span class="fn todo">Urgent computing</span>
+        <div class="flow"><a class="fn" href="https://kitware.github.io/paraview-catalyst/usecase/cyclonic.html">Urgent computing</a>
           <p class="fd">Wildfire, cyclone, tsunami, contaminant release — decisions made
             while the simulation is still running, because afterwards is too late.</p></div>
         <div class="flow"><a class="fn" href="https://doi.org/10.1007/978-3-030-48340-1_31">Performance analysis</a>
@@ -790,6 +809,12 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
           <tr><td>Interpretation accuracy</td><td class="n">0.41</td><td class="n">0.91</td></tr>
         </tbody>
       </table>
+      <figure class="figure" style="margin-top:1.6rem">
+        <img src="assets/aiflow.jpg" width="1500" height="613" loading="lazy"
+             alt="Diagram of a deep learning workflow coupled to a running simulation">
+        <figcaption>Training coupled to the running solver —
+          <a href="https://kitware.github.io/paraview-catalyst/usecase/deep_learning.html" style="color:var(--muted)">use case &rarr;</a></figcaption>
+      </figure>
       <table style="margin-top:1.6rem">
         <caption>NEEDS CITATION before publishing — link the benchmark, workload and
           hardware. Currently the least supported numbers on the page.</caption>
@@ -811,9 +836,9 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
 <section class="wide" id="adopters">
   <div class="wrap">
     <div class="lead">
-      <h2>Twenty-seven codes already ship a Catalyst adaptor.</h2>
-      <p>Across CFD, combustion, shock physics, plasma, climate, biomedical and
-        astrophysics — in national labs, national weather services, universities and
+      <h2>Twenty-eight codes already ship a Catalyst adaptor.</h2>
+      <p>Across CFD, combustion, shock physics, plasma, climate, biomedical,
+        rotorcraft and astrophysics — in national labs, national weather services, universities and
         commercial products.</p>
       <p>And on the machines that matter: the runs behind this page's numbers executed
         on <a href="https://doi.org/10.1177/10943420241286521" style="color:var(--text)">Frontier</a>,
@@ -867,11 +892,17 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
       <div class="dom">
         <h3>Climate, ocean and weather</h3>
         <div class="names">
-          <span>MPAS-Ocean</span>
+          <a href="https://kitware.github.io/paraview-catalyst/usecase/mpaso.html">MPAS-Ocean</a>
           <a href="https://www.cisl.ucar.edu/siparcs-2019-omeara">MPAS-Atmosphere</a>
           <a href="https://www.paraview.org/paraview-docs/latest/cxx/files.html">CAM</a>
           <a href="https://github.com/niwa/lfric_catalyst_adaptor">LFRic</a>
           <span>ICON</span>
+        </div>
+      </div>
+      <div class="dom">
+        <h3>Rotorcraft and aeroacoustics</h3>
+        <div class="names">
+          <a href="https://kitware.github.io/paraview-catalyst/usecase/rotor.html">Rotorcraft (moving geometry)</a>
         </div>
       </div>
       <div class="dom">
@@ -887,7 +918,40 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
           <a href="https://arxiv.org/abs/2110.15427">Cosmic string networks</a>
         </div>
       </div>
+    
+    <div class="gallery">
+      <a class="tile" href="https://kitware.github.io/paraview-catalyst/usecase/ai_and_cfd.html">
+        <figure style="margin:0"><video src="assets/phasta.mp4" poster="assets/phasta.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>
+          <figcaption><b>PHASTA</b>wingtip vortices, 256K MPI ranks</figcaption>
+        </figure>
+      </a>
+      <a class="tile" href="https://kitware.github.io/paraview-catalyst/usecase/cyclonic.html">
+        <figure style="margin:0"><video src="assets/cyclone.mp4" poster="assets/cyclone.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>
+          <figcaption><b>Cyclonic forecast</b>tracked while the forecast runs</figcaption>
+        </figure>
+      </a>
+      <a class="tile" href="https://kitware.github.io/paraview-catalyst/usecase/mpaso.html">
+        <figure style="margin:0"><video src="assets/mpaso.mp4" poster="assets/mpaso.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>
+          <figcaption><b>MPAS-Ocean</b>Arctic eddies, extracted in situ</figcaption>
+        </figure>
+      </a>
+      <a class="tile" href="https://kitware.github.io/paraview-catalyst/usecase/rotor.html">
+        <figure style="margin:0"><video src="assets/rotor.mp4" poster="assets/rotor.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>
+          <figcaption><b>Rotorcraft</b>moving geometry, unsteady</figcaption>
+        </figure>
+      </a>
+      <a class="tile" href="https://kitware.github.io/paraview-catalyst/usecase/turbulence.html">
+        <figure style="margin:0"><img src="assets/supersonic.jpg" loading="lazy" alt="Supersonic turbulence">
+          <figcaption><b>Supersonic turbulence</b>shock structure at full cadence</figcaption>
+        </figure>
+      </a>
+      <a class="tile" href="https://kitware.github.io/paraview-catalyst/usecase/combustion.html">
+        <figure style="margin:0"><img src="assets/combustion.jpg" loading="lazy" alt="Combustion">
+          <figcaption><b>Combustion</b>engine cycle analysis</figcaption>
+        </figure>
+      </a>
     </div>
+  </div>
   </div>
 </section>
 
@@ -1156,6 +1220,14 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
           <tr><td>PLUTO adaptor (third party)</td><td>—</td><td class="n">273 lines</td></tr>
         </tbody>
       </table>
+      <figure class="figure" style="margin-top:1.5rem">
+        <video src="assets/lulesh.mp4" poster="assets/lulesh.jpg"
+               autoplay muted loop playsinline preload="none"
+               width="1000" height="729"
+               aria-label="LULESH hydrodynamics proxy rendered in situ"></video>
+        <figcaption>LULESH — the 325-to-155-line conversion above, running.
+          <a href="https://kitware.github.io/paraview-catalyst/usecase/lulesh.html" style="color:var(--muted)">use case &rarr;</a></figcaption>
+      </figure>
       <p class="claim quiet" style="margin-top:1.1rem">The PLUTO adaptor was written by one
         graduate student for a code with no official Catalyst support, who then published
         a walkthrough so others could repeat it. PLUTO's polar grid, zero-copy field
