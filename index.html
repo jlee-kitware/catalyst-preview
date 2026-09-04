@@ -489,7 +489,15 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
         <code>libcatalyst</code>, a small BSD-licensed library with one header. The
         ParaView implementation is discovered at run time.</p>
       <p>ParaView is not in your build system, not in your dependency tree, and not in
-        your support matrix. Users who don't want visualisation don't pay for it.</p>
+        your support matrix.</p>
+      <p>What loads at run time is a choice, and it is not only about pictures. The
+        ParaView implementation brings two decades of VTK: hundreds of filters, data
+        reduction and resampling, temporal and unsteady analysis, statistics, particle
+        tracking and parallel rendering. Or write your own implementation against the
+        same API — several groups have, including ADIOS2/Fides staging, a workflow
+        composer, and a game-engine bridge.</p>
+      <p>A site that wants none of it ships nothing extra; a site that wants all of it
+        sets an environment variable.</p>
       <p>A C interface because everything binds to C. Adaptors exist today in
         <b>C</b>, <b>C++</b>, <b>Fortran</b> and <b>Python</b> — LFRic's is C++ against a
         Fortran-lineage model, PLUTO's is C, the LBM proxies are Python. Your solver's
@@ -522,23 +530,25 @@ conduit_node_set_path_external_float64_ptr(
   <div class="wrap">
     <div class="claim">
       <h2>If you sell simulation software, the argument is different.</h2>
-      <p>Your problem isn't the filesystem. It's that visualisation is a permanent line
-        item on your roadmap and it never stops asking for headcount.</p>
+      <p>Your problem isn't the filesystem. It's that post-processing — plots, exports,
+        derived quantities, comparison tooling, rendering — is a permanent line item on
+        your roadmap and it never stops asking for headcount.</p>
       <p class="quiet">Catalyst is BSD, so it ships inside your product with no royalty
         and no copyleft. See the licence table below.</p>
     </div>
     <div class="offers">
       <div class="offer">
-        <h3>You stop taking visualisation feature requests</h3>
+        <h3>You stop taking analysis feature requests</h3>
         <p>Ship one adaptor and the pipeline becomes a Python script. "Can you add this
           plot, this export, this derived metric" turns into something your customer
           writes for themselves, on their own schedule, without a release from you.</p>
       </div>
       <div class="offer">
-        <h3>You stop maintaining a rendering engine</h3>
-        <p>Parallel rendering, unstructured meshes, AMR, GPU pipelines, twenty file
-          formats. That is a quarter century of work in VTK and ParaView that you can
-          link instead of rebuild — and keep getting for free as it improves.</p>
+        <h3>You stop maintaining an analysis stack</h3>
+        <p>Parallel rendering, unstructured meshes and AMR, GPU pipelines, temporal
+          analysis, statistics, resampling, twenty file formats. That is a quarter
+          century of work in VTK and ParaView that you can link instead of rebuild — and
+          keep getting for free as it improves.</p>
       </div>
       <div class="offer">
         <h3>Your customers already know the interface</h3>
