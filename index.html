@@ -135,6 +135,30 @@ h1{
   .kpi:last-child{border-bottom:0}
 }
 
+
+/* ---------- imagery ---------- */
+.figure{margin:0;position:relative}
+.figure img{
+  display:block;width:100%;height:auto;border:1px solid var(--rule);
+  background:#0f0d18;
+}
+.figure figcaption{
+  margin-top:.6rem;font:400 .78rem/1.5 var(--mono);color:var(--muted);
+}
+.products{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));
+  gap:1rem;margin-top:1rem;
+}
+.prod{margin:0}
+.prod img{
+  display:block;width:100%;height:auto;border:1px solid var(--rule);
+  background:#fff;border-radius:2px;
+}
+.prod figcaption{
+  margin-top:.45rem;font:400 .74rem/1.45 var(--mono);color:var(--muted);
+}
+.prod b{color:var(--produced);font-weight:500;display:block}
+
 /* ---------- decision guide ---------- */
 .guide{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(21rem,1fr));
@@ -344,27 +368,36 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
            /main/wp-content/uploads/2026/04/image-5-1.png      (helicopter rotor)
          Verify each is genuinely Catalyst-produced before captioning it as such. -->
     <figure class="figure">
-      <svg viewBox="0 0 640 420" role="img" aria-label="Placeholder for a Catalyst-rendered simulation frame">
-        <defs>
-          <linearGradient id="pl" x1="0" y1="1" x2="1" y2="0">
-            <stop offset="0" stop-color="#2b1f52"/><stop offset=".45" stop-color="#cb4f7d"/>
-            <stop offset="1" stop-color="#f0c05a"/>
-          </linearGradient>
-        </defs>
-        <rect width="640" height="420" fill="#0f0d18"/>
-        <g fill="none" stroke="url(#pl)" stroke-width="1.15" opacity=".85">
-          <path d="M-10 300 C 150 300 190 150 330 150 C 470 150 520 232 660 232"/>
-          <path d="M-10 316 C 150 316 196 176 330 172 C 468 168 520 246 660 246"/>
-          <path d="M-10 332 C 150 332 202 202 330 194 C 466 186 520 260 660 260"/>
-          <path d="M-10 348 C 150 348 208 228 330 216 C 464 204 520 274 660 274"/>
-          <path d="M-10 364 C 150 364 214 254 330 238 C 462 222 520 288 660 288"/>
-          <path d="M-10 284 C 150 284 184 124 330 128 C 472 132 520 218 660 218"/>
-          <path d="M-10 268 C 150 268 178 98 330 106 C 474 114 520 204 660 204"/>
-        </g>
-        <ellipse cx="330" cy="172" rx="46" ry="72" fill="#14121f" stroke="#4a4270"/>
-      </svg>
-      <figcaption>placeholder — swap for a real rendered frame</figcaption>
+      <img src="assets/vortices-q.jpg" width="1024" height="768" loading="eager"
+           alt="Q-criterion vortex structures extracted from a running CFD simulation">
+      <figcaption>Q-criterion vortex structures, extracted during the run.
+        <!-- PROVENANCE: from ~/gitsync/trame-cfd-mcp/docs/images/vortices_q.png.
+             CONFIRM this was produced through a Catalyst pipeline before captioning it
+             as in situ output. If it came from a post-hoc ParaView session, either
+             re-render it in situ or change the caption. -->
+      </figcaption>
     </figure>
+
+    <div class="products">
+      <figure class="prod">
+        <img src="assets/lift.png" width="900" height="675" loading="lazy"
+             alt="Sectional lift distribution chart">
+        <figcaption><b>Engineering quantity</b>sectional lift, every timestep</figcaption>
+      </figure>
+      <figure class="prod">
+        <img src="assets/drag.png" width="900" height="675" loading="lazy"
+             alt="Sectional drag distribution chart">
+        <figcaption><b>Engineering quantity</b>sectional drag</figcaption>
+      </figure>
+      <figure class="prod">
+        <img src="assets/pressure.png" width="900" height="675" loading="lazy"
+             alt="Pressure distribution histogram">
+        <figcaption><b>Statistics</b>pressure distribution</figcaption>
+      </figure>
+    </div>
+    <p class="lede" style="font-size:.85rem;margin-top:.9rem;color:var(--muted)">
+      Four products, one run, one adaptor. None of them required writing the mesh to
+      disk first.</p>
   </div>
 </header>
 
@@ -543,6 +576,12 @@ conduit_node_set_path_external_float64_ptr(
       <p class="claim quiet" style="margin-top:.9rem">No C++ to write, no rebuild to
         change the analysis, and nothing stopping you importing whatever the rest of your
         field already uses.</p>
+      <figure class="figure" style="margin-top:1.6rem">
+        <img src="assets/amr-isosurface.jpg" width="1600" height="900" loading="lazy"
+             alt="Isosurface extracted inside a translucent adaptive mesh refinement grid">
+        <figcaption>An isosurface pulled from inside a live AMReX AMR hierarchy —
+          the block structure is the solver's own, read in place.</figcaption>
+      </figure>
     </div>
   </div>
 </section>
