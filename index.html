@@ -135,6 +135,30 @@ h1{
   .kpi:last-child{border-bottom:0}
 }
 
+/* ---------- decision guide ---------- */
+.guide{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(21rem,1fr));
+  gap:0 2.6rem;border-top:1px solid var(--rule);
+}
+.gq{padding:1.15rem 0;border-bottom:1px solid var(--rule)}
+.gq h3{
+  margin:0 0 .5rem;font:500 .92rem/1.4 var(--sans);color:var(--text);
+}
+.gq h3 .n{
+  font:500 .78rem var(--mono);color:var(--muted);margin-right:.5rem;
+}
+.gq p{margin:0 0 .45rem;color:var(--muted);font-size:.89rem;line-height:1.55}
+.gq .ans{
+  margin:0;padding-left:.85rem;border-left:2px solid var(--produced);
+  color:var(--text);font-size:.89rem;line-height:1.55;
+}
+.gq .ans b{color:var(--produced);font-weight:500;font-family:var(--mono);font-size:.84rem}
+.gq .why{
+  display:block;margin-top:.45rem;font:400 .78rem/1.5 var(--mono);color:var(--muted);
+}
+.gq .why a{color:var(--muted)}
+.gq .why a:hover{color:var(--produced)}
+
 /* ---------- workflows ---------- */
 .wide{padding:var(--pad) 0;border-top:1px solid var(--rule)}
 .wide .wrap{padding:0 var(--gut)}
@@ -274,6 +298,7 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
     <a href="#workflows">Workflows</a>
     <a href="#adopters">Adopters</a>
     <a href="#papers">Papers</a>
+    <a href="#guide">Which fits you</a>
     <a href="#docs">Docs</a>
     <a href="#talk">Talk to us</a>
   </div>
@@ -934,6 +959,91 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
            "lab reports" group rather than mixing them in here. -->
     </div>
       </div>
+  </div>
+</section>
+
+<section class="wide" id="guide">
+  <div class="wrap">
+    <div class="lead">
+      <h2>Which of those applies to you.</h2>
+      <p>The honest answer depends on your pipeline, and nobody can give it to you
+        without knowing it. But the published cost studies do narrow it down, and the
+        reasoning is worth having before you talk to anyone — including us.</p>
+      <p class="quiet">Every recommendation below cites the study it comes from.
+        <a href="#talk">Get a second opinion &rarr;</a></p>
+    </div>
+    <div class="guide">
+
+      <div class="gq">
+        <h3><span class="n">01</span>Is your analysis cheap relative to your solve?</h3>
+        <p>Integrating a quantity of interest, thresholding, extracting a surface on a
+          modest mesh — these cost a fraction of a timestep.</p>
+        <p class="ans"><b>Yes &rarr; run it in line.</b> Sandia's conclusion after
+          10.58M processor-hours: for analysis that does not hinder solver scalability,
+          in situ is the simplest and best choice, because the analysis costs less than
+          allocating extra nodes and moving data to them.
+          <span class="why"><a href="https://doi.org/10.1145/2597652.2597668">Oldfield et al., ICS 2014</a></span></p>
+      </div>
+
+      <div class="gq">
+        <h3><span class="n">02</span>Does your analysis scale as well as your solver?</h3>
+        <p>Parallel image compositing is the usual culprit. It is communication-bound,
+          and it degrades at high concurrency in a way the physics does not.</p>
+        <p class="ans"><b>No &rarr; move it in transit.</b> Rendering at lower
+          concurrency on dedicated nodes was measured at 4× cheaper for volume rendering
+          and 3–6× for isosurfacing. This is the fix for the compositing wall, not a
+          reason to avoid in situ.
+          <span class="why"><a href="https://www.osti.gov/servlets/purl/1649280">Kress et al., ISC HPC 2020</a></span></p>
+      </div>
+
+      <div class="gq">
+        <h3><span class="n">03</span>Are you scaling up, or already at the top end?</h3>
+        <p>In-line visualization cost grew from 0.6× to 2.2× of solver cycle time across
+          8 to 1024 nodes on the same problem, while data transfer cost barely moved.</p>
+        <p class="ans"><b>Scaling up &rarr; the case for in transit strengthens as you
+          grow.</b> With one caveat from Sandia: in transit only pays if the compute
+          nodes have enough work to hide the analysis. At 32K cores with too little work
+          per node, the wait time erased the benefit.
+          <span class="why"><a href="https://www.osti.gov/servlets/purl/1649280">Kress 2020</a> · <a href="https://doi.org/10.1145/2597652.2597668">Oldfield 2014</a></span></p>
+      </div>
+
+      <div class="gq">
+        <h3><span class="n">04</span>Can you say in advance what you will need to see?</h3>
+        <p>The genuine constraint of in situ: the data is transient, so something has to
+          be specified before the run.</p>
+        <p class="ans"><b>Not entirely &rarr; you still have four options.</b> Render an
+          image database across many viewpoints and explore it afterwards; trigger on a
+          detected feature; write reduced extracts for post hoc work; or attach a live
+          session and ask questions of the run as it goes. Catalyst supports batch and
+          interactive simultaneously.
+          <span class="why"><a href="https://www.kennethmoreland.com/documents/InSituTensions.pdf">Moreland, IEEE CG&amp;A 2016</a></span></p>
+      </div>
+
+      <div class="gq">
+        <h3><span class="n">05</span>Is your filesystem actually keeping up today?</h3>
+        <p>Worth asking honestly. On Cielo in 2014, with a strong Lustre filesystem and
+          one moderate analysis every ten cycles, post-processing performed well.</p>
+        <p class="ans"><b>If yes &rarr; keep post-processing, and use in situ to choose
+          what you keep.</b> That study's own conclusion was that all three approaches
+          are needed and in situ does not displace post-processing. The gap has widened
+          since — at a projected 60 TB/s, exascale I/O lands under 1% of what the
+          simulation generates — but the honest starting point is that this is additive.
+          <span class="why"><a href="https://doi.org/10.1145/2597652.2597668">Oldfield et al., ICS 2014</a></span></p>
+      </div>
+
+      <div class="gq">
+        <h3><span class="n">06</span>What are you actually optimising for?</h3>
+        <p>Cost per run, time to answer, and capability you do not currently have are
+          three different goals with three different answers.</p>
+        <p class="ans"><b>Capability is usually the real one.</b> Most teams do not adopt
+          in situ to save money on storage. They adopt it because there is an analysis
+          they cannot do at all — training data that was deleted at write time, a
+          divergence nobody saw until Friday, an ensemble too large to keep. If that is
+          your case, the cost comparison matters less than you think.
+          <span class="why">our read of the adoption corpus, not a published finding</span></p>
+      </div>
+
+    </div>
   </div>
 </section>
 
