@@ -338,6 +338,33 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
 </style>
 </head>
 <body>
+<!--
+  SECTION ORDER IS THE BUYER'S QUESTION SEQUENCE. Keep it.
+  Every section answers exactly one question, in the order a reader forms them.
+  If you add a section, decide which question it answers first. If it does not
+  answer one, it does not belong.
+
+    1  top          What is my problem?              Your simulation outruns your filesystem
+    2  running      Is it really that bad?           Watch the two numbers separate
+    3  why          Is it MY problem?                You probably arrived here with one of these
+    4  architecture What is this thing?              You link a stub
+    5  product      What is in it for me? (ISV)      If you sell simulation software
+    6  workflows    What can it do?                  Instrument once
+    7  ai           Can I trust the newest part?     Can you trust a model near your science?
+    8  evidence     Is any of this real?             None of that is speculative
+    9  adopters     Who exactly?                     Here is who, and how you can check
+   10  papers       Has it been scrutinised?         And a decade of peer-reviewed work
+   11  guide        Does it fit MY case?             Which of those applies to you
+   12  effort       What will it cost me?            What it actually costs to adopt
+   13  licence      Can I ship it?                   BSD 3-Clause
+   14  talk         Can I get help?                  Or have the people who wrote it do it
+   15  docs         Can I try it myself first?       Everything above is a published example
+
+  Two rules that follow from this:
+  - Proof belongs in 8-10, together. Do not scatter evidence earlier to look credible.
+  - Do not answer a question before the reader has asked it. Reassurance offered too
+    early reads as defensiveness.
+-->
 
 <nav class="nav">
   <div class="wrap">
@@ -747,8 +774,10 @@ conduit_node_set_path_external_float64_ptr(
 <section class="row2" id="ai">
   <div class="wrap">
     <div class="claim">
-      <h2>The newest of those, in detail.</h2>
-      <p>Take the AI group in the list above and look closely at LLM-guided analysis, because it is the one people assume cannot be made trustworthy. An engineer types what they want to know. A language model interprets the
+      <h2>Can you trust a model near your science?</h2>
+      <p>It is the fair objection to the last group above, so it is worth answering
+        directly rather than in a footnote. An engineer types what they want to know. A
+        language model interprets the
         intent and plans; deterministic ParaView filters do the computing; the model
         explains the result it is handed. It never writes the analysis code.</p>
       <p>A domain ontology constrains planning to valid analysis chains, so whole classes
@@ -839,10 +868,10 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
 <section class="wide" id="adopters">
   <div class="wrap">
     <div class="lead">
-      <h2>Twenty-eight codes already ship a Catalyst adaptor.</h2>
+      <h2>Here is who, and how you can check.</h2>
       <p>Across CFD, combustion, shock physics, plasma, climate, biomedical,
-        rotorcraft and astrophysics, in national labs, national weather services, universities and
-        commercial products.</p>
+        rotorcraft and astrophysics, in national labs, national weather services,
+        universities and commercial products.</p>
       <p>And on the machines that matter: the runs behind this page's numbers executed
         on <a href="https://doi.org/10.1177/10943420241286521" style="color:var(--text)">Frontier</a>,
         <a href="https://www.kennethmoreland.com/documents/InSituTensions.pdf" style="color:var(--text)">Titan</a>,
