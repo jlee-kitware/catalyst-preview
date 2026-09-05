@@ -601,6 +601,15 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
         workflow composer, and a game-engine bridge.</p>
       <p>A site that wants none of it ships nothing extra; a site that wants all of it
         sets an environment variable.</p>
+      <p>This used to be a real objection. Under the 1.0 API the implementation was
+        linked in, and a published survey measured what that added to a statically built
+        executable: <b style="color:var(--text);font-weight:400">2.1&nbsp;MB</b> for the
+        smallest edition up to <b style="color:var(--text);font-weight:400">98&nbsp;MB</b>
+        for full ParaView, replicated per process.
+        <a href="https://doi.org/10.1111/cgf.12930" style="color:var(--produced)">Bauer et al., Computer Graphics
+        Forum 35(3), 2016, Table 2</a>. Under 2.0 the question does not arise: your
+        binary carries the stub, and the implementation is a shared library the loader
+        maps once per node.</p>
       <p>And it is vendor-portable by construction. Conduit is API-agnostic; Viskores
         filters compile through Kokkos to CUDA, HIP, SYCL or OpenMP. The
         <a href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/" style="color:var(--produced)">same integration pattern runs on
