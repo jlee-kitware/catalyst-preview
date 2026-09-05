@@ -569,12 +569,16 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
         workflow composer, and a game-engine bridge.</p>
       <p>A site that wants none of it ships nothing extra; a site that wants all of it
         sets an environment variable.</p>
-      <p>A C interface because everything binds to C. Adaptors exist today in
-        <b>C</b>, <b>C++</b>, <b>Fortran</b> and <b>Python</b> — LFRic's is C++ against a
-        Fortran-lineage model, PLUTO's is C, the LBM proxies are Python. Your solver's
-        language is not the question; whether it can describe its mesh is.</p>
+      <p>A C interface because everything binds to C. There is a worked example for each:
+        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CUnstructuredGrid" style="color:var(--produced)">C</a>,
+        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxUnstructuredGrid" style="color:var(--produced)">C++</a>,
+        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/Fortran90ImageData" style="color:var(--produced)">Fortran&nbsp;90</a> and
+        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/PythonImageData" style="color:var(--produced)">Python</a>.
+        Your solver's language is not the question; whether it can describe its mesh is.</p>
       <p class="quiet">Swap implementations by pointing an environment variable at a
-        different <code>libcatalyst.so.2</code>. No recompile.</p>
+        different <code>libcatalyst.so.2</code>. No recompile — and pipelines themselves
+        can be <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxDynamicPipelines" style="color:var(--muted)">added and
+        removed while the solver runs</a>.</p>
     </div>
     <div>
 <pre><span class="c">/* the entire integration surface */</span>
@@ -592,7 +596,9 @@ conduit_node_set_path_external_float64_ptr(
 <span class="fn">catalyst_finalize</span>(params);</pre>
       <p class="claim quiet" style="margin-top:.9rem">Fields are passed by pointer.
         Catalyst reads your arrays in place — no copy, no reformat, GPU-resident data
-        stays on the GPU.</p>
+        stays on the GPU. A
+        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxLBMCylinder" style="color:var(--produced)">D2Q9 lattice-Boltzmann
+        example</a> hands Catalyst raw CUDA device pointers and never touches host memory.</p>
 <pre style="margin-top:1.4rem"><span class="c"># the other side: your pipeline script, in Python</span>
 <span class="kw">from</span> paraview.simple <span class="kw">import</span> *
 <span class="kw">from</span> vtk.util.numpy_support <span class="kw">import</span> vtk_to_numpy
@@ -675,9 +681,9 @@ conduit_node_set_path_external_float64_ptr(
         <h3>Where the analysis runs</h3>
         <p class="gd">The same instrumentation supports all three. Switching is a
           deployment decision, not a code change.</p>
-        <div class="flow"><span class="fn">In line</span>
+        <div class="flow"><a class="fn" href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxAsyncExecute">In line, sync or async</a>
           <p class="fd">Analysis executes on the solver's own ranks, sharing its CPUs and
-            GPUs. Nothing moves.</p></div>
+            GPUs. Nothing moves. Run it blocking, or let the solver carry on.</p></div>
         <div class="flow"><a class="fn" href="https://doi.org/10.1007/978-3-031-40843-4_20">In transit</a>
           <p class="fd">Data is staged to dedicated analysis nodes, so heavy rendering
             never blocks the solver and can use hardware the compute nodes lack.</p></div>
@@ -737,7 +743,9 @@ conduit_node_set_path_external_float64_ptr(
             Friday. Kill it, or fix it.</p></div>
         <div class="flow"><a class="fn" href="https://www.kitware.com/webinars/whats-new-in-in-situ-analysis-and-visualization/">Computational steering</a>
           <p class="fd">Change a parameter or boundary condition mid-run and watch the
-            field respond. Catalyst carries results back to the solver, on CPU or GPU.</p></div>
+            field respond, through <code>catalyst_results</code>. Worked examples in
+            <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxSteering" style="color:var(--muted)">C++</a> and
+            <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/PythonSteering" style="color:var(--muted)">Python</a>.</p></div>
         <div class="flow"><a class="fn" href="https://github.com/aymanzyy/catalystml">Notebooks and dashboards</a>
           <p class="fd">Jupyter and trame front ends over a live run, so the interaction
             is a browser tab rather than a queue submission.</p></div>
@@ -1209,7 +1217,10 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
       <p>Once the adaptor exists, every pipeline your users will ever want is a Python
         script they write themselves — no further solver changes.</p>
       <p class="quiet">The clearest number we have: converting LULESH from the legacy
-        API to Catalyst 2.0 cut the adaptor roughly in half.</p>
+        API to Catalyst 2.0 cut the adaptor roughly in half. The
+        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/Lulesh-tutorial" style="color:var(--produced)">tutorial walks it in
+        six stages</a>, from an uninstrumented solver to a steered one — read it before
+        estimating your own.</p>
       <p class="quiet">On runtime cost, be careful what you compare against. A solve with
         nothing attached is a floor, not an option — you still have to get the data out.
         The real comparison is the whole post-hoc pipeline: write every timestep, move it,
@@ -1353,16 +1364,23 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
 <section class="row2" id="docs">
   <div class="wrap">
     <div class="claim">
-      <h2>Five minutes to a first result.</h2>
-      <p>One command gets you a running instrumented solver writing images. Then point
-        it at your own code.</p>
+      <h2>Everything above is a published example.</h2>
+      <p>Not a sales demo. Clone the examples repository and run the same integration
+        patterns this page describes — sync and async execution, GPU device pointers,
+        closed-loop steering, dynamic pipelines, adaptors in four languages.</p>
+      <p class="quiet">Start with the LULESH tutorial if you want the graduated path, or
+        the LBM cylinder if you want to see all three GPU patterns at once.</p>
     </div>
     <div>
-      <pre>docker run --rm -v $PWD/out:/out \
-  kitware/catalyst-demo</pre>
-      <p class="claim quiet" style="margin-top:.9rem">No ParaView build, no CMake flags.
-        The full from-source instructions are in the guide when you need them —
-        and you will only need them at deployment, not at evaluation.</p>
+      <pre>git clone https://gitlab.kitware.com/paraview/catalyst-examples
+cd catalyst-examples/ParaView/<span class="fn">Lulesh-tutorial</span>
+
+<span class="c"># six versions, uninstrumented through steered</span>
+ls
+<span class="c">Version0  Version1  Version2  Version3  Version4  Version5</span></pre>
+      <p class="claim quiet" style="margin-top:.9rem">A prebuilt container is on the way
+        for a zero-build first look. Until then the examples build against an installed
+        ParaView, and the tutorial's first version needs no Catalyst at all.</p>
       <div class="btns" style="margin-top:1.2rem">
         <a class="btn" href="https://kitware.github.io/paraview-catalyst/">Documentation</a>
         <a class="btn" href="https://gitlab.kitware.com/paraview/catalyst-examples">Examples</a>
