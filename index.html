@@ -147,7 +147,7 @@ h1{
   margin-top:.6rem;font:400 .78rem/1.5 var(--mono);color:var(--muted);
 }
 .products{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(min(13rem,100%),1fr));
   gap:1rem;margin-top:1rem;
 }
 .prod{margin:0}
@@ -166,7 +166,7 @@ h1{
   display:block;width:100%;height:auto;border:1px solid var(--rule);background:#0f0d18;
 }
 .gallery{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(min(15rem,100%),1fr));
   gap:1.1rem;margin-top:2.2rem;
 }
 .tile{margin:0;text-decoration:none;display:block}
@@ -183,7 +183,7 @@ h1{
 
 /* ---------- decision guide ---------- */
 .guide{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(21rem,1fr));
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(min(21rem,100%),1fr));
   gap:0 2.6rem;border-top:1px solid var(--rule);
 }
 .gq{padding:1.15rem 0;border-bottom:1px solid var(--rule)}
@@ -215,7 +215,7 @@ h1{
 .wide .lead a{color:var(--produced);text-decoration:none;white-space:nowrap}
 .wide .lead a:hover{text-decoration:underline}
 .flows{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(19rem,1fr));
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(min(19rem,100%),1fr));
   gap:2.2rem 3rem;align-items:start;
 }
 .flowgroup{break-inside:avoid}
@@ -246,7 +246,7 @@ h1{
 
 /* ---------- publications ---------- */
 .pubgroups{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(24rem,1fr));
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(min(24rem,100%),1fr));
   gap:1.8rem 3rem;align-items:start;
 }
 .pubs{display:grid;gap:0;border-top:1px solid var(--rule)}
@@ -272,6 +272,13 @@ h1{
 .claim p{color:var(--muted);margin:0 0 .8rem;font-size:1rem;max-width:38ch}
 .claim p:last-child{margin-bottom:0}
 .claim .quiet{font-size:.88rem}
+
+.skip{
+  position:absolute;left:-9999px;top:0;z-index:99;
+  background:var(--produced);color:#14121f;padding:.6rem 1rem;
+  font:500 .9rem var(--sans);text-decoration:none;
+}
+.skip:focus{left:0}
 
 h2{
   font-weight:300;font-size:clamp(1.45rem,2.8vw,2.1rem);letter-spacing:-.03em;
@@ -324,6 +331,7 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
   h1{max-width:none}
 }
 @media (prefers-reduced-motion:reduce){
+  video{animation:none}
   html{scroll-behavior:auto}
   .fill{transition:none}
 }
@@ -358,6 +366,7 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
     early reads as defensiveness.
 -->
 
+<a class="skip" href="#top">Skip to content</a>
 <nav class="nav">
   <div class="wrap">
     <a class="brand" href="#top">ParaView&nbsp;<span>Catalyst</span></a>
@@ -1478,6 +1487,17 @@ ls
     },{threshold:.25}).observe(sec);
   } else { start(); }
 })();
+
+// Respect reduced motion: pause every looping video and show its poster instead.
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  document.querySelectorAll('video[autoplay]').forEach(function (v) {
+    v.autoplay = false;
+    v.removeAttribute('autoplay');
+    v.loop = false;
+    v.pause();
+    v.setAttribute('controls', '');
+  });
+}
 </script>
 </body>
 </html>
