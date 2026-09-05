@@ -1084,12 +1084,13 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
 
       <div class="pubgroup">
         <h3>In situ is still an I/O problem</h3>
-        <p>Extracts are smaller, not free. Worth reading before assuming reduction ends
-          the conversation.</p>
+        <p>Extracts are smaller, not free. An isosurface can land almost entirely on a
+          handful of ranks, and that imbalance defeats ordinary collective writes. Read
+          this before assuming reduction ends the conversation.</p>
         <div class="pubs">
           <a class="pub" href="https://doi.org/10.1145/2828612.2828620">
             <span class="t">In situ analysis as a parallel I/O problem</span>
-            <span class="m">Ziegeler, Atkins, Bauer, Pettey &middot; DoD HPCMP and Kitware &middot; ISAV 2015 &middot; open access &middot; compute-to-I/O ratios across machine generations, and in situ cost expressed in units of I/O throughput</span></a>
+            <span class="m">Ziegeler, Atkins, Bauer, Pettey &middot; DoD HPCMP and Kitware &middot; ISAV 2015 &middot; open access &middot; treats extract output as an I/O problem in its own right, and adds dynamic aggregation in ADIOS2 to handle it</span></a>
         </div>
       </div>
 
