@@ -107,7 +107,11 @@ h1{
 
 /* ---------- KPI band: every number links to its source ---------- */
 .kpiband{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);background:#181524}
-.kpiband .wrap{padding:0 var(--gut)}
+.kpiband .wrap{padding:2.4rem var(--gut) 0}
+.kpihead{max-width:56ch;margin-bottom:1.6rem}
+.kpihead h2{margin:0 0 .55rem;font-size:clamp(1.25rem,2.4vw,1.6rem)}
+.kpihead p{margin:0;color:var(--muted);font-size:.92rem;line-height:1.6}
+.kpihead p b{color:var(--text);font-weight:400}
 .kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
 .kpi{
   display:block;text-decoration:none;padding:1.5rem 1.4rem 1.35rem;
@@ -433,8 +437,15 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
   </div>
 </header>
 
-<section class="kpiband">
+<section class="kpiband" id="evidence">
   <div class="wrap">
+    <div class="kpihead">
+      <h2>You would not be first.</h2>
+      <p>In situ analysis is not a research idea waiting for adopters. It runs in
+        production, at scale, in codes you have heard of. <b>Every number and every name
+        on this page links to its source</b> — a paper, a lab report, or the adaptor's
+        own code. Where we cannot link it, we say so.</p>
+    </div>
     <div class="kpis">
       <a class="kpi" href="#adopters">
         <b>28</b>
@@ -454,7 +465,7 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
 
 <section class="counter" id="running">
   <div class="wrap">
-    <h2>The Data Problem.</h2>
+    <h2>Watch the two numbers separate.</h2>
     <p class="sub">A WarpX timestep on Frontier produces a 5.75&nbsp;billion element mesh —
       1.16&nbsp;TB. Post-hoc, all of it has to land on disk before you can look at any of
       it, and then be read back again to do the analysis. In situ, only the results you
