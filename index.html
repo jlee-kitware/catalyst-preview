@@ -436,42 +436,18 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
 <section class="kpiband">
   <div class="wrap">
     <div class="kpis">
-      <a class="kpi" href="https://doi.org/10.1177/10943420241286521">
-        <b>4,416</b>
-        <span class="lb">GPUs across 552 Frontier nodes, rendering in situ</span>
-        <span class="src">ECP ALPINE, IJHPCA 2024</span></a>
-      <a class="kpi" href="https://doi.org/10.1177/10943420241286521">
-        <b>1.16 TB</b>
-        <span class="lb">one WarpX timestep — a 5.75 billion element AMR mesh, analysed in memory</span>
-        <span class="src">ECP ALPINE, IJHPCA 2024</span></a>
       <a class="kpi" href="#adopters">
         <b>28</b>
-        <span class="lb">simulation codes with a Catalyst adaptor, across eight domains</span>
+        <span class="lb">simulation codes already ship a Catalyst adaptor, across eight domains</span>
         <span class="src">every one linked to its evidence</span></a>
-      <a class="kpi" href="https://doi.org/10.1007/978-3-030-90539-2_33">
-        <b>3</b>
-        <span class="lb">function calls is the entire integration surface</span>
-        <span class="src">Catalyst Revised, ISC HPC 2021</span></a>
-      <a class="kpi" href="https://doi.org/10.1007/978-3-030-90539-2_33">
-        <b>325&thinsp;→&thinsp;155</b>
-        <span class="lb">lines to instrument LULESH, moving to the 2.0 API</span>
-        <span class="src">Catalyst Revised, ISC HPC 2021</span></a>
-      <a class="kpi" href="https://arxiv.org/abs/2608.30696">
-        <b>0.41&thinsp;→&thinsp;0.91</b>
-        <span class="lb">interpretation accuracy when an ontology grounds the AI planner</span>
-        <span class="src">arXiv:2608.30696, 2026</span></a>
-      <a class="kpi" href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/">
-        <b>+27%</b>
-        <span class="lb">more solver iterations in the same window, running the pipeline asynchronously</span>
-        <span class="src">Catalyst 2.1 demonstration, 2026</span></a>
-      <a class="kpi" href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/">
-        <b>8 bytes</b>
-        <span class="lb">crossed to the host in a closed steering loop — the field never left the GPU</span>
-        <span class="src">Catalyst 2.1 demonstration, 2026</span></a>
-      <a class="kpi" href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/">
-        <b>4</b>
-        <span class="lb">GPU backends from one adaptor — CUDA, HIP, SYCL, OpenMP</span>
-        <span class="src">Viskores via Kokkos</span></a>
+      <a class="kpi" href="https://doi.org/10.1177/10943420241286521">
+        <b>4,416</b>
+        <span class="lb">GPUs on Frontier, analysing a run in place rather than writing it</span>
+        <span class="src">ECP ALPINE, IJHPCA 2024</span></a>
+      <a class="kpi" href="#papers">
+        <b>21</b>
+        <span class="lb">peer-reviewed papers, a decade of them, mostly not by us</span>
+        <span class="src">read before committing engineering time</span></a>
     </div>
   </div>
 </section>
@@ -762,8 +738,9 @@ conduit_node_set_path_external_float64_ptr(
           <p class="fd">See divergence in hour four of a three-day job instead of on
             Friday. Kill it, or fix it.</p></div>
         <div class="flow"><a class="fn" href="https://www.kitware.com/webinars/whats-new-in-in-situ-analysis-and-visualization/">Computational steering</a>
-          <p class="fd">Change a parameter or boundary condition mid-run and watch the
-            field respond, through <code>catalyst_results</code>. Worked examples in
+          <p class="fd">Change a parameter or boundary condition mid-run through
+            <code>catalyst_results</code> — an on-device reduction returned eight bytes
+            to the driver and the field never left the GPU. Worked examples in
             <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxSteering" style="color:var(--muted)">C++</a> and
             <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/PythonSteering" style="color:var(--muted)">Python</a>.</p></div>
         <div class="flow"><a class="fn" href="https://github.com/aymanzyy/catalystml">Notebooks and dashboards</a>
