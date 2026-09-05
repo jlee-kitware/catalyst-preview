@@ -106,6 +106,42 @@ h1{
 .readout{font:400 .82rem/1.5 var(--mono);color:var(--muted);margin:1.1rem 0 0}
 .readout b{color:var(--text);font-weight:500}
 
+
+
+/* ---------- progressive disclosure ---------- */
+details.more{margin-top:1.4rem}
+details.more > summary{
+  list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:.55rem;
+  padding:.55rem .95rem;border:1px solid var(--rule);border-radius:2px;
+  font:400 .9rem var(--sans);color:var(--muted);
+}
+details.more > summary::-webkit-details-marker{display:none}
+details.more > summary:hover{border-color:var(--produced);color:var(--produced)}
+details.more > summary::after{content:"\203a";font-size:1.1rem;line-height:1;transition:transform .18s}
+details.more[open] > summary::after{transform:rotate(90deg)}
+details.more[open] > summary{margin-bottom:1.6rem}
+details.more > summary .n{font:400 .78rem var(--mono);opacity:.75}
+
+/* ---------- persona router ---------- */
+.router{border-bottom:1px solid var(--rule);background:#16131f}
+.router .wrap{padding:2.1rem var(--gut)}
+.router > .wrap > p{
+  margin:0 0 1.3rem;color:var(--muted);font:400 .9rem/1.6 var(--sans);max-width:56ch;
+}
+.tracks{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(15rem,100%),1fr));gap:0}
+.track{
+  display:block;text-decoration:none;padding:1.15rem 1.3rem 1.2rem;
+  border:1px solid var(--rule);margin:-1px 0 0 -1px;transition:background .15s;
+}
+.track:hover{background:#1f1b2c}
+.track .who{
+  display:block;font:400 .76rem/1.4 var(--mono);color:var(--muted);
+  text-transform:uppercase;letter-spacing:.07em;margin-bottom:.5rem;
+}
+.track .goes{display:block;font:400 1rem/1.4 var(--sans);color:var(--text);margin-bottom:.5rem}
+.track:hover .goes{color:var(--produced)}
+.track .cost{display:block;font:400 .76rem/1.4 var(--mono);color:var(--muted)}
+
 /* ---------- KPI band: every number links to its source ---------- */
 .kpiband{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);background:#181524}
 .kpiband .wrap{padding:2.4rem var(--gut) 0}
@@ -485,6 +521,31 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
 
 
 
+<section class="router">
+  <div class="wrap">
+    <p>The rest of this page answers four different questions. Take the one you came
+      with; the others will still be here.</p>
+    <div class="tracks">
+      <a class="track" href="#evidence">
+        <span class="who">Deciding whether to look</span>
+        <span class="goes">Is this real, and who is already using it?</span>
+        <span class="cost">28 codes, 21 papers &middot; two minutes</span></a>
+      <a class="track" href="#guide">
+        <span class="who">Evaluating for your code</span>
+        <span class="goes">Would it fit my problem, and what would it cost?</span>
+        <span class="cost">seven questions, then the effort table &middot; ten minutes</span></a>
+      <a class="track" href="#product">
+        <span class="who">Shipping simulation software</span>
+        <span class="goes">What does this do for my product and my licence?</span>
+        <span class="cost">the ISV case and BSD terms &middot; five minutes</span></a>
+      <a class="track" href="#docs">
+        <span class="who">Ready to try it</span>
+        <span class="goes">Show me the code and let me run something.</span>
+        <span class="cost">published examples, no sales conversation &middot; now</span></a>
+    </div>
+  </div>
+</section>
+
 <section class="counter" id="running">
   <div class="wrap">
     <h2>Watch the two numbers separate.</h2>
@@ -765,6 +826,10 @@ conduit_node_set_path_external_float64_ptr(
           <p class="fd">Images, extracts and KPI tables produced during the run, circulated or dropped into a report before the job finishes.</p></div>
       </div>
 
+    </div>
+    <details class="more">
+      <summary>Four more rungs <span class="n">steering, AI in the loop, coupling, exascale</span></summary>
+      <div class="flows">
       <div class="flowgroup">
         <h3>Then get into the loop</h3>
         <p class="gd">Putting a person back in a workflow that post-hoc locks them out of.</p>
@@ -813,7 +878,8 @@ conduit_node_set_path_external_float64_ptr(
           <p class="fd">Chain and orchestrate several of the above as modular stages in one run.</p></div>
       </div>
 
-    </div>
+      </div>
+    </details>
   </div>
 </section>
 
@@ -1113,6 +1179,10 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
         </div>
       </div>
 
+      </div>
+      <details class="more">
+        <summary>The rest of the reading list <span class="n">I/O, integrations, and tools built on Catalyst</span></summary>
+        <div class="pubgroups">
       <div class="pubgroup">
         <h3>In situ is still an I/O problem</h3>
         <p>Extracts are smaller, not free. An isosurface can land almost entirely on a
@@ -1199,7 +1269,8 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
            Also: SPARC/Nalu/CTH items are OSTI reports, not papers - consider a separate
            "lab reports" group rather than mixing them in here. -->
     </div>
-      </div>
+        </details>
+    </div>
   </div>
 </section>
 
