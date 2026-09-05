@@ -460,6 +460,18 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
         <b>0.41&thinsp;→&thinsp;0.91</b>
         <span class="lb">interpretation accuracy when an ontology grounds the AI planner</span>
         <span class="src">arXiv:2608.30696, 2026</span></a>
+      <a class="kpi" href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/">
+        <b>+27%</b>
+        <span class="lb">more solver iterations in the same window, running the pipeline asynchronously</span>
+        <span class="src">Catalyst 2.1 demonstration, 2026</span></a>
+      <a class="kpi" href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/">
+        <b>8 bytes</b>
+        <span class="lb">crossed to the host in a closed steering loop — the field never left the GPU</span>
+        <span class="src">Catalyst 2.1 demonstration, 2026</span></a>
+      <a class="kpi" href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/">
+        <b>4</b>
+        <span class="lb">GPU backends from one adaptor — CUDA, HIP, SYCL, OpenMP</span>
+        <span class="src">Viskores via Kokkos</span></a>
     </div>
   </div>
 </section>
@@ -569,6 +581,11 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
         workflow composer, and a game-engine bridge.</p>
       <p>A site that wants none of it ships nothing extra; a site that wants all of it
         sets an environment variable.</p>
+      <p>And it is vendor-portable by construction. Conduit is API-agnostic; Viskores
+        filters compile through Kokkos to CUDA, HIP, SYCL or OpenMP. The
+        <a href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/" style="color:var(--produced)">same integration pattern runs on
+        NVIDIA, AMD MI300X and Intel Max GPUs without adaptor changes</a> — and on
+        unified-memory parts like Grace Hopper and MI300A the model only gets simpler.</p>
       <p>A C interface because everything binds to C. There is a worked example for each:
         <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CUnstructuredGrid" style="color:var(--produced)">C</a>,
         <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxUnstructuredGrid" style="color:var(--produced)">C++</a>,
@@ -598,7 +615,9 @@ conduit_node_set_path_external_float64_ptr(
         Catalyst reads your arrays in place — no copy, no reformat, GPU-resident data
         stays on the GPU. A
         <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxLBMCylinder" style="color:var(--produced)">D2Q9 lattice-Boltzmann
-        example</a> hands Catalyst raw CUDA device pointers and never touches host memory.</p>
+        example</a> keeps four field arrays in device memory for the whole run, hands
+        Catalyst the raw pointers through <code>set_external</code>, and analyses them
+        on the same buffer the solver just wrote — no per-step transfer to host.</p>
 <pre style="margin-top:1.4rem"><span class="c"># the other side: your pipeline script, in Python</span>
 <span class="kw">from</span> paraview.simple <span class="kw">import</span> *
 <span class="kw">from</span> vtk.util.numpy_support <span class="kw">import</span> vtk_to_numpy
@@ -685,8 +704,9 @@ conduit_node_set_path_external_float64_ptr(
           <p class="fd">Analysis executes on the solver's own ranks, sharing its CPUs and
             GPUs. Nothing moves. Run it blocking, or let the solver carry on.</p></div>
         <div class="flow"><a class="fn" href="https://doi.org/10.1007/978-3-031-40843-4_20">In transit</a>
-          <p class="fd">Data is staged to dedicated analysis nodes, so heavy rendering
-            never blocks the solver and can use hardware the compute nodes lack.</p></div>
+          <p class="fd">Data is staged to dedicated analysis nodes over ADIOS2 SST and
+            Fides, so heavy pipelines never block the solver and can use hardware the
+            compute nodes lack.</p></div>
         <div class="flow"><a class="fn" href="https://arxiv.org/abs/2406.18112">Hybrid</a>
           <p class="fd">Reduce in line, then move only the reduction and render in
             transit. Cuts transfer time by two orders of magnitude on tested pipelines.</p></div>
@@ -814,8 +834,11 @@ conduit_node_set_path_external_float64_ptr(
         is one; the identical pipeline reads files when the run is already finished. The
         engineer asks the same question and does not need to know which mode they are in —
         so adopting this does not mean abandoning the analyses you already have.</p>
-      <p class="quiet">Kitware is extending this with NASA and the University of Colorado
-        Boulder, so validated solvers gain modern AI workflows without being rewritten.</p>
+      <p class="quiet">Two packages build on the same substrate: <b>catalyst-ml</b> for
+        in situ training and inference, and <b>catalyst-cosim</b> for multi-physics
+        coupling. Kitware is extending this with NASA and the University of Colorado
+        Boulder, so validated solvers gain modern AI workflows without being rewritten.
+        <a href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/" style="color:var(--muted)">roadmap &rarr;</a></p>
       <div class="btns" style="margin-top:1.2rem">
         <a class="btn" href="#talk">Talk about AI in the loop</a>
       </div>
@@ -1169,7 +1192,21 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
       </div>
 
       <div class="gq">
-        <h3><span class="n">04</span>Can you say in advance what you will need to see?</h3>
+        <h3><span class="n">04</span>Should the pipeline block the solver, or not?</h3>
+        <p>Since 2.1, <code>catalyst_execute</code> can snapshot the timestep onto a
+          bounded queue and return immediately, while a worker thread runs the pipeline
+          alongside the next solver step.</p>
+        <p class="ans"><b>Depends on the ratio of pipeline cost to step cost.</b> A
+          couple of reductions per step gains little and should stay synchronous. A
+          heavier pipeline gains a lot — in the 2.1 demonstration the solver went from
+          blocked <b>33%</b> of wall-clock to <b>6%</b>, completing <b>27% more
+          iterations</b>. GPU solvers usually leave CPU cores idle, which is exactly what
+          async is for. The trade is bounded memory for the queue.
+          <span class="why"><a href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/">Catalyst 2.1 demonstration, 2026</a></span></p>
+      </div>
+
+      <div class="gq">
+        <h3><span class="n">05</span>Can you say in advance what you will need to see?</h3>
         <p>The genuine constraint of in situ: the data is transient, so something has to
           be specified before the run.</p>
         <p class="ans"><b>Not entirely &rarr; you still have four options.</b> Render an
@@ -1181,7 +1218,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
       </div>
 
       <div class="gq">
-        <h3><span class="n">05</span>Is your filesystem actually keeping up today?</h3>
+        <h3><span class="n">06</span>Is your filesystem actually keeping up today?</h3>
         <p>Worth asking honestly. On Cielo in 2014, with a strong Lustre filesystem and
           one moderate analysis every ten cycles, post-processing performed well.</p>
         <p class="ans"><b>If yes &rarr; keep post-processing, and use in situ to choose
@@ -1193,7 +1230,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
       </div>
 
       <div class="gq">
-        <h3><span class="n">06</span>What are you actually optimising for?</h3>
+        <h3><span class="n">07</span>What are you actually optimising for?</h3>
         <p>Cost per run, time to answer, and capability you do not currently have are
           three different goals with three different answers.</p>
         <p class="ans"><b>Capability is usually the real one.</b> Most teams do not adopt
@@ -1354,10 +1391,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
         </div>
       </div>
       <div class="btns" style="margin-top:1.4rem">
-        <!-- TODO: replace with the real assessment intake link (dedicated form or
-             calendar), not the generic contact page, once one exists. Generic contact
-             is the interim so the primary CTA is at least not dead. -->
-        <a class="btn solid" href="https://www.kitware.com/contact/">Book an assessment</a>
+        <a class="btn solid" href="https://www.kitware.com/catalyst-assessment">Book an assessment</a>
         <a class="btn" href="#docs">Try it yourself first</a>
       </div>
     </div>
