@@ -691,8 +691,12 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
         <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/Fortran90ImageData" style="color:var(--produced)">Fortran&nbsp;90</a> and
         <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/PythonImageData" style="color:var(--produced)">Python</a>.
         Your solver's language is not the question; whether it can describe its mesh is.</p>
-      <p class="quiet">Swap implementations by pointing an environment variable at a
-        different <code>libcatalyst.so.2</code>. No recompile, and pipelines themselves
+      <p class="quiet">Swap implementations at run time with
+        <code>CATALYST_IMPLEMENTATION_NAME</code> and
+        <code>CATALYST_IMPLEMENTATION_PATHS</code>; Catalyst loads the named library with
+        <code>dlopen</code> and checks it for compatibility.
+        <a href="https://catalyst-in-situ.readthedocs.io/en/latest/for_simulation_developers.html" style="color:var(--muted)">API reference</a>.
+        No recompile, and pipelines themselves
         can be <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxDynamicPipelines" style="color:var(--muted)">added and
         removed while the solver runs</a>.</p>
     </div>
@@ -1548,7 +1552,8 @@ ls
         for a zero-build first look. Until then the examples build against an installed
         ParaView, and the tutorial's first version needs no Catalyst at all.</p>
       <div class="btns" style="margin-top:1.2rem">
-        <a class="btn" href="https://kitware.github.io/paraview-catalyst/">Documentation</a>
+        <a class="btn" href="https://catalyst-in-situ.readthedocs.io/en/latest/for_simulation_developers.html">Catalyst API</a>
+        <a class="btn" href="https://kitware.github.io/paraview-catalyst/">ParaView Catalyst</a>
         <a class="btn" href="https://gitlab.kitware.com/paraview/catalyst-examples">Examples</a>
         <a class="btn" href="https://discourse.paraview.org/c/in-situ-support">Ask on Discourse</a>
       </div>
