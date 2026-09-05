@@ -6,7 +6,7 @@
 <title>ParaView Catalyst: in situ analysis for HPC simulations</title>
 <meta name="description" content="Analyse simulation data where it is computed. Three function calls, an ABI-stable C API, and ParaView never enters your build. 28 adopting codes, every claim linked to its evidence.">
 <meta property="og:title" content="ParaView Catalyst: analyse the data where it is computed">
-<meta property="og:description" content="Compute bandwidth outgrew storage by orders of magnitude. Catalyst decides which results land on disk, then you post-process the results you chose.">
+<meta property="og:description" content="Something in your workflow decides what to throw away, before anyone has looked at the run. Catalyst does the analysis in memory, so that decision moves to after you have seen the data.">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -385,19 +385,23 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
 <header class="hero" id="top">
   <div class="wrap">
     <div>
-      <h1>Your simulation now outruns your filesystem by orders of magnitude.</h1>
-      <p class="lede">Compute scaled. Storage bandwidth didn't. So the disk decides what
-        your science looks like. You keep the timesteps you can afford to write, not the
-        ones that matter, and that choice gets made before anyone knows which is which.
-        Catalyst analyses the data in situ, where it is computed, so you stop choosing.</p>
+      <h1>Something in your workflow decides what to throw away.</h1>
+      <p class="lede">Usually a number in a config file. Write every hundredth timestep,
+        because that is what the filesystem will take, and hope the one you needed was
+        not among the other ninety-nine. That decision gets made before anyone has looked
+        at the run.</p>
+      <p class="lede">Catalyst does the analysis while the data is still in memory, in
+        situ, where it is computed. The decision does not go away. It moves to after you
+        have seen what you have.</p>
       <div class="btns">
         <a class="btn solid" href="#running">See it running</a>
         <a class="btn" href="#architecture">Integration architecture</a>
       </div>
       <p class="lede" style="margin:1.6rem 0 0;font-size:.95rem">
-        On Titan, compute bandwidth was <b style="color:var(--produced);font-weight:500;font-family:var(--mono)">125 PB/s</b>
-        against <b style="color:var(--written);font-weight:500;font-family:var(--mono)">1.4 TB/s</b> to storage,
-        a gap near 89,000&#8239;:&#8239;1, and widening.
+        Why the number in that config file is small: on Titan, compute bandwidth was
+        <b style="color:var(--produced);font-weight:500;font-family:var(--mono)">125 PB/s</b>
+        against <b style="color:var(--written);font-weight:500;font-family:var(--mono)">1.4 TB/s</b>
+        to storage. A gap near 89,000&#8239;:&#8239;1, and widening.
         <a href="https://www.kennethmoreland.com/documents/InSituTensions.pdf"
            style="color:var(--muted);font:400 .8rem var(--mono);display:block;margin-top:.4rem">Moreland, IEEE CG&amp;A 36(2), 2016, Fig. 1</a>
         <span style="color:var(--muted);font:400 .8rem/1.6 var(--mono);display:block;margin-top:.5rem">Like
