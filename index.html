@@ -372,6 +372,8 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
         a gap near 89,000&#8239;:&#8239;1, and widening.
         <a href="https://www.kennethmoreland.com/documents/InSituTensions.pdf"
            style="color:var(--muted);font:400 .8rem var(--mono);display:block;margin-top:.4rem">Moreland, IEEE CG&amp;A 36(2), 2016, Fig. 1</a>
+        <span style="color:var(--muted);font:400 .8rem/1.6 var(--mono);display:block;margin-top:.5rem">Like
+        every number on this page, that one links to where it came from.</span>
       </p>
     </div>
 
@@ -437,31 +439,7 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
   </div>
 </header>
 
-<section class="kpiband" id="evidence">
-  <div class="wrap">
-    <div class="kpihead">
-      <h2>You would not be first.</h2>
-      <p>In situ analysis is not a research idea waiting for adopters. It runs in
-        production, at scale, in codes you have heard of. <b>Every number and every name
-        on this page links to its source</b>: a paper, a lab report, or the adaptor's
-        own code. Where we cannot link it, we say so.</p>
-    </div>
-    <div class="kpis">
-      <a class="kpi" href="#adopters">
-        <b>28</b>
-        <span class="lb">simulation codes already ship a Catalyst adaptor, across eight domains</span>
-        <span class="src">every one linked to its evidence</span></a>
-      <a class="kpi" href="https://doi.org/10.1177/10943420241286521">
-        <b>4,416</b>
-        <span class="lb">GPUs on Frontier, analysing a run in place rather than writing it</span>
-        <span class="src">ECP ALPINE, IJHPCA 2024</span></a>
-      <a class="kpi" href="#papers">
-        <b>21</b>
-        <span class="lb">peer-reviewed papers, a decade of them, mostly not by us</span>
-        <span class="src">read before committing engineering time</span></a>
-    </div>
-  </div>
-</section>
+
 
 <section class="counter" id="running">
   <div class="wrap">
@@ -828,6 +806,32 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
         train on the same runtime stream, with no disk round trip and GPU-resident data
         staying on the GPU. That gap is training that keeps pace with the solver versus
         training that throttles it.</p>
+    </div>
+  </div>
+</section>
+
+<section class="kpiband" id="evidence">
+  <div class="wrap">
+    <div class="kpihead">
+      <h2>None of that is speculative.</h2>
+      <p>Every capability above is running in production somewhere, at scale, in codes
+        you have heard of. <b>Every number and every name on this page links to its
+        source</b>: a paper, a lab report, or the adaptor's own code. Where we cannot
+        link it, we say so.</p>
+    </div>
+    <div class="kpis">
+      <a class="kpi" href="#adopters">
+        <b>28</b>
+        <span class="lb">simulation codes already ship a Catalyst adaptor, across eight domains</span>
+        <span class="src">every one linked to its evidence</span></a>
+      <a class="kpi" href="https://doi.org/10.1177/10943420241286521">
+        <b>4,416</b>
+        <span class="lb">GPUs on Frontier, analysing a run in place rather than writing it</span>
+        <span class="src">ECP ALPINE, IJHPCA 2024</span></a>
+      <a class="kpi" href="#papers">
+        <b>21</b>
+        <span class="lb">peer-reviewed papers, a decade of them, mostly not by us</span>
+        <span class="src">read before committing engineering time</span></a>
     </div>
   </div>
 </section>
