@@ -677,128 +677,89 @@ conduit_node_set_path_external_float64_ptr(
         back into the solver, and artifacts small enough to email a collaborator.</p>
       <p>That is the part worth sitting with if you ship simulation software. You
         instrument once; your users reach all of it without another release from you.</p>
+      <p>Roughly in the order teams adopt them. All of them run three ways without a
+        code change: <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxAsyncExecute" style="color:var(--produced)">in line,
+        blocking or async</a>, <a href="https://doi.org/10.1007/978-3-031-40843-4_20" style="color:var(--produced)">in
+        transit</a> on separate nodes, or <a href="https://arxiv.org/abs/2406.18112" style="color:var(--produced)">hybrid</a>,
+        reducing in place and rendering elsewhere. <a href="#guide" style="color:var(--produced)">Which
+        one fits you &rarr;</a></p>
       <p class="quiet">Linked names go to published work using that pattern. Grey names
-        are established practice we have not yet pinned to a public reference.
-        <a href="#talk">Talk about your workflow &rarr;</a></p>
+        are established practice we have not yet pinned to a public reference.</p>
     </div>
     <div class="flows">
 
       <div class="flowgroup">
-        <h3>Where the analysis runs</h3>
-        <p class="gd">The same instrumentation supports all three. Switching is a
-          deployment decision, not a code change.</p>
-        <div class="flow"><a class="fn" href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxAsyncExecute">In line, sync or async</a>
-          <p class="fd">Analysis executes on the solver's own ranks, sharing its CPUs and
-            GPUs. Nothing moves. Run it blocking, or let the solver carry on.</p></div>
-        <div class="flow"><a class="fn" href="https://doi.org/10.1007/978-3-031-40843-4_20">In transit</a>
-          <p class="fd">Data is staged to dedicated analysis nodes over ADIOS2 SST and
-            Fides, so heavy pipelines never block the solver and can use hardware the
-            compute nodes lack.</p></div>
-        <div class="flow"><a class="fn" href="https://arxiv.org/abs/2406.18112">Hybrid</a>
-          <p class="fd">Reduce in line, then move only the reduction and render in
-            transit. Cuts transfer time by two orders of magnitude on tested pipelines.</p></div>
-      </div>
-
-      <div class="flowgroup">
-        <h3>Analysis and extraction</h3>
-        <p class="gd">Turning a running simulation into results rather than into files.</p>
+        <h3>First, measure something</h3>
+        <p class="gd">Where almost everyone starts. Cheap, and it pays immediately.</p>
         <div class="flow"><span class="fn">Quantitative KPIs</span>
-          <p class="fd">Lift and drag integration, boundary-layer metrics, field energy:
-            engineering numbers at every timestep, not every hundredth.</p></div>
+          <p class="fd">Lift, drag, boundary-layer metrics, field energy. Engineering numbers at every timestep, not every hundredth.</p></div>
         <div class="flow"><span class="fn">Feature extraction</span>
-          <p class="fd">Isosurfaces, vortex cores, streamlines, thresholds. Keep the
-            structure, discard the volume it came from.</p></div>
-        <div class="flow"><a class="fn" href="https://doi.org/10.1007/978-3-031-40843-4_19">Region of interest</a>
-          <p class="fd">Detect what matters while it happens and save only that. Used to
-            track a cyclone through a running forecast.</p></div>
-        <div class="flow"><a class="fn" href="https://www.kennethmoreland.com/documents/InSituTensions.pdf">Image databases</a>
-          <p class="fd">Render many viewpoints and parameters in situ, then explore the
-            resulting database interactively afterwards. The Cinema approach, for when
-            you cannot say in advance what will matter.</p></div>
-        <div class="flow"><span class="fn">Shareable results</span>
-          <p class="fd">Images, extracts and KPI tables produced automatically during the
-            run, circulated to the team or dropped into a report before the job has
-            finished.</p></div>
-        <div class="flow"><a class="fn" href="https://arxiv.org/abs/2110.15427">Reduced archival</a>
-          <p class="fd">Write a compact derived representation instead of full fields, so
-            the run is still analysable next year.</p></div>
+          <p class="fd">Isosurfaces, vortex cores, streamlines, thresholds. Keep the structure, discard the volume it came from.</p></div>
+        <div class="flow"><span class="fn">Live monitoring</span>
+          <p class="fd">See divergence in hour four of a three-day job instead of on Friday. Kill it, or fix it.</p></div>
+        <div class="flow"><a class="fn" href="https://doi.org/10.1007/978-3-030-48340-1_31">Performance analysis</a>
+          <p class="fd">Route profiler data down the same path and see load imbalance painted on the mesh that caused it.</p></div>
       </div>
 
       <div class="flowgroup">
-        <h3>AI in the loop</h3>
+        <h3>Then stop writing everything</h3>
+        <p class="gd">Once the analysis runs in place, the disk holds results instead of raw state.</p>
+        <div class="flow"><a class="fn" href="https://doi.org/10.1007/978-3-031-40843-4_19">Region of interest</a>
+          <p class="fd">Detect what matters while it happens and save only that. Used to track a cyclone through a running forecast.</p></div>
+        <div class="flow"><a class="fn" href="https://www.kennethmoreland.com/documents/InSituTensions.pdf">Image databases</a>
+          <p class="fd">Render many viewpoints and parameters in situ, then explore the database afterwards. For when you cannot say in advance what will matter.</p></div>
+        <div class="flow"><a class="fn" href="https://arxiv.org/abs/2110.15427">Reduced archival</a>
+          <p class="fd">Write a compact derived representation instead of full fields, so the run is still analysable next year.</p></div>
+        <div class="flow"><span class="fn">Shareable results</span>
+          <p class="fd">Images, extracts and KPI tables produced during the run, circulated or dropped into a report before the job finishes.</p></div>
+      </div>
+
+      <div class="flowgroup">
+        <h3>Then get into the loop</h3>
+        <p class="gd">Putting a person back in a workflow that post-hoc locks them out of.</p>
+        <div class="flow"><a class="fn" href="https://www.kitware.com/webinars/whats-new-in-in-situ-analysis-and-visualization/">Computational steering</a>
+          <p class="fd">Change a parameter or boundary condition mid-run through <code>catalyst_results</code>. An on-device reduction returned eight bytes to the driver and the field never left the GPU.</p></div>
+        <div class="flow"><a class="fn" href="https://github.com/aymanzyy/catalystml">Notebooks and dashboards</a>
+          <p class="fd">Jupyter and trame front ends over a live run, so the interaction is a browser tab rather than a queue submission.</p></div>
+        <div class="flow"><a class="fn" href="https://doi.org/10.1007/978-3-031-73716-9_33">Immersive and VR</a>
+          <p class="fd">Hybrid visualization through a game engine, for walkthroughs of a running domain.</p></div>
+      </div>
+
+      <div class="flowgroup">
+        <h3>Then let a model into it</h3>
         <p class="gd">Models that learn from, explain, and act on the running solver.</p>
         <div class="flow"><a class="fn" href="https://github.com/aymanzyy/catalystml">Training</a>
-          <p class="fd">Surrogates, reduced-order models and data-driven closures trained
-            on runtime data, with no disk round trip.</p></div>
+          <p class="fd">Surrogates, reduced-order models and data-driven closures trained on runtime data, with no disk round trip.</p></div>
         <div class="flow"><a class="fn" href="https://github.com/aymanzyy/catalystml">Inference and passback</a>
-          <p class="fd">Query a trained model mid-run and return a correction to the
-            solver: a closure coefficient, a compressed field.</p></div>
+          <p class="fd">Query a trained model mid-run and return a correction to the solver: a closure coefficient, a compressed field.</p></div>
         <div class="flow"><a class="fn" href="https://hal.science/hal-04692246/file/Ribes-Mazen-Meyer-ISAV-2022_in_situ_metamodel_training-v2.pdf">Explainable AI</a>
-          <p class="fd">Watch a surrogate converge in space against ground truth, not
-            just as a loss curve. Two runs with identical loss can be visibly different.</p></div>
+          <p class="fd">Watch a surrogate converge in space against ground truth, not just as a loss curve. Two runs with identical loss can look very different.</p></div>
         <div class="flow"><a class="fn" href="https://arxiv.org/abs/2608.30696">LLM-guided analysis</a>
-          <p class="fd">Ask a question in plain language; deterministic filters compute
-            the answer; the model explains it. It never writes the analysis code.</p></div>
+          <p class="fd">Ask a question in plain language; deterministic filters compute the answer; the model explains it. It never writes the analysis code.</p></div>
       </div>
 
       <div class="flowgroup">
-        <h3>Interaction and control</h3>
-        <p class="gd">Putting a person back in a loop that post-hoc workflows lock them
-          out of.</p>
-        <div class="flow"><span class="fn">Live monitoring</span>
-          <p class="fd">See divergence in hour four of a three-day job instead of on
-            Friday. Kill it, or fix it.</p></div>
-        <div class="flow"><a class="fn" href="https://www.kitware.com/webinars/whats-new-in-in-situ-analysis-and-visualization/">Computational steering</a>
-          <p class="fd">Change a parameter or boundary condition mid-run through
-            <code>catalyst_results</code>. An on-device reduction returned eight bytes
-            to the driver and the field never left the GPU. Worked examples in
-            <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxSteering" style="color:var(--muted)">C++</a> and
-            <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/PythonSteering" style="color:var(--muted)">Python</a>.</p></div>
-        <div class="flow"><a class="fn" href="https://github.com/aymanzyy/catalystml">Notebooks and dashboards</a>
-          <p class="fd">Jupyter and trame front ends over a live run, so the interaction
-            is a browser tab rather than a queue submission.</p></div>
-        <div class="flow"><a class="fn" href="https://doi.org/10.1007/978-3-031-73716-9_33">Immersive and VR</a>
-          <p class="fd">Hybrid visualization through a game engine, for walkthroughs of a
-            running domain.</p></div>
-      </div>
-
-      <div class="flowgroup">
-        <h3>Coupled and multi-run</h3>
+        <h3>Then couple, and run many</h3>
         <p class="gd">Where the simulation is not one solver producing one answer.</p>
         <div class="flow"><span class="fn">Co-simulation</span>
-          <p class="fd">Two or more solvers exchange fields every timestep through a
-            common in-memory mesh description, instead of through disk and bespoke glue.
-            What makes it work in practice: consistent schema, careful partition
-            handling, and complete metadata across the coupled codes.</p></div>
+          <p class="fd">Two or more solvers exchange fields every timestep through a common in-memory mesh description, instead of through disk and bespoke glue. What makes it work: consistent schema, careful partition handling, complete metadata.</p></div>
         <div class="flow"><span class="fn todo">Digital twins</span>
-          <p class="fd">Assimilate live telemetry, steer the model to track the asset, and
-            stay faster than real time using surrogates.</p></div>
+          <p class="fd">Assimilate live telemetry, steer the model to track the asset, stay faster than real time using surrogates.</p></div>
         <div class="flow"><span class="fn todo">Ensembles and DoE</span>
-          <p class="fd">Hundreds of runs where full-field output per member is impossible.
-            Extract quantities of interest at full temporal fidelity instead.</p></div>
+          <p class="fd">Hundreds of runs where full-field output per member is impossible. Extract quantities of interest at full temporal fidelity instead.</p></div>
         <div class="flow"><span class="fn todo">Adaptive sampling</span>
-          <p class="fd">Feed those summaries to an optimiser that decides where in the
-            design space to run next.</p></div>
+          <p class="fd">Feed those summaries to an optimiser that decides where in the design space to run next.</p></div>
       </div>
 
       <div class="flowgroup">
-        <h3>Scale and mission</h3>
-        <p class="gd">Where post-hoc stopped being an option rather than a preference.</p>
+        <h3>And where post-hoc stops being an option</h3>
+        <p class="gd">The cases that motivated all of this in the first place.</p>
         <div class="flow"><a class="fn" href="https://doi.org/10.1177/10943420241286521">Exascale</a>
-          <p class="fd">Runs whose per-timestep output exceeds what the filesystem can
-            absorb. Analysis happens where the data is because it cannot go anywhere.</p></div>
-        <div class="flow"><span class="fn">Multiphysics at scale</span>
-          <p class="fd">Coupled physics on exascale machines, where both the coupling and
-            the analysis have to avoid the filesystem.</p></div>
+          <p class="fd">Runs whose per-timestep output exceeds what the filesystem can absorb. Analysis happens where the data is because it cannot go anywhere else.</p></div>
         <div class="flow"><a class="fn" href="https://kitware.github.io/paraview-catalyst/usecase/cyclonic.html">Urgent computing</a>
-          <p class="fd">Wildfire, cyclone, tsunami, contaminant release. Decisions made
-            while the simulation is still running, because afterwards is too late.</p></div>
-        <div class="flow"><a class="fn" href="https://doi.org/10.1007/978-3-030-48340-1_31">Performance analysis</a>
-          <p class="fd">Route profiler data through the same path and see load imbalance
-            painted on the mesh that caused it.</p></div>
+          <p class="fd">Wildfire, cyclone, tsunami, contaminant release. Decisions made while the simulation is still running, because afterwards is too late.</p></div>
         <div class="flow"><a class="fn" href="https://doi.org/10.1007/978-3-032-07612-0_6">Composed workflows</a>
-          <p class="fd">Chain and orchestrate several of the above as modular stages in
-            one run.</p></div>
+          <p class="fd">Chain and orchestrate several of the above as modular stages in one run.</p></div>
       </div>
 
     </div>
