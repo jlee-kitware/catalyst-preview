@@ -254,6 +254,13 @@ h1{
   gap:1.8rem 3rem;align-items:start;
 }
 .pubs{display:grid;gap:0;border-top:1px solid var(--rule)}
+.era{
+  display:inline-block;margin-left:.45rem;padding:.1rem .4rem;
+  border:1px solid var(--rule);border-radius:2px;
+  font:400 .68rem/1.5 var(--mono);color:var(--muted);vertical-align:.08em;
+}
+.era.old{border-color:#4a3f5e}
+.era.other{border-color:#4a3f5e;color:#8b7fa8}
 .pub{display:block;padding:.85rem 0;border-bottom:1px solid var(--rule);text-decoration:none}
 .pub .t{display:block;font-size:.97rem;line-height:1.4;margin-bottom:.2rem}
 .pub:hover .t{color:var(--produced)}
@@ -918,6 +925,11 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
       <p class="quiet">Every linked name goes straight to its evidence: a paper, a lab
         report, or the adaptor source. Dashed names are confirmed integrations whose
         public reference we are still pinning down.</p>
+      <p class="quiet">One honest caveat on this wall. Catalyst 2.0 arrived in 2021, and
+        several of these integrations were written against the 1.0 API before that. They
+        are evidence that the code adopted Catalyst, not proof that its adaptor is
+        current. The conversion is small when it happens: LULESH went from 325 lines to
+        155.</p>
     </div>
     <div class="domains">
       <div class="dom">
@@ -1030,6 +1042,14 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
       <h2>And a decade of peer-reviewed work behind it.</h2>
       <p>The papers below are the ones to read before committing engineering time. Every
         entry links to its DOI or an open-access copy.</p>
+      <p><b style="color:var(--text);font-weight:400">Mind the API boundary.</b> Catalyst
+        2.0 arrived with ParaView 5.9 in 2021. Work published before that describes the
+        1.0 API, which needed the ParaView SDK at build time, linked the implementation
+        into your binary, and used a different call sequence. Those papers are still good
+        evidence for whether in situ works and what it costs to run. They are not a
+        description of what you would integrate against today, and anything they say
+        about build complexity or binary size has since been answered by the
+        architecture. Entries below are tagged where this matters.</p>
       <div class="cite">
         <h3>Citing Catalyst</h3>
         <p>Cite the AIAA 2026 paper for current capability, the 2021 ISC paper for the
@@ -1049,7 +1069,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
             <span class="t">Catalyst Revised: Rethinking the ParaView in Situ Analysis and Visualization API</span>
             <span class="m">Ayachit et al. · ISC High Performance 2021 · LNCS 12761 · the 2.0 API</span></a>
           <a class="pub" href="https://doi.org/10.1145/2828612.2828624">
-            <span class="t">ParaView Catalyst: Enabling In Situ Data Analysis and Visualization</span>
+            <span class="t">ParaView Catalyst: Enabling In Situ Data Analysis and Visualization<span class="era old">Catalyst 1.0</span></span>
             <span class="m">Ayachit, Bauer, Geveci, O'Leary, Moreland, Fabian, Mauldin · ISAV 2015 · the original design</span></a>
         </div>
       </div>
@@ -1074,16 +1094,16 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
           evaluating Catalyst specifically.</p>
         <div class="pubs">
           <a class="pub" href="https://www.kennethmoreland.com/documents/InSituTensions.pdf">
-            <span class="t">The tensions of in situ visualization</span>
+            <span class="t">The tensions of in situ visualization<span class="era old">Catalyst 1.0</span></span>
             <span class="m">Moreland · IEEE Computer Graphics and Applications 36(2) · 2016 · the tradeoffs named honestly, by one of Catalyst's own authors. Describes the 1.0 API; read it alongside the 2021 redesign above.</span></a>
           <a class="pub" href="https://doi.org/10.1111/cgf.12930">
-            <span class="t">In situ methods, infrastructures, and applications on high performance computing platforms</span>
+            <span class="t">In situ methods, infrastructures, and applications on high performance computing platforms<span class="era old">Catalyst 1.0</span></span>
             <span class="m">Bauer et al. · Computer Graphics Forum 35(3) · 2016 · state-of-the-art report</span></a>
           <a class="pub" href="https://doi.org/10.1145/2597652.2597668">
-            <span class="t">Evaluation of methods to integrate analysis into a large-scale shock physics code</span>
+            <span class="t">Evaluation of methods to integrate analysis into a large-scale shock physics code<span class="era old">Catalyst 1.0</span></span>
             <span class="m">Oldfield, Moreland, Fabian, Rogers · ICS 2014 · the rigorous three-way comparison: in situ, in transit and post-processing on CTH, 10.58M processor-hours. Concludes all three are needed, and Catalyst supports all three.</span></a>
           <a class="pub" href="https://www.osti.gov/servlets/purl/1649280">
-            <span class="t">Opportunities for cost savings with in-transit visualization</span>
+            <span class="t">Opportunities for cost savings with in-transit visualization<span class="era other">measured on Ascent</span></span>
             <span class="m">Kress et al. · ISC HPC 2020 · the cost model: in-line visualization cost grows 0.6× → 2.2× of solver cycle time with scale while transfer cost barely moves; volume rendering 4× cheaper at lower concurrency</span></a>
           <a class="pub" href="https://doi.org/10.1177/10943420241286521">
             <span class="t">The ECP ALPINE project: in situ and post hoc visualization infrastructure for exascale</span>
@@ -1098,7 +1118,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
           this before assuming reduction ends the conversation.</p>
         <div class="pubs">
           <a class="pub" href="https://doi.org/10.1145/2828612.2828620">
-            <span class="t">In situ analysis as a parallel I/O problem</span>
+            <span class="t">In situ analysis as a parallel I/O problem<span class="era old">Catalyst 1.0</span></span>
             <span class="m">Ziegeler, Atkins, Bauer, Pettey &middot; DoD HPCMP and Kitware &middot; ISAV 2015 &middot; open access &middot; treats extract output as an I/O problem in its own right, and adds dynamic aggregation in ADIOS2 to handle it</span></a>
         </div>
       </div>
@@ -1108,22 +1128,22 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
         <p>Written by the people who did the work, not by us.</p>
         <div class="pubs">
           <a class="pub" href="https://doi.org/10.1007/s11227-021-03990-3">
-            <span class="t">In situ visualization of large-scale turbulence simulations in Nek5000 with ParaView Catalyst</span>
+            <span class="t">In situ visualization of large-scale turbulence simulations in Nek5000 with ParaView Catalyst<span class="era old">Catalyst 1.0</span></span>
             <span class="m">Atzori et al. · Journal of Supercomputing · 2021 · where the time goes in a compositing-heavy pipeline, and how to tune it</span></a>
           <a class="pub" href="https://doi.org/10.1007/978-3-662-44900-4_2">
-            <span class="t">In-situ visualization in CFD using open-source tools: integration of Catalyst into Code_Saturne</span>
+            <span class="t">In-situ visualization in CFD using open-source tools: integration of Catalyst into Code_Saturne<span class="era old">Catalyst 1.0</span></span>
             <span class="m">Ribés, Lorendeau, Fournier · EDF R&amp;D · 2015</span></a>
           <a class="pub" href="https://doi.org/10.1007/978-3-030-48340-1_31">
-            <span class="t">In situ visualization of performance-related data in parallel CFD applications</span>
+            <span class="t">In situ visualization of performance-related data in parallel CFD applications<span class="era old">Catalyst 1.0</span></span>
             <span class="m">Score-P plugin routing profiling data through Catalyst · 2020</span></a>
           <a class="pub" href="https://superfri.org/index.php/superfri/article/view/317">
-            <span class="t">Enhancing the in situ visualization of performance data in parallel CFD applications</span>
+            <span class="t">Enhancing the in situ visualization of performance data in parallel CFD applications<span class="era old">Catalyst 1.0</span></span>
             <span class="m">Supercomputing Frontiers and Innovations · 2020 · follow-on work</span></a>
           <a class="pub" href="https://arxiv.org/abs/2110.15427">
-            <span class="t">High resolution calibration of cosmic string network evolution</span>
+            <span class="t">High resolution calibration of cosmic string network evolution<span class="era old">Catalyst 1.0</span></span>
             <span class="m">arXiv:2110.15427 · Catalyst v5.8.0 used to reduce output at 4096³</span></a>
           <a class="pub" href="https://arxiv.org/abs/2208.07767">
-            <span class="t">Enhancing dynamic mode decomposition workflow with in-situ visualization and data compression</span>
+            <span class="t">Enhancing dynamic mode decomposition workflow with in-situ visualization and data compression<span class="era old">Catalyst 1.0</span></span>
             <span class="m">arXiv:2208.07767 · adaptor written against the initialize / co-process / finalize cycle</span></a>
         </div>
       </div>
@@ -1288,8 +1308,9 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
         A structured-mesh adaptor is a few hundred lines. Unstructured with AMR is more.</p>
       <p>Once the adaptor exists, every pipeline your users will ever want is a Python
         script they write themselves, with no further solver changes.</p>
-      <p class="quiet">The clearest number we have: converting LULESH from the legacy
-        API to Catalyst 2.0 cut the adaptor roughly in half. The
+      <p class="quiet">The clearest number we have, and note what it measures: this is
+        the cost of moving an existing 1.0 adaptor to the 2.0 API, not the cost of
+        starting from nothing. Converting LULESH cut it roughly in half. The
         <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/Lulesh-tutorial" style="color:var(--produced)">tutorial walks it in
         six stages</a>, from an uninstrumented solver to a steered one. Read it before
         estimating your own.</p>
