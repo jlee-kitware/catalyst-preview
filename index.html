@@ -609,10 +609,12 @@ conduit_node_set_path_external_float64_ptr(
         change the analysis, and nothing stopping you importing whatever the rest of your
         field already uses.</p>
       <figure class="figure" style="margin-top:1.6rem">
-        <img src="assets/amr-isosurface.jpg" width="1600" height="900" loading="lazy"
-             alt="Isosurface extracted inside a translucent adaptive mesh refinement grid">
-        <figcaption>An isosurface pulled from inside a live AMReX AMR hierarchy —
-          the block structure is the solver's own, read in place.</figcaption>
+        <video src="assets/amrex.mp4" poster="assets/amrex.jpg"
+               autoplay muted loop playsinline preload="none"
+               width="1100" height="619"
+               aria-label="Isosurface evolving inside a translucent adaptive mesh refinement grid"></video>
+        <figcaption>An isosurface tracked through a live AMReX run — the AMR block
+          structure is the solver's own, read in place, refining as the front moves.</figcaption>
       </figure>
     </div>
   </div>
@@ -733,9 +735,9 @@ conduit_node_set_path_external_float64_ptr(
         <div class="flow"><span class="fn">Live monitoring</span>
           <p class="fd">See divergence in hour four of a three-day job instead of on
             Friday. Kill it, or fix it.</p></div>
-        <div class="flow"><a class="fn" href="https://hal.science/hal-04692246/file/Ribes-Mazen-Meyer-ISAV-2022_in_situ_metamodel_training-v2.pdf">Computational steering</a>
+        <div class="flow"><a class="fn" href="https://www.kitware.com/webinars/whats-new-in-in-situ-analysis-and-visualization/">Computational steering</a>
           <p class="fd">Change a parameter or boundary condition mid-run and watch the
-            field respond. Catalyst carries results back to the solver.</p></div>
+            field respond. Catalyst carries results back to the solver, on CPU or GPU.</p></div>
         <div class="flow"><a class="fn" href="https://github.com/aymanzyy/catalystml">Notebooks and dashboards</a>
           <p class="fd">Jupyter and trame front ends over a live run, so the interaction
             is a browser tab rather than a queue submission.</p></div>
@@ -1366,6 +1368,14 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
         <a class="btn" href="https://gitlab.kitware.com/paraview/catalyst-examples">Examples</a>
         <a class="btn" href="https://discourse.paraview.org/c/in-situ-support">Ask on Discourse</a>
       </div>
+      <p class="claim quiet" style="margin-top:1.2rem">Or watch one — all free, all
+        recorded:
+        <a href="https://www.kitware.com/webinars/whats-new-in-in-situ-analysis-and-visualization/" style="color:var(--produced)">async
+        execution, GPU workflows and in-situ AI</a> ·
+        <a href="https://www.kitware.com/webinars/in-situ-analysis-with-catalyst-getting-started/" style="color:var(--produced)">getting
+        started</a> ·
+        <a href="https://www.kitware.com/webinars/catalyst-the-swiss-army-knife-for-smarter-simulations/" style="color:var(--produced)">the
+        wider toolkit</a></p>
     </div>
   </div>
 </section>
