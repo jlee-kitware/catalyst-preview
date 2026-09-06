@@ -55,9 +55,9 @@ a{color:inherit}
 .dim{color:var(--muted)}
 .norm{color:var(--text);font-weight:400}
 .m0{margin:0}
-.mt3{margin-top:var(--s3)}
-.mt4{margin-top:var(--s4)}
-.mt5{margin-top:var(--s5)}
+.mt3{margin-top:var(--s3)!important}
+.mt4{margin-top:var(--s4)!important}
+.mt5{margin-top:var(--s5)!important}
 .mono-note{margin:var(--s5) 0 0;font:400 .8rem/1.7 var(--mono)}
 
 /* ---------- nav ---------- */
@@ -97,7 +97,11 @@ h1{
 .btn:hover{border-color:var(--muted)}
 .btn.solid{background:var(--produced);color:#1a1508;border-color:var(--produced);font-weight:600}
 .btn.solid:hover{background:#f6cd75;border-color:#f6cd75}
-.figure{border:1px solid var(--rule);background:#0f0d18;position:relative}
+.figure{
+  margin:0;border:1px solid var(--rule);background:#0f0d18;position:relative;
+}
+.figure img,.figure video{display:block;width:100%;height:auto}
+.figure .embed{border:0}
 .figure svg{display:block;width:100%;height:auto}
 .figure figcaption{
   border-top:1px solid var(--rule);padding:.6rem .85rem;
@@ -158,18 +162,18 @@ details.more > summary .n{font:400 .78rem var(--mono);opacity:.75}
   margin:0 0 1.3rem;color:var(--muted);font:400 .9rem/1.6 var(--sans);max-width:56ch;
 }
 .tracks{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(15rem,100%),1fr));gap:0}
-.track{
+.route{
   display:block;text-decoration:none;padding:1.15rem 1.3rem 1.2rem;
   border:1px solid var(--rule);margin:-1px 0 0 -1px;transition:background .15s;
 }
-.track:hover{background:#1f1b2c}
-.track .who{
+.route:hover{background:#1f1b2c}
+.route .who{
   display:block;font:400 .76rem/1.4 var(--mono);color:var(--muted);
   text-transform:uppercase;letter-spacing:.07em;margin-bottom:.5rem;
 }
-.track .goes{display:block;font:400 1rem/1.4 var(--sans);color:var(--text);margin-bottom:.5rem}
-.track:hover .goes{color:var(--produced)}
-.track .cost{display:block;font:400 .76rem/1.4 var(--mono);color:var(--muted)}
+.route .goes{display:block;font:400 1rem/1.4 var(--sans);color:var(--text);margin-bottom:.5rem}
+.route:hover .goes{color:var(--produced)}
+.route .cost{display:block;font:400 .76rem/1.4 var(--mono);color:var(--muted)}
 
 /* ---------- KPI band: every number links to its source ---------- */
 .kpiband{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);background:#181524}
@@ -207,14 +211,6 @@ details.more > summary .n{font:400 .78rem var(--mono);opacity:.75}
 
 
 /* ---------- imagery ---------- */
-.figure{margin:0;position:relative}
-.figure img{
-  display:block;width:100%;height:auto;border:1px solid var(--rule);
-  background:#0f0d18;
-}
-.figure figcaption{
-  margin-top:.6rem;font:400 .78rem/1.5 var(--mono);color:var(--muted);
-}
 .products{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(min(13rem,100%),1fr));
   gap:1rem;margin-top:1rem;
@@ -231,9 +227,6 @@ details.more > summary .n{font:400 .78rem var(--mono);opacity:.75}
 
 
 /* ---------- media ---------- */
-.figure video{
-  display:block;width:100%;height:auto;border:1px solid var(--rule);background:#0f0d18;
-}
 .gallery{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(min(15rem,100%),1fr));
   gap:1.1rem;margin-top:2.2rem;
@@ -609,19 +602,19 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
     <p>The rest of this page answers four different questions. Take the one you came
       with; the others will still be here.</p>
     <div class="tracks">
-      <a class="track" href="#evidence">
+      <a class="route" href="#evidence">
         <span class="who">Deciding whether to look</span>
         <span class="goes">Is this real, and who is already using it?</span>
         <span class="cost">28 codes, 21 papers &middot; two minutes</span></a>
-      <a class="track" href="#guide">
+      <a class="route" href="#guide">
         <span class="who">Evaluating for your code</span>
         <span class="goes">Would it fit my problem, and what would it cost?</span>
         <span class="cost">seven questions, the alternatives, then the effort table &middot; ten minutes</span></a>
-      <a class="track" href="#product">
+      <a class="route" href="#product">
         <span class="who">Shipping simulation software</span>
         <span class="goes">What does this do for my product and my licence?</span>
         <span class="cost">the ISV case and BSD terms &middot; five minutes</span></a>
-      <a class="track" href="#docs">
+      <a class="route" href="#docs">
         <span class="who">Ready to try it</span>
         <span class="goes">Show me the code and let me run something.</span>
         <span class="cost">published examples, no sales conversation &middot; now</span></a>
