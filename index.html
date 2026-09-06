@@ -8,6 +8,12 @@
 <meta property="og:title" content="ParaView Catalyst: analyse the data before it reaches the disk">
 <meta property="og:description" content="Something in your workflow decides what to throw away, before anyone has looked at the run. Catalyst does the analysis in memory, so that decision moves to after you have seen the data.">
 <meta property="og:type" content="website">
+<!-- og:image must be absolute. Update the host when this moves to kitware.com. -->
+<meta property="og:image" content="https://jlee-kitware.github.io/catalyst-preview/assets/warpx.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
@@ -42,8 +48,12 @@ a{color:inherit}
   backdrop-filter:blur(10px);
   border-bottom:1px solid var(--rule);
 }
-.nav .wrap{display:flex;align-items:baseline;gap:2rem;height:60px}
-.brand{font-weight:600;letter-spacing:-.02em;margin-right:auto}
+.nav .wrap{display:flex;align-items:center;gap:2rem;height:60px}
+.brand{
+  font-weight:600;letter-spacing:-.02em;margin-right:auto;
+  display:inline-flex;align-items:center;gap:.5rem;
+}
+.brand img{display:block;width:20px;height:20px;flex:none}
 .brand span{color:var(--muted);font-weight:300}
 .nav a:not(.brand){
   color:var(--muted);text-decoration:none;font-size:.9rem;
@@ -457,7 +467,8 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
 <a class="skip" href="#top">Skip to content</a>
 <nav class="nav">
   <div class="wrap">
-    <a class="brand" href="#top">ParaView&nbsp;<span>Catalyst</span></a>
+    <a class="brand" href="#top"><img src="assets/favicon-32x32.png" alt="" width="20"
+       height="20" decoding="async">ParaView&nbsp;<span>Catalyst</span></a>
     <a href="#why">The problem</a>
     <a href="#running">Live run</a>
     <a href="#architecture">Architecture</a>
