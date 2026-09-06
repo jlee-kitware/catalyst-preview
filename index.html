@@ -310,6 +310,17 @@ a[target="_blank"] .era::after{content:none}
 .thennow tr.changed .now{color:var(--produced);font-weight:500}
 .thennow tr.changed td:first-child{box-shadow:inset 2px 0 0 var(--produced);padding-left:.7rem}
 
+
+/* a heading that introduces a card grid must not look like a card */
+.blockhead{
+  margin:0 0 .35rem;font:600 1.02rem/1.3 var(--sans);color:var(--text);
+}
+.blockintro{margin:0 0 var(--s4);color:var(--muted);font-size:.92rem;max-width:52ch}
+.offer h3 .ord{
+  display:inline-block;min-width:1.15rem;margin-right:.4rem;
+  font:500 .78rem var(--mono);color:var(--produced);
+}
+
 /* ---------- placement diagram ---------- */
 .placement{margin:0 0 2.4rem}
 .placement svg{display:block;width:100%;height:auto;max-width:58rem}
@@ -1776,31 +1787,31 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
         <a href="https://sites.google.com/view/ritalighosh/use-catalyst-with-your-simulations" class="lk" target="_blank" rel="noopener noreferrer">published
         a walkthrough</a> so others could repeat it.</p>
 
-      <div class="offers mt5">
+      <div class="mt5">
+        <h3 class="blockhead">What drives the runtime cost</h3>
+        <p class="blockintro">Four things, roughly in order of how much they matter. Tune
+          the first two and most workloads land where you want them.</p>
+      </div>
+      <div class="offers">
         <div class="offer">
-          <h3>What drives the runtime cost</h3>
-          <p>Four things, roughly in order. Tune the first two and most workloads land
-            where you want them.</p>
-        </div>
-        <div class="offer">
-          <h3>What the pipeline computes</h3>
+          <h3><span class="ord">1</span>What the pipeline computes</h3>
           <p>A scalar integral over the field is nearly free. Isosurface extraction is
             modest. Volume rendering at high resolution is a real cost, and should be
             budgeted like one.</p>
         </div>
         <div class="offer">
-          <h3>How often it runs</h3>
+          <h3><span class="ord">2</span>How often it runs</h3>
           <p>Every timestep is a choice, not a requirement. Most teams run the expensive
             parts on a stride and the cheap KPIs every step.</p>
         </div>
         <div class="offer">
-          <h3>Mesh conversion</h3>
+          <h3><span class="ord">3</span>Mesh conversion</h3>
           <p>Translating your native domain into the Conduit Mesh Blueprint is typically
             the most expensive part of the adaptor itself. Fields can be passed by
             pointer; topology usually cannot.</p>
         </div>
         <div class="offer">
-          <h3>Where the data already is</h3>
+          <h3><span class="ord">4</span>Where the data already is</h3>
           <p>GPU-resident data that stays on the GPU avoids the transfer entirely. Data
             that has to be marshalled across the bus does not.</p>
         </div>
