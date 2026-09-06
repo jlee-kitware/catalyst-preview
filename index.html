@@ -48,6 +48,8 @@ a{color:inherit}
 :root{
   --s1:.5rem; --s2:.75rem; --s3:1rem; --s4:1.25rem;
   --s5:1.5rem; --s6:2rem; --s7:3rem;
+  /* one vertical rhythm for every full-width section band */
+  --pad:clamp(2.5rem,5.5vw,4rem);
 }
 .lk{color:var(--produced)}
 .dim{color:var(--muted)}
@@ -104,7 +106,7 @@ h1{
 
 /* ---------- counter: the one loud moment ---------- */
 .counter{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);background:var(--slab)}
-.counter .wrap{padding:clamp(2.25rem,5vw,3.25rem) var(--gut)}
+.counter .wrap{padding:var(--pad) var(--gut)}
 .counter h2{max-width:26ch}
 .counter p.sub{color:var(--muted);margin:0 0 2rem;max-width:56ch;font-size:.98rem}
 .gauge{display:grid;gap:1.1rem;margin-bottom:1.6rem}
@@ -151,7 +153,7 @@ details.more > summary .n{font:400 .78rem var(--mono);opacity:.75}
 
 /* ---------- persona router ---------- */
 .router{border-bottom:1px solid var(--rule);background:#16131f}
-.router .wrap{padding:2.1rem var(--gut)}
+.router .wrap{padding:var(--pad) var(--gut)}
 .router > .wrap > p{
   margin:0 0 1.3rem;color:var(--muted);font:400 .9rem/1.6 var(--sans);max-width:56ch;
 }
@@ -171,7 +173,7 @@ details.more > summary .n{font:400 .78rem var(--mono);opacity:.75}
 
 /* ---------- KPI band: every number links to its source ---------- */
 .kpiband{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);background:#181524}
-.kpiband .wrap{padding:2.4rem var(--gut) 0}
+.kpiband .wrap{padding:var(--pad) var(--gut)}
 .kpihead{max-width:56ch;margin-bottom:1.6rem}
 .kpihead h2{margin-bottom:.55rem}
 .kpihead p{margin:0;color:var(--muted);font-size:.92rem;line-height:1.6}
@@ -380,7 +382,7 @@ a[target="_blank"] .era::after{content:none}
 .row2 .wrap{
   display:grid;grid-template-columns:minmax(0,.62fr) minmax(0,1fr);
   gap:clamp(1.5rem,4vw,3.5rem);
-  padding:clamp(2.5rem,5.5vw,4rem) var(--gut);
+  padding:var(--pad) var(--gut);
 }
 .claim h2{max-width:24ch}
 .claim p{color:var(--muted);margin:0 0 .8rem;font-size:1rem;max-width:38ch}
