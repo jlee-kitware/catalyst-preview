@@ -245,6 +245,23 @@ details.more > summary .n{font:400 .78rem var(--mono);opacity:.75}
 .gq .why a{color:var(--muted)}
 .gq .why a:hover{color:var(--produced)}
 
+
+/* ---------- placement diagram ---------- */
+.placement{margin:0 0 2.4rem}
+.placement svg{display:block;width:100%;height:auto;max-width:58rem}
+.placement figcaption{
+  margin-top:.7rem;font:400 .8rem/1.6 var(--mono);color:var(--muted);max-width:60ch;
+}
+.placement .lbl{font:500 11px var(--mono);fill:var(--text)}
+.placement .sub{font:400 9.5px var(--mono);fill:var(--muted)}
+.placement .box{fill:#1c1828;stroke:#2e2842}
+.placement .solver{fill:#221d33;stroke:#3a3350}
+.placement .an{fill:none;stroke:var(--produced);stroke-width:1.4}
+.placement .anfill{fill:rgba(240,192,90,.13);stroke:var(--produced);stroke-width:1.2}
+.placement .flow{stroke:var(--produced);stroke-width:1.6;fill:none;marker-end:url(#ah)}
+.placement .thin{stroke:var(--written);stroke-width:1.2;fill:none;
+  stroke-dasharray:3 3;marker-end:url(#ah2)}
+
 /* ---------- workflows ---------- */
 .wide{padding:var(--pad) 0;border-top:1px solid var(--rule)}
 .wide .wrap{padding:0 var(--gut)}
@@ -808,6 +825,71 @@ conduit_node_set_path_external_float64_ptr(
         are established practice with no public reference we could verify, so we have not
         linked them.</p>
     </div>
+    <figure class="placement">
+      <svg viewBox="0 0 720 140" xmlns="http://www.w3.org/2000/svg" role="img"
+           aria-label="Three placements: in line, in transit, and hybrid">
+        <defs>
+          <marker id="ah" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+            <path d="M0 0 L7 3.5 L0 7 z" fill="var(--produced)"/></marker>
+          <marker id="ah2" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+            <path d="M0 0 L7 3.5 L0 7 z" fill="var(--written)"/></marker>
+        </defs>
+      <g transform="translate(0,0)">
+      <text class="lbl" x="0" y="12">In line</text>
+      <text class="sub" x="0" y="26">nothing moves</text>
+      <rect class="solver" x="0" y="38" width="104" height="66" rx="2"/>
+      <text class="sub" x="8" y="56">solver ranks</text>
+      <rect class="box" x="8" y="66" width="18" height="28" rx="1"/>
+      <rect class="box" x="31" y="66" width="18" height="28" rx="1"/>
+      <rect class="box" x="54" y="66" width="18" height="28" rx="1"/>
+      <rect class="box" x="77" y="66" width="18" height="28" rx="1"/>
+      <rect class="anfill" x="8" y="72" width="18" height="16"/>
+      <rect class="anfill" x="31" y="72" width="18" height="16"/>
+      <rect class="anfill" x="54" y="72" width="18" height="16"/>
+      <rect class="anfill" x="77" y="72" width="18" height="16"/>
+      <text class="sub" x="0" y="122">analysis runs on the same ranks</text>
+      </g>
+      <g transform="translate(250,0)">
+      <text class="lbl" x="0" y="12">In transit</text>
+      <text class="sub" x="0" y="26">analysis on its own nodes</text>
+      <rect class="solver" x="0" y="38" width="104" height="66" rx="2"/>
+      <text class="sub" x="8" y="56">solver ranks</text>
+      <rect class="box" x="8" y="66" width="18" height="28" rx="1"/>
+      <rect class="box" x="31" y="66" width="18" height="28" rx="1"/>
+      <rect class="box" x="54" y="66" width="18" height="28" rx="1"/>
+      <rect class="box" x="77" y="66" width="18" height="28" rx="1"/>
+      <rect class="solver" x="132" y="38" width="70" height="66" rx="2"/>
+      <text class="sub" x="140" y="56">analysis</text>
+      <rect class="anfill" x="140" y="66" width="22" height="28" rx="1"/>
+      <rect class="anfill" x="166" y="66" width="22" height="28" rx="1"/>
+      <path class="flow" d="M108 78 L128 78"/>
+      <text class="sub" x="0" y="122">full timestep moves over the network</text>
+      </g>
+      <g transform="translate(490,0)">
+      <text class="lbl" x="0" y="12">Hybrid</text>
+      <text class="sub" x="0" y="26">reduce, then move</text>
+      <rect class="solver" x="0" y="38" width="104" height="66" rx="2"/>
+      <text class="sub" x="8" y="56">solver ranks</text>
+      <rect class="box" x="8" y="66" width="18" height="28" rx="1"/>
+      <rect class="box" x="31" y="66" width="18" height="28" rx="1"/>
+      <rect class="box" x="54" y="66" width="18" height="28" rx="1"/>
+      <rect class="box" x="77" y="66" width="18" height="28" rx="1"/>
+      <rect class="solver" x="132" y="38" width="70" height="66" rx="2"/>
+      <text class="sub" x="140" y="56">analysis</text>
+      <rect class="anfill" x="140" y="66" width="22" height="28" rx="1"/>
+      <rect class="anfill" x="166" y="66" width="22" height="28" rx="1"/>
+      <rect class="anfill" x="8" y="86" width="18" height="8"/>
+      <rect class="anfill" x="31" y="86" width="18" height="8"/>
+      <rect class="anfill" x="54" y="86" width="18" height="8"/>
+      <rect class="anfill" x="77" y="86" width="18" height="8"/>
+      <path class="thin" d="M108 78 L128 78"/>
+      <text class="sub" x="0" y="122">reduce in place, move only the result</text>
+      </g>
+      </svg>
+      <figcaption>The same adaptor feeds all three. Which one runs is a launch-time
+        decision, and the solver code does not change between them.</figcaption>
+    </figure>
+
     <div class="flows">
 
       <div class="flowgroup">
