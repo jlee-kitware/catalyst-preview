@@ -585,9 +585,8 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
            strategy/clearances.md (private repo), deliberately not here, because HTML
            comments are readable in view-source on the public deploy. Restore the
            specific wording from that file once contracts confirms. -->
-      Four products from one <b class="norm">coupled production CFD run</b>, a primal
-      solve and its adjoint running together, requested in plain language while it was
-      still solving. Catalyst served
+      Four products from one <b class="norm">production CFD run</b>, requested in plain
+      language while it was still solving. Catalyst served
       the live simulation to ParaView; trame drew the browser session; an MCP layer
       turned the question into filters. <b class="norm">No
       solution files were written.</b> The same session reads from disk instead,
@@ -1017,7 +1016,10 @@ conduit_node_set_path_external_float64_ptr(
         <div class="flow"><a class="fn" href="https://github.com/aymanzyy/catalystml" target="_blank" rel="noopener noreferrer">Training</a>
           <p class="fd">Surrogates, reduced-order models and data-driven closures trained on runtime data, with no disk round trip.</p></div>
         <div class="flow"><a class="fn" href="https://github.com/aymanzyy/catalystml" target="_blank" rel="noopener noreferrer">Inference and passback</a>
-          <p class="fd">Query a trained model mid-run and return a correction to the solver: a closure coefficient, a compressed field.</p></div>
+          <p class="fd">Query a trained model mid-run and return a correction to the
+            solver, as tightly as every nonlinear iteration: read a feature from the
+            volume channel, write a closure correction back into solver memory before
+            the next one begins.</p></div>
         <div class="flow"><a class="fn" href="https://hal.science/hal-04692246/file/Ribes-Mazen-Meyer-ISAV-2022_in_situ_metamodel_training-v2.pdf" target="_blank" rel="noopener noreferrer">Explainable AI</a>
           <p class="fd">Watch a surrogate converge in space against ground truth, not just as a loss curve. Two runs with identical loss can look very different.</p></div>
         <div class="flow"><a class="fn" href="https://arxiv.org/abs/2608.30696" target="_blank" rel="noopener noreferrer">LLM-guided analysis</a>
@@ -1033,10 +1035,11 @@ conduit_node_set_path_external_float64_ptr(
             Two patterns. Across components, the strongest version instruments the
             coupler rather than the models: one integration then serves every component,
             each grid arriving in its native form with no forced regridding and no copy.
-            Within one physics, a primal solve and its adjoint run together, the adjoint
-            consuming state the primal has just produced rather than a trajectory
-            checkpointed to disk. A dedicated package,
-            <b class="norm">catalyst-cosim</b>, is being built on this.</p></div>
+            Inside a single solve, a model can join the physics itself: on every
+            nonlinear iteration the pipeline reads a feature from the volume channel and
+            writes a correction straight back into the solver's memory through
+            <code>catalyst_results</code>. No disk, no host staging, no lag. A dedicated
+            package, <b class="norm">catalyst-cosim</b>, is being built on this.</p></div>
         <div class="flow"><span class="fn todo">Digital twins</span>
           <p class="fd">Assimilate live telemetry, steer the model to track the asset, stay faster than real time using surrogates.</p></div>
         <div class="flow"><span class="fn todo">Ensembles and DoE</span>
