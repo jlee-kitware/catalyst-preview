@@ -830,8 +830,10 @@ conduit_node_set_path_external_float64_ptr(
         code change: <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxAsyncExecute" style="color:var(--produced)">in line,
         blocking or async</a>, <a href="https://doi.org/10.1007/978-3-031-40843-4_20" style="color:var(--produced)">in
         transit</a> on separate nodes, or <a href="https://arxiv.org/abs/2406.18112" style="color:var(--produced)">hybrid</a>,
-        reducing in place and rendering elsewhere. <a href="#guide" style="color:var(--produced)">Which
-        one fits you &rarr;</a></p>
+        reducing in place and rendering elsewhere. Fides ships inside ParaView and hands
+        the Conduit node straight to ADIOS2, so moving off-node is a change to the
+        pipeline script rather than to your solver.
+        <a href="#guide" style="color:var(--produced)">Which one fits you &rarr;</a></p>
       <p class="quiet">Linked names go to published work using that pattern. Grey ones
         are established practice with no public reference we could verify, so we have not
         linked them.</p>
@@ -897,8 +899,10 @@ conduit_node_set_path_external_float64_ptr(
       <text class="sub" x="0" y="122">reduce in place, move only the result</text>
       </g>
       </svg>
-      <figcaption>The same adaptor feeds all three. Which one runs is a launch-time
-        decision, and the solver code does not change between them.</figcaption>
+      <figcaption>The same adaptor feeds all three, and the solver code does not change
+        between them. Moving from in line to in transit is a few lines in the Python
+        pipeline: instantiate a Fides writer and give it the Conduit node Catalyst
+        already holds. ADIOS2 carries it from there.</figcaption>
     </figure>
 
     <div class="flows">
@@ -1574,9 +1578,10 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
 
       <div class="gq">
         <h3><span class="n">ADIOS2</span></h3>
-        <p>Not an alternative at all. It is data transport, and Catalyst writes through
-          it: the in transit and hybrid paths on this page are ADIOS2 underneath, with
-          Fides translating.</p>
+        <p>Not an alternative at all. It is data transport, and it is already wired in:
+          Fides ships inside ParaView and translates between Catalyst's Conduit node and
+          ADIOS2 without a manual conversion step. The in transit and hybrid paths on
+          this page are ADIOS2 underneath.</p>
         <p class="ans"><b>Use both.</b> If someone offers you ADIOS2 instead of Catalyst,
           they have answered a different question. ADIOS2 moves the data; something still
           has to decide what the data should be.</p>
