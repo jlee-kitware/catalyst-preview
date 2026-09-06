@@ -257,6 +257,18 @@ details.more > summary .n{font:400 .78rem var(--mono);opacity:.75}
 .gq .why a:hover{color:var(--produced)}
 
 
+
+/* external links leave the page, so say so where it is not obvious */
+.claim a[target="_blank"]::after,
+.lead a[target="_blank"]::after,
+.gq a[target="_blank"]::after,
+.fd a[target="_blank"]::after,
+.sub a[target="_blank"]::after,
+.pub .m a[target="_blank"]::after{
+  content:"\2197";font-size:.78em;margin-left:.18em;opacity:.6;
+}
+a[target="_blank"] .era::after{content:none}
+
 /* ---------- placement diagram ---------- */
 .placement{margin:0 0 2.4rem}
 .placement svg{display:block;width:100%;height:auto;max-width:58rem}
@@ -474,7 +486,7 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
         against <b style="color:var(--written);font-weight:500;font-family:var(--mono)">1.4 TB/s</b>
         to storage. A gap near 89,000&#8239;:&#8239;1, and widening.
         <a href="https://www.kennethmoreland.com/documents/InSituTensions.pdf"
-           style="color:var(--muted);font:400 .8rem var(--mono);display:block;margin-top:.4rem">Moreland, IEEE CG&amp;A 36(2), 2016, Fig. 1</a>
+           style="color:var(--muted);font:400 .8rem var(--mono);display:block;margin-top:.4rem" target="_blank" rel="noopener noreferrer">Moreland, IEEE CG&amp;A 36(2), 2016, Fig. 1</a>
       </p>
       <p class="lede">Catalyst does the analysis while the data is still in memory: on
         the solver's own nodes, streamed to neighbouring ones, or both. Never by way of
@@ -513,7 +525,7 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
              width="1280" height="720"
              aria-label="WarpX plasma accelerator simulation rendered in situ"></video>
       <figcaption>WarpX, rendered in situ on Frontier.
-        <a href="https://kitware.github.io/paraview-catalyst/usecase/warpx.html" style="color:var(--muted)">use case &rarr;</a></figcaption>
+        <a href="https://kitware.github.io/paraview-catalyst/usecase/warpx.html" style="color:var(--muted)" target="_blank" rel="noopener noreferrer">use case &rarr;</a></figcaption>
     </figure>
 
     <div class="products">
@@ -709,28 +721,28 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
         executable: <b style="color:var(--text);font-weight:400">2.1&nbsp;MB</b> for the
         smallest edition up to <b style="color:var(--text);font-weight:400">98&nbsp;MB</b>
         for full ParaView, replicated per process.
-        <a href="https://doi.org/10.1111/cgf.12930" style="color:var(--produced)">Bauer et al., Computer Graphics
+        <a href="https://doi.org/10.1111/cgf.12930" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">Bauer et al., Computer Graphics
         Forum 35(3), 2016, Table 2</a>. Under 2.0 the question does not arise: your
         binary carries the stub, and the implementation is a shared library the loader
         maps once per node.</p>
       <p>And it is vendor-portable by construction. Conduit is API-agnostic; Viskores
         filters compile through Kokkos to CUDA, HIP, SYCL or OpenMP. The
-        <a href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/" style="color:var(--produced)">same integration pattern runs on
+        <a href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">same integration pattern runs on
         NVIDIA, AMD MI300X and Intel Max GPUs without adaptor changes</a>. And on
         unified-memory parts like Grace Hopper and MI300A the model only gets simpler.</p>
       <p>A C interface because everything binds to C. There is a worked example for each:
-        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CUnstructuredGrid" style="color:var(--produced)">C</a>,
-        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxUnstructuredGrid" style="color:var(--produced)">C++</a>,
-        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/Fortran90ImageData" style="color:var(--produced)">Fortran&nbsp;90</a> and
-        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/PythonImageData" style="color:var(--produced)">Python</a>.
+        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CUnstructuredGrid" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">C</a>,
+        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxUnstructuredGrid" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">C++</a>,
+        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/Fortran90ImageData" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">Fortran&nbsp;90</a> and
+        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/PythonImageData" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">Python</a>.
         Your solver's language is not the question; whether it can describe its mesh is.</p>
       <p class="quiet">Swap implementations at run time with
         <code>CATALYST_IMPLEMENTATION_NAME</code> and
         <code>CATALYST_IMPLEMENTATION_PATHS</code>; Catalyst loads the named library with
         <code>dlopen</code> and checks it for compatibility.
-        <a href="https://catalyst-in-situ.readthedocs.io/en/latest/for_simulation_developers.html" style="color:var(--muted)">API reference</a>.
+        <a href="https://catalyst-in-situ.readthedocs.io/en/latest/for_simulation_developers.html" style="color:var(--muted)" target="_blank" rel="noopener noreferrer">API reference</a>.
         No recompile, and pipelines themselves
-        can be <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxDynamicPipelines" style="color:var(--muted)">added and
+        can be <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxDynamicPipelines" style="color:var(--muted)" target="_blank" rel="noopener noreferrer">added and
         removed while the solver runs</a>.</p>
     </div>
     <div>
@@ -750,7 +762,7 @@ conduit_node_set_path_external_float64_ptr(
       <p class="claim quiet" style="margin-top:.9rem">Fields are passed by pointer.
         Catalyst reads your arrays in place: no copy, no reformat, GPU-resident data
         stays on the GPU. A
-        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxLBMCylinder" style="color:var(--produced)">D2Q9 lattice-Boltzmann
+        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxLBMCylinder" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">D2Q9 lattice-Boltzmann
         example</a> keeps four field arrays in device memory for the whole run, hands
         Catalyst the raw pointers through <code>set_external</code>, and analyses them
         on the same buffer the solver just wrote, with no per-step transfer to host.</p>
@@ -827,9 +839,9 @@ conduit_node_set_path_external_float64_ptr(
       <p>That is the part worth sitting with if you ship simulation software. You
         instrument once; your users reach all of it without another release from you.</p>
       <p>Roughly in the order teams adopt them. All of them run three ways without a
-        code change: <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxAsyncExecute" style="color:var(--produced)">in line,
-        blocking or async</a>, <a href="https://doi.org/10.1007/978-3-031-40843-4_20" style="color:var(--produced)">in
-        transit</a> on separate nodes, or <a href="https://arxiv.org/abs/2406.18112" style="color:var(--produced)">hybrid</a>,
+        code change: <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxAsyncExecute" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">in line,
+        blocking or async</a>, <a href="https://doi.org/10.1007/978-3-031-40843-4_20" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">in
+        transit</a> on separate nodes, or <a href="https://arxiv.org/abs/2406.18112" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">hybrid</a>,
         reducing in place and rendering elsewhere. Fides ships inside ParaView and hands
         the Conduit node straight to ADIOS2, so moving off-node is a change to the
         pipeline script rather than to your solver.
@@ -916,18 +928,18 @@ conduit_node_set_path_external_float64_ptr(
           <p class="fd">Isosurfaces, vortex cores, streamlines, thresholds. Keep the structure, discard the volume it came from.</p></div>
         <div class="flow"><span class="fn">Live monitoring</span>
           <p class="fd">See divergence in hour four of a three-day job instead of on Friday. Kill it, or fix it.</p></div>
-        <div class="flow"><a class="fn" href="https://doi.org/10.1007/978-3-030-48340-1_31">Performance analysis</a>
+        <div class="flow"><a class="fn" href="https://doi.org/10.1007/978-3-030-48340-1_31" target="_blank" rel="noopener noreferrer">Performance analysis</a>
           <p class="fd">Route profiler data down the same path and see load imbalance painted on the mesh that caused it.</p></div>
       </div>
 
       <div class="flowgroup">
         <h3>Then stop writing everything</h3>
         <p class="gd">Once the analysis runs in place, the disk holds results instead of raw state.</p>
-        <div class="flow"><a class="fn" href="https://doi.org/10.1007/978-3-031-40843-4_19">Region of interest</a>
+        <div class="flow"><a class="fn" href="https://doi.org/10.1007/978-3-031-40843-4_19" target="_blank" rel="noopener noreferrer">Region of interest</a>
           <p class="fd">Detect what matters while it happens and save only that. Used to track a cyclone through a running forecast.</p></div>
-        <div class="flow"><a class="fn" href="https://www.kennethmoreland.com/documents/InSituTensions.pdf">Image databases</a>
+        <div class="flow"><a class="fn" href="https://www.kennethmoreland.com/documents/InSituTensions.pdf" target="_blank" rel="noopener noreferrer">Image databases</a>
           <p class="fd">Render many viewpoints and parameters in situ, then explore the database afterwards. For when you cannot say in advance what will matter.</p></div>
-        <div class="flow"><a class="fn" href="https://arxiv.org/abs/2110.15427">Reduced archival</a>
+        <div class="flow"><a class="fn" href="https://arxiv.org/abs/2110.15427" target="_blank" rel="noopener noreferrer">Reduced archival</a>
           <p class="fd">Write a compact derived representation instead of full fields, so the run is still analysable next year.</p></div>
         <div class="flow"><span class="fn">Shareable results</span>
           <p class="fd">Images, extracts and KPI tables produced during the run, circulated or dropped into a report before the job finishes.</p></div>
@@ -940,24 +952,24 @@ conduit_node_set_path_external_float64_ptr(
       <div class="flowgroup">
         <h3>Then get into the loop</h3>
         <p class="gd">Putting a person back in a workflow that post-hoc locks them out of.</p>
-        <div class="flow"><a class="fn" href="https://www.kitware.com/webinars/whats-new-in-in-situ-analysis-and-visualization/">Computational steering</a>
+        <div class="flow"><a class="fn" href="https://www.kitware.com/webinars/whats-new-in-in-situ-analysis-and-visualization/" target="_blank" rel="noopener noreferrer">Computational steering</a>
           <p class="fd">Change a parameter or boundary condition mid-run through <code>catalyst_results</code>. An on-device reduction returned eight bytes to the driver and the field never left the GPU.</p></div>
-        <div class="flow"><a class="fn" href="https://github.com/aymanzyy/catalystml">Notebooks and dashboards</a>
+        <div class="flow"><a class="fn" href="https://github.com/aymanzyy/catalystml" target="_blank" rel="noopener noreferrer">Notebooks and dashboards</a>
           <p class="fd">Jupyter and trame front ends over a live run, so the interaction is a browser tab rather than a queue submission.</p></div>
-        <div class="flow"><a class="fn" href="https://doi.org/10.1007/978-3-031-73716-9_33">Immersive and VR</a>
+        <div class="flow"><a class="fn" href="https://doi.org/10.1007/978-3-031-73716-9_33" target="_blank" rel="noopener noreferrer">Immersive and VR</a>
           <p class="fd">Hybrid visualization through a game engine, for walkthroughs of a running domain.</p></div>
       </div>
 
       <div class="flowgroup">
         <h3>Then let a model into it</h3>
         <p class="gd">Models that learn from, explain, and act on the running solver.</p>
-        <div class="flow"><a class="fn" href="https://github.com/aymanzyy/catalystml">Training</a>
+        <div class="flow"><a class="fn" href="https://github.com/aymanzyy/catalystml" target="_blank" rel="noopener noreferrer">Training</a>
           <p class="fd">Surrogates, reduced-order models and data-driven closures trained on runtime data, with no disk round trip.</p></div>
-        <div class="flow"><a class="fn" href="https://github.com/aymanzyy/catalystml">Inference and passback</a>
+        <div class="flow"><a class="fn" href="https://github.com/aymanzyy/catalystml" target="_blank" rel="noopener noreferrer">Inference and passback</a>
           <p class="fd">Query a trained model mid-run and return a correction to the solver: a closure coefficient, a compressed field.</p></div>
-        <div class="flow"><a class="fn" href="https://hal.science/hal-04692246/file/Ribes-Mazen-Meyer-ISAV-2022_in_situ_metamodel_training-v2.pdf">Explainable AI</a>
+        <div class="flow"><a class="fn" href="https://hal.science/hal-04692246/file/Ribes-Mazen-Meyer-ISAV-2022_in_situ_metamodel_training-v2.pdf" target="_blank" rel="noopener noreferrer">Explainable AI</a>
           <p class="fd">Watch a surrogate converge in space against ground truth, not just as a loss curve. Two runs with identical loss can look very different.</p></div>
-        <div class="flow"><a class="fn" href="https://arxiv.org/abs/2608.30696">LLM-guided analysis</a>
+        <div class="flow"><a class="fn" href="https://arxiv.org/abs/2608.30696" target="_blank" rel="noopener noreferrer">LLM-guided analysis</a>
           <p class="fd">Ask a question in plain language; deterministic filters compute the answer; the model explains it. It never writes the analysis code.</p></div>
       </div>
 
@@ -977,11 +989,11 @@ conduit_node_set_path_external_float64_ptr(
       <div class="flowgroup">
         <h3>And where post-hoc stops being an option</h3>
         <p class="gd">The cases that motivated all of this in the first place.</p>
-        <div class="flow"><a class="fn" href="https://doi.org/10.1177/10943420241286521">Exascale</a>
+        <div class="flow"><a class="fn" href="https://doi.org/10.1177/10943420241286521" target="_blank" rel="noopener noreferrer">Exascale</a>
           <p class="fd">Runs whose per-timestep output exceeds what the filesystem can absorb. The analysis goes to the data, on the same nodes or adjacent ones, because the data cannot go to the analysis.</p></div>
-        <div class="flow"><a class="fn" href="https://kitware.github.io/paraview-catalyst/usecase/cyclonic.html">Urgent computing</a>
+        <div class="flow"><a class="fn" href="https://kitware.github.io/paraview-catalyst/usecase/cyclonic.html" target="_blank" rel="noopener noreferrer">Urgent computing</a>
           <p class="fd">Wildfire, cyclone, tsunami, contaminant release. Decisions made while the simulation is still running, because afterwards is too late.</p></div>
-        <div class="flow"><a class="fn" href="https://doi.org/10.1007/978-3-032-07612-0_6">Composed workflows</a>
+        <div class="flow"><a class="fn" href="https://doi.org/10.1007/978-3-032-07612-0_6" target="_blank" rel="noopener noreferrer">Composed workflows</a>
           <p class="fd">Chain and orchestrate several of the above as modular stages in one run.</p></div>
       </div>
 
@@ -1015,7 +1027,7 @@ conduit_node_set_path_external_float64_ptr(
         in situ training and inference, and <b>catalyst-cosim</b> for multi-physics
         coupling. Kitware is extending this with NASA and the University of Colorado
         Boulder, so validated solvers gain modern AI workflows without being rewritten.
-        <a href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/" style="color:var(--muted)">roadmap &rarr;</a></p>
+        <a href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/" style="color:var(--muted)" target="_blank" rel="noopener noreferrer">roadmap &rarr;</a></p>
       <div class="btns" style="margin-top:1.2rem">
         <a class="btn" href="#talk">Talk about AI in the loop</a>
       </div>
@@ -1040,7 +1052,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
         <img src="assets/aiflow.jpg" width="1500" height="613" loading="lazy"
              alt="Diagram of a deep learning workflow coupled to a running simulation">
         <figcaption>Training coupled to the running solver.
-          <a href="https://kitware.github.io/paraview-catalyst/usecase/deep_learning.html" style="color:var(--muted)">use case &rarr;</a></figcaption>
+          <a href="https://kitware.github.io/paraview-catalyst/usecase/deep_learning.html" style="color:var(--muted)" target="_blank" rel="noopener noreferrer">use case &rarr;</a></figcaption>
       </figure>
       <!-- PARKED, do not restore without a citation. These three figures came from
            kitware.com/in-situ and no benchmark, workload or hardware description has
@@ -1067,14 +1079,15 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
       <p>Every capability above is running in production, at scale, in codes you have
         heard of, on machines you can name. <b>Every number and every name on this page
         links to its source</b>: a paper, a lab report, or the adaptor's own code. Where
-        we cannot link it, we say so.</p>
+        we cannot link it, we say so. Those links open in a new tab, so you can check one
+        without losing your place here.</p>
     </div>
     <div class="kpis">
       <a class="kpi" href="#adopters">
         <b>28</b>
         <span class="lb">simulation codes already ship a Catalyst adaptor, across eight domains</span>
         <span class="src">every one linked to its evidence</span></a>
-      <a class="kpi" href="https://doi.org/10.1177/10943420241286521">
+      <a class="kpi" href="https://doi.org/10.1177/10943420241286521" target="_blank" rel="noopener noreferrer">
         <b>4,416</b>
         <span class="lb">GPUs on Frontier, analysing a run in place rather than writing it</span>
         <span class="src">ECP ALPINE, IJHPCA 2024</span></a>
@@ -1094,10 +1107,10 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
         rotorcraft and astrophysics, in national labs, national weather services,
         universities and commercial products.</p>
       <p>And on the machines that matter: the runs behind this page's numbers executed
-        on <a href="https://doi.org/10.1177/10943420241286521" style="color:var(--text)">Frontier</a>,
-        <a href="https://www.kennethmoreland.com/documents/InSituTensions.pdf" style="color:var(--text)">Titan</a>,
-        <a href="https://doi.org/10.1145/2597652.2597668" style="color:var(--text)">Cielo</a> and
-        <a href="https://doi.org/10.1007/s11227-021-03990-3" style="color:var(--text)">Beskow</a>.
+        on <a href="https://doi.org/10.1177/10943420241286521" style="color:var(--text)" target="_blank" rel="noopener noreferrer">Frontier</a>,
+        <a href="https://www.kennethmoreland.com/documents/InSituTensions.pdf" style="color:var(--text)" target="_blank" rel="noopener noreferrer">Titan</a>,
+        <a href="https://doi.org/10.1145/2597652.2597668" style="color:var(--text)" target="_blank" rel="noopener noreferrer">Cielo</a> and
+        <a href="https://doi.org/10.1007/s11227-021-03990-3" style="color:var(--text)" target="_blank" rel="noopener noreferrer">Beskow</a>.
         workstation to exascale on the same three calls.</p>
       <p class="quiet">Every linked name goes straight to its evidence: a paper, a lab
         report, or the adaptor source. Dashed ones are integrations we know of and could
@@ -1113,98 +1126,98 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
       <div class="dom">
         <h3>Computational fluid dynamics</h3>
         <div class="names">
-          <a href="https://www.kennethmoreland.com/documents/InSituTensions.pdf">PHASTA</a>
-          <a href="https://doi.org/10.1007/s11227-021-03990-3">Nek5000</a>
-          <a href="https://www.openfoam.com/news/main-news/openfoam-v1806/post-processing">OpenFOAM</a>
-          <a href="https://doi.org/10.1007/978-3-662-44900-4_2">Code_Saturne</a>
-          <a href="https://www.osti.gov/biblio/1481596">SPARC</a>
-          <a href="https://www.osti.gov/servlets/purl/1643316">Nalu</a>
+          <a href="https://www.kennethmoreland.com/documents/InSituTensions.pdf" target="_blank" rel="noopener noreferrer">PHASTA</a>
+          <a href="https://doi.org/10.1007/s11227-021-03990-3" target="_blank" rel="noopener noreferrer">Nek5000</a>
+          <a href="https://www.openfoam.com/news/main-news/openfoam-v1806/post-processing" target="_blank" rel="noopener noreferrer">OpenFOAM</a>
+          <a href="https://doi.org/10.1007/978-3-662-44900-4_2" target="_blank" rel="noopener noreferrer">Code_Saturne</a>
+          <a href="https://www.osti.gov/biblio/1481596" target="_blank" rel="noopener noreferrer">SPARC</a>
+          <a href="https://www.osti.gov/servlets/purl/1643316" target="_blank" rel="noopener noreferrer">Nalu</a>
           <span>Alya</span>
-          <a href="https://www.kennethmoreland.com/documents/InSituTensions.pdf">Hydra-TH</a>
+          <a href="https://www.kennethmoreland.com/documents/InSituTensions.pdf" target="_blank" rel="noopener noreferrer">Hydra-TH</a>
         </div>
       </div>
       <div class="dom">
         <h3>Combustion and engines</h3>
         <div class="names">
-          <a href="https://kitware.github.io/paraview-catalyst/usecase/combustion.html">CONVERGE</a>
-          <a href="https://github.com/AMReX-Combustion/PeleLM/blob/development/Docs/source/manual/Visualization.rst">PeleLM</a>
+          <a href="https://kitware.github.io/paraview-catalyst/usecase/combustion.html" target="_blank" rel="noopener noreferrer">CONVERGE</a>
+          <a href="https://github.com/AMReX-Combustion/PeleLM/blob/development/Docs/source/manual/Visualization.rst" target="_blank" rel="noopener noreferrer">PeleLM</a>
         </div>
       </div>
       <div class="dom">
         <h3>Shock and multi-material physics</h3>
         <div class="names">
-          <a href="https://www.sandia.gov/cth/">CTH</a>
-          <a href="https://www.paraview.org/paraview-docs/latest/cxx/files.html">Pagosa</a>
+          <a href="https://www.sandia.gov/cth/" target="_blank" rel="noopener noreferrer">CTH</a>
+          <a href="https://www.paraview.org/paraview-docs/latest/cxx/files.html" target="_blank" rel="noopener noreferrer">Pagosa</a>
           <span>xRAGE</span>
-          <a href="https://doi.org/10.1007/978-3-030-90539-2_33">LULESH</a>
+          <a href="https://doi.org/10.1007/978-3-030-90539-2_33" target="_blank" rel="noopener noreferrer">LULESH</a>
         </div>
       </div>
       <div class="dom">
         <h3>Plasma and accelerator physics</h3>
         <div class="names">
-          <a href="https://doi.org/10.1177/10943420241286521">WarpX</a>
-          <a href="https://www.paraview.org/paraview-docs/latest/cxx/files.html">NPIC</a>
+          <a href="https://doi.org/10.1177/10943420241286521" target="_blank" rel="noopener noreferrer">WarpX</a>
+          <a href="https://www.paraview.org/paraview-docs/latest/cxx/files.html" target="_blank" rel="noopener noreferrer">NPIC</a>
           <span>UH3D</span><span>VPIC</span>
-          <a href="https://doi.org/10.1177/10943420241286521">MFIX-Exa</a>
+          <a href="https://doi.org/10.1177/10943420241286521" target="_blank" rel="noopener noreferrer">MFIX-Exa</a>
         </div>
       </div>
       <div class="dom">
         <h3>Climate, ocean and weather</h3>
         <div class="names">
-          <a href="https://kitware.github.io/paraview-catalyst/usecase/mpaso.html">MPAS-Ocean</a>
-          <a href="https://www.cisl.ucar.edu/siparcs-2019-omeara">MPAS-Atmosphere</a>
-          <a href="https://www.paraview.org/paraview-docs/latest/cxx/files.html">CAM</a>
-          <a href="https://github.com/niwa/lfric_catalyst_adaptor">LFRic</a>
+          <a href="https://kitware.github.io/paraview-catalyst/usecase/mpaso.html" target="_blank" rel="noopener noreferrer">MPAS-Ocean</a>
+          <a href="https://www.cisl.ucar.edu/siparcs-2019-omeara" target="_blank" rel="noopener noreferrer">MPAS-Atmosphere</a>
+          <a href="https://www.paraview.org/paraview-docs/latest/cxx/files.html" target="_blank" rel="noopener noreferrer">CAM</a>
+          <a href="https://github.com/niwa/lfric_catalyst_adaptor" target="_blank" rel="noopener noreferrer">LFRic</a>
           <span>ICON</span>
         </div>
       </div>
       <div class="dom">
         <h3>Rotorcraft and aeroacoustics</h3>
         <div class="names">
-          <a href="https://kitware.github.io/paraview-catalyst/usecase/rotor.html">Rotorcraft (moving geometry)</a>
+          <a href="https://kitware.github.io/paraview-catalyst/usecase/rotor.html" target="_blank" rel="noopener noreferrer">Rotorcraft (moving geometry)</a>
         </div>
       </div>
       <div class="dom">
         <h3>Biomedical and hemodynamics</h3>
         <div class="names">
-          <a href="https://github.com/aymanzyy/catalystml">HARVEY proxy</a>
+          <a href="https://github.com/aymanzyy/catalystml" target="_blank" rel="noopener noreferrer">HARVEY proxy</a>
         </div>
       </div>
       <div class="dom">
         <h3>Astrophysics</h3>
         <div class="names">
-          <a href="https://github.com/RitaliG/rps_cgm_hydro">PLUTO</a>
-          <a href="https://arxiv.org/abs/2110.15427">Cosmic string networks</a>
+          <a href="https://github.com/RitaliG/rps_cgm_hydro" target="_blank" rel="noopener noreferrer">PLUTO</a>
+          <a href="https://arxiv.org/abs/2110.15427" target="_blank" rel="noopener noreferrer">Cosmic string networks</a>
         </div>
       </div>
     
     <div class="gallery">
-      <a class="tile" href="https://kitware.github.io/paraview-catalyst/usecase/ai_and_cfd.html">
+      <a class="tile" href="https://kitware.github.io/paraview-catalyst/usecase/ai_and_cfd.html" target="_blank" rel="noopener noreferrer">
         <figure style="margin:0"><video src="assets/phasta.mp4" poster="assets/phasta.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>
           <figcaption><b>PHASTA</b>wingtip vortices, 256K MPI ranks</figcaption>
         </figure>
       </a>
-      <a class="tile" href="https://kitware.github.io/paraview-catalyst/usecase/cyclonic.html">
+      <a class="tile" href="https://kitware.github.io/paraview-catalyst/usecase/cyclonic.html" target="_blank" rel="noopener noreferrer">
         <figure style="margin:0"><video src="assets/cyclone.mp4" poster="assets/cyclone.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>
           <figcaption><b>Cyclonic forecast</b>tracked while the forecast runs</figcaption>
         </figure>
       </a>
-      <a class="tile" href="https://kitware.github.io/paraview-catalyst/usecase/mpaso.html">
+      <a class="tile" href="https://kitware.github.io/paraview-catalyst/usecase/mpaso.html" target="_blank" rel="noopener noreferrer">
         <figure style="margin:0"><video src="assets/mpaso.mp4" poster="assets/mpaso.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>
           <figcaption><b>MPAS-Ocean</b>Arctic eddies, extracted in situ</figcaption>
         </figure>
       </a>
-      <a class="tile" href="https://kitware.github.io/paraview-catalyst/usecase/rotor.html">
+      <a class="tile" href="https://kitware.github.io/paraview-catalyst/usecase/rotor.html" target="_blank" rel="noopener noreferrer">
         <figure style="margin:0"><video src="assets/rotor.mp4" poster="assets/rotor.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>
           <figcaption><b>Rotorcraft</b>moving geometry, unsteady</figcaption>
         </figure>
       </a>
-      <a class="tile" href="https://kitware.github.io/paraview-catalyst/usecase/turbulence.html">
+      <a class="tile" href="https://kitware.github.io/paraview-catalyst/usecase/turbulence.html" target="_blank" rel="noopener noreferrer">
         <figure style="margin:0"><img src="assets/supersonic.jpg" loading="lazy" alt="Supersonic turbulence">
           <figcaption><b>Supersonic turbulence</b>shock structure at full cadence</figcaption>
         </figure>
       </a>
-      <a class="tile" href="https://kitware.github.io/paraview-catalyst/usecase/combustion.html">
+      <a class="tile" href="https://kitware.github.io/paraview-catalyst/usecase/combustion.html" target="_blank" rel="noopener noreferrer">
         <figure style="margin:0"><img src="assets/combustion.jpg" loading="lazy" alt="Combustion">
           <figcaption><b>Combustion</b>engine cycle analysis</figcaption>
         </figure>
@@ -1240,13 +1253,13 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
       <div class="pubgroup">
         <h3>Design of the API itself</h3>
         <div class="pubs">
-          <a class="pub" href="https://doi.org/10.2514/6.2026-0766">
+          <a class="pub" href="https://doi.org/10.2514/6.2026-0766" target="_blank" rel="noopener noreferrer">
             <span class="t">Catalyst: Expanding In Situ Analysis and Visualization Workflows for Exascale Computing</span>
             <span class="m">Wetterer-Nelson, Tsolakis, Lee, Tsalikis, Wittenburg, Yenpure, Ross, Lipsa, Panchumarti, Geveci · AIAA SCITECH 2026 · where Catalyst is now</span></a>
-          <a class="pub" href="https://doi.org/10.1007/978-3-030-90539-2_33">
+          <a class="pub" href="https://doi.org/10.1007/978-3-030-90539-2_33" target="_blank" rel="noopener noreferrer">
             <span class="t">Catalyst Revised: Rethinking the ParaView in Situ Analysis and Visualization API</span>
             <span class="m">Ayachit et al. · ISC High Performance 2021 · LNCS 12761 · the 2.0 API</span></a>
-          <a class="pub" href="https://doi.org/10.1145/2828612.2828624">
+          <a class="pub" href="https://doi.org/10.1145/2828612.2828624" target="_blank" rel="noopener noreferrer">
             <span class="t">ParaView Catalyst: Enabling In Situ Data Analysis and Visualization<span class="era old">Catalyst 1.0</span></span>
             <span class="m">Ayachit, Bauer, Geveci, O'Leary, Moreland, Fabian, Mauldin · ISAV 2015 · the original design</span></a>
         </div>
@@ -1257,10 +1270,10 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
         <p>The architecture behind the section above, and independent work on the same
           idea.</p>
         <div class="pubs">
-          <a class="pub" href="https://arxiv.org/abs/2608.30696">
+          <a class="pub" href="https://arxiv.org/abs/2608.30696" target="_blank" rel="noopener noreferrer">
             <span class="t">Domain-Grounded Tool Orchestration for LLM-Guided Scientific Analysis</span>
             <span class="m">Lee, Jourdain, Quammen, O'Leary, Geveci · arXiv:2608.30696 · 2026 · ontology-grounded MCP over ParaView and Catalyst; interpretation accuracy 0.41 → 0.91</span></a>
-          <a class="pub" href="https://hal.science/hal-04692246/file/Ribes-Mazen-Meyer-ISAV-2022_in_situ_metamodel_training-v2.pdf">
+          <a class="pub" href="https://hal.science/hal-04692246/file/Ribes-Mazen-Meyer-ISAV-2022_in_situ_metamodel_training-v2.pdf" target="_blank" rel="noopener noreferrer">
             <span class="t">In situ monitoring and steering deep learning training from numerical simulations in ParaView-Catalyst</span>
             <span class="m">Ribés, Mazen, Meyer · EDF R&amp;D · ISAV 2022 · built on Catalyst 2; watching a surrogate converge in space, not just as a loss curve</span></a>
         </div>
@@ -1271,19 +1284,19 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
         <p>Start here if you are deciding between in situ approaches rather than
           evaluating Catalyst specifically.</p>
         <div class="pubs">
-          <a class="pub" href="https://www.kennethmoreland.com/documents/InSituTensions.pdf">
+          <a class="pub" href="https://www.kennethmoreland.com/documents/InSituTensions.pdf" target="_blank" rel="noopener noreferrer">
             <span class="t">The tensions of in situ visualization<span class="era old">Catalyst 1.0</span></span>
             <span class="m">Moreland · IEEE Computer Graphics and Applications 36(2) · 2016 · the tradeoffs named honestly, by one of Catalyst's own authors. Describes the 1.0 API; read it alongside the 2021 redesign above.</span></a>
-          <a class="pub" href="https://doi.org/10.1111/cgf.12930">
+          <a class="pub" href="https://doi.org/10.1111/cgf.12930" target="_blank" rel="noopener noreferrer">
             <span class="t">In situ methods, infrastructures, and applications on high performance computing platforms<span class="era old">Catalyst 1.0</span></span>
             <span class="m">Bauer et al. · Computer Graphics Forum 35(3) · 2016 · state-of-the-art report</span></a>
-          <a class="pub" href="https://doi.org/10.1145/2597652.2597668">
+          <a class="pub" href="https://doi.org/10.1145/2597652.2597668" target="_blank" rel="noopener noreferrer">
             <span class="t">Evaluation of methods to integrate analysis into a large-scale shock physics code<span class="era old">Catalyst 1.0</span></span>
             <span class="m">Oldfield, Moreland, Fabian, Rogers · ICS 2014 · the rigorous three-way comparison: in situ, in transit and post-processing on CTH, 10.58M processor-hours. Concludes all three are needed, and Catalyst supports all three.</span></a>
-          <a class="pub" href="https://www.osti.gov/servlets/purl/1649280">
+          <a class="pub" href="https://www.osti.gov/servlets/purl/1649280" target="_blank" rel="noopener noreferrer">
             <span class="t">Opportunities for cost savings with in-transit visualization<span class="era other">measured on Ascent</span></span>
             <span class="m">Kress et al. · ISC HPC 2020 · the cost model: in-line visualization cost grows 0.6× → 2.2× of solver cycle time with scale while transfer cost barely moves; volume rendering 4× cheaper at lower concurrency</span></a>
-          <a class="pub" href="https://doi.org/10.1177/10943420241286521">
+          <a class="pub" href="https://doi.org/10.1177/10943420241286521" target="_blank" rel="noopener noreferrer">
             <span class="t">The ECP ALPINE project: in situ and post hoc visualization infrastructure for exascale</span>
             <span class="m">Ahrens et al. · Int. J. High Performance Computing Applications · 2024</span></a>
         </div>
@@ -1299,7 +1312,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
           handful of ranks, and that imbalance defeats ordinary collective writes. Read
           this before assuming reduction ends the conversation.</p>
         <div class="pubs">
-          <a class="pub" href="https://doi.org/10.1145/2828612.2828620">
+          <a class="pub" href="https://doi.org/10.1145/2828612.2828620" target="_blank" rel="noopener noreferrer">
             <span class="t">In situ analysis as a parallel I/O problem<span class="era old">Catalyst 1.0</span></span>
             <span class="m">Ziegeler, Atkins, Bauer, Pettey &middot; DoD HPCMP and Kitware &middot; ISAV 2015 &middot; open access &middot; treats extract output as an I/O problem in its own right, and adds dynamic aggregation in ADIOS2 to handle it</span></a>
         </div>
@@ -1309,22 +1322,22 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
         <h3>Teams reporting their own integration</h3>
         <p>Written by the people who did the work, not by us.</p>
         <div class="pubs">
-          <a class="pub" href="https://doi.org/10.1007/s11227-021-03990-3">
+          <a class="pub" href="https://doi.org/10.1007/s11227-021-03990-3" target="_blank" rel="noopener noreferrer">
             <span class="t">In situ visualization of large-scale turbulence simulations in Nek5000 with ParaView Catalyst<span class="era old">Catalyst 1.0</span></span>
             <span class="m">Atzori et al. · Journal of Supercomputing · 2021 · where the time goes in a compositing-heavy pipeline, and how to tune it</span></a>
-          <a class="pub" href="https://doi.org/10.1007/978-3-662-44900-4_2">
+          <a class="pub" href="https://doi.org/10.1007/978-3-662-44900-4_2" target="_blank" rel="noopener noreferrer">
             <span class="t">In-situ visualization in CFD using open-source tools: integration of Catalyst into Code_Saturne<span class="era old">Catalyst 1.0</span></span>
             <span class="m">Ribés, Lorendeau, Fournier · EDF R&amp;D · 2015</span></a>
-          <a class="pub" href="https://doi.org/10.1007/978-3-030-48340-1_31">
+          <a class="pub" href="https://doi.org/10.1007/978-3-030-48340-1_31" target="_blank" rel="noopener noreferrer">
             <span class="t">In situ visualization of performance-related data in parallel CFD applications<span class="era old">Catalyst 1.0</span></span>
             <span class="m">Score-P plugin routing profiling data through Catalyst · 2020</span></a>
-          <a class="pub" href="https://superfri.org/index.php/superfri/article/view/317">
+          <a class="pub" href="https://superfri.org/index.php/superfri/article/view/317" target="_blank" rel="noopener noreferrer">
             <span class="t">Enhancing the in situ visualization of performance data in parallel CFD applications<span class="era old">Catalyst 1.0</span></span>
             <span class="m">Supercomputing Frontiers and Innovations · 2020 · follow-on work</span></a>
-          <a class="pub" href="https://arxiv.org/abs/2110.15427">
+          <a class="pub" href="https://arxiv.org/abs/2110.15427" target="_blank" rel="noopener noreferrer">
             <span class="t">High resolution calibration of cosmic string network evolution<span class="era old">Catalyst 1.0</span></span>
             <span class="m">arXiv:2110.15427 · Catalyst v5.8.0 used to reduce output at 4096³</span></a>
-          <a class="pub" href="https://arxiv.org/abs/2208.07767">
+          <a class="pub" href="https://arxiv.org/abs/2208.07767" target="_blank" rel="noopener noreferrer">
             <span class="t">Enhancing dynamic mode decomposition workflow with in-situ visualization and data compression<span class="era old">Catalyst 1.0</span></span>
             <span class="m">arXiv:2208.07767 · adaptor written against the initialize / co-process / finalize cycle</span></a>
         </div>
@@ -1335,19 +1348,19 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
         <p>Evidence that the API is stable enough for other people to build products
           against.</p>
         <div class="pubs">
-          <a class="pub" href="https://arxiv.org/abs/2406.18112">
+          <a class="pub" href="https://arxiv.org/abs/2406.18112" target="_blank" rel="noopener noreferrer">
             <span class="t">In situ, in transit hybrid analysis with Catalyst-ADIOS2</span>
             <span class="m">arXiv:2406.18112 · 2024 · relies explicitly on the ABI guarantee to swap implementations per cluster</span></a>
-          <a class="pub" href="https://doi.org/10.1007/978-3-032-07612-0_6">
+          <a class="pub" href="https://doi.org/10.1007/978-3-032-07612-0_6" target="_blank" rel="noopener noreferrer">
             <span class="t">Enabling modular in-situ workflows through CatalystMaestro and CatalystComposer</span>
             <span class="m">2025</span></a>
-          <a class="pub" href="https://doi.org/10.1007/978-3-031-73716-9_33">
+          <a class="pub" href="https://doi.org/10.1007/978-3-031-73716-9_33" target="_blank" rel="noopener noreferrer">
             <span class="t">InsitUE: enabling hybrid in-situ visualizations through Unreal Engine and Catalyst</span>
             <span class="m">2024</span></a>
-          <a class="pub" href="https://doi.org/10.1007/978-3-030-81627-8_10">
+          <a class="pub" href="https://doi.org/10.1007/978-3-030-81627-8_10" target="_blank" rel="noopener noreferrer">
             <span class="t">Leveraging production visualization tools in situ</span>
             <span class="m">2021</span></a>
-          <a class="pub" href="https://doi.org/10.1007/978-3-031-40843-4_19">
+          <a class="pub" href="https://doi.org/10.1007/978-3-031-40843-4_19" target="_blank" rel="noopener noreferrer">
             <span class="t">Inshimtu: a lightweight in situ visualization shim</span>
             <span class="m">KAUST · 2023 · in situ without modifying the solver</span></a>
         </div>
@@ -1404,7 +1417,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
           10.58M processor-hours: for analysis that does not hinder solver scalability,
           in situ is the simplest and best choice, because the analysis costs less than
           allocating extra nodes and moving data to them.
-          <span class="why"><a href="https://doi.org/10.1145/2597652.2597668">Oldfield et al., ICS 2014</a></span></p>
+          <span class="why"><a href="https://doi.org/10.1145/2597652.2597668" target="_blank" rel="noopener noreferrer">Oldfield et al., ICS 2014</a></span></p>
       </div>
 
       <div class="gq">
@@ -1415,7 +1428,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
           concurrency on dedicated nodes was measured at 4× cheaper for volume rendering
           and 3–6× for isosurfacing. This is the fix for the compositing wall, not a
           reason to avoid in situ.
-          <span class="why"><a href="https://www.osti.gov/servlets/purl/1649280">Kress et al., ISC HPC 2020</a></span></p>
+          <span class="why"><a href="https://www.osti.gov/servlets/purl/1649280" target="_blank" rel="noopener noreferrer">Kress et al., ISC HPC 2020</a></span></p>
       </div>
 
       <div class="gq">
@@ -1426,7 +1439,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
           grow.</b> With one caveat from Sandia: in transit only pays if the compute
           nodes have enough work to hide the analysis. At 32K cores with too little work
           per node, the wait time erased the benefit.
-          <span class="why"><a href="https://www.osti.gov/servlets/purl/1649280">Kress 2020</a> · <a href="https://doi.org/10.1145/2597652.2597668">Oldfield 2014</a></span></p>
+          <span class="why"><a href="https://www.osti.gov/servlets/purl/1649280" target="_blank" rel="noopener noreferrer">Kress 2020</a> · <a href="https://doi.org/10.1145/2597652.2597668" target="_blank" rel="noopener noreferrer">Oldfield 2014</a></span></p>
       </div>
 
       <div class="gq">
@@ -1440,7 +1453,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
           blocked <b>33%</b> of wall-clock to <b>6%</b>, completing <b>27% more
           iterations</b>. GPU solvers usually leave CPU cores idle, which is exactly what
           async is for. The trade is bounded memory for the queue.
-          <span class="why"><a href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/">Catalyst 2.1 demonstration, 2026</a></span></p>
+          <span class="why"><a href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/" target="_blank" rel="noopener noreferrer">Catalyst 2.1 demonstration, 2026</a></span></p>
         <figure class="timing">
           <svg viewBox="0 0 400 116" xmlns="http://www.w3.org/2000/svg" role="img"
                aria-label="Synchronous execution leaves the solver waiting; asynchronous overlaps analysis with the next step">
@@ -1501,7 +1514,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
           detected feature; or write reduced extracts for post hoc work. Catalyst
           supports batch and interactive simultaneously, so the practical question is
           only what to run first.
-          <span class="why"><a href="https://www.kennethmoreland.com/documents/InSituTensions.pdf">Moreland, IEEE CG&amp;A 2016</a></span></p>
+          <span class="why"><a href="https://www.kennethmoreland.com/documents/InSituTensions.pdf" target="_blank" rel="noopener noreferrer">Moreland, IEEE CG&amp;A 2016</a></span></p>
       </div>
 
       <div class="gq">
@@ -1513,7 +1526,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
           are needed and in situ does not displace post-processing. The gap has widened
           since, and at a projected 60 TB/s exascale I/O lands under 1% of what the
           simulation generates, but the honest starting point is that this is additive.
-          <span class="why"><a href="https://doi.org/10.1145/2597652.2597668">Oldfield et al., ICS 2014</a></span></p>
+          <span class="why"><a href="https://doi.org/10.1145/2597652.2597668" target="_blank" rel="noopener noreferrer">Oldfield et al., ICS 2014</a></span></p>
       </div>
 
       <div class="gq">
@@ -1539,7 +1552,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
       <p>Catalyst is one of several production in situ infrastructures, and the honest
         landscape was surveyed in 2016 by a group spanning Kitware, ORNL, LANL, Sandia,
         Argonne, LBNL and Intelligent Light. If you are choosing, read
-        <a href="https://doi.org/10.1111/cgf.12930">their table</a> before ours.</p>
+        <a href="https://doi.org/10.1111/cgf.12930" target="_blank" rel="noopener noreferrer">their table</a> before ours.</p>
       <p>Here is where we would and would not point you at Catalyst.</p>
     </div>
 
@@ -1553,7 +1566,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
           is the binding constraint and you do not need ParaView's filter set or the
           application your users already run. It is a good piece of engineering and the
           published in situ cost model was measured on it.
-          <span class="why"><a href="https://doi.org/10.1177/10943420241286521">ECP ALPINE, IJHPCA 2024</a></span></p>
+          <span class="why"><a href="https://doi.org/10.1177/10943420241286521" target="_blank" rel="noopener noreferrer">ECP ALPINE, IJHPCA 2024</a></span></p>
       </div>
 
       <div class="gq">
@@ -1622,7 +1635,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
       <p class="quiet">The clearest number we have, and note what it measures: this is
         the cost of moving an existing 1.0 adaptor to the 2.0 API, not the cost of
         starting from nothing. Converting LULESH cut it roughly in half. The
-        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/Lulesh-tutorial" style="color:var(--produced)">tutorial walks it in
+        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/Lulesh-tutorial" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">tutorial walks it in
         six stages</a>, from an uninstrumented solver to a steered one. Read it before
         estimating your own.</p>
       <p class="quiet">On runtime cost, be careful what you compare against. A solve with
@@ -1660,14 +1673,14 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
                width="1000" height="729"
                aria-label="LULESH hydrodynamics proxy rendered in situ"></video>
         <figcaption>LULESH: the 325-to-155-line conversion above, running.
-          <a href="https://kitware.github.io/paraview-catalyst/usecase/lulesh.html" style="color:var(--muted)">use case &rarr;</a></figcaption>
+          <a href="https://kitware.github.io/paraview-catalyst/usecase/lulesh.html" style="color:var(--muted)" target="_blank" rel="noopener noreferrer">use case &rarr;</a></figcaption>
       </figure>
       <p class="claim quiet" style="margin-top:1.1rem">The PLUTO adaptor was written by one
         graduate student for a code with no official Catalyst support: polar grid,
         zero-copy field passing, 273 lines, and a generator script to emit it. They then
         <!-- VERIFY this link resolves for anonymous visitors before publishing; taken
              from the repository README, which appends ?authuser=0 -->
-        <a href="https://sites.google.com/view/ritalighosh/use-catalyst-with-your-simulations" style="color:var(--produced)">published
+        <a href="https://sites.google.com/view/ritalighosh/use-catalyst-with-your-simulations" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">published
         a walkthrough</a> so others could repeat it.</p>
 
       <div class="offers" style="margin-top:1.6rem">
@@ -1765,7 +1778,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
         </div>
       </div>
       <div class="btns" style="margin-top:1.4rem">
-        <a class="btn solid" href="https://www.kitware.com/catalyst-assessment">Book an assessment</a>
+        <a class="btn solid" href="https://www.kitware.com/catalyst-assessment" target="_blank" rel="noopener noreferrer">Book an assessment</a>
         <a class="btn" href="#docs">Try it yourself first</a>
       </div>
     </div>
@@ -1793,17 +1806,17 @@ ls
         for a zero-build first look. Until then the examples build against an installed
         ParaView, and the tutorial's first version needs no Catalyst at all.</p>
       <div class="btns" style="margin-top:1.2rem">
-        <a class="btn" href="https://catalyst-in-situ.readthedocs.io/en/latest/for_simulation_developers.html">Catalyst API</a>
-        <a class="btn" href="https://kitware.github.io/paraview-catalyst/">ParaView Catalyst</a>
-        <a class="btn" href="https://gitlab.kitware.com/paraview/catalyst-examples">Examples</a>
-        <a class="btn" href="https://discourse.paraview.org/c/in-situ-support">Ask on Discourse</a>
+        <a class="btn" href="https://catalyst-in-situ.readthedocs.io/en/latest/for_simulation_developers.html" target="_blank" rel="noopener noreferrer">Catalyst API</a>
+        <a class="btn" href="https://kitware.github.io/paraview-catalyst/" target="_blank" rel="noopener noreferrer">ParaView Catalyst</a>
+        <a class="btn" href="https://gitlab.kitware.com/paraview/catalyst-examples" target="_blank" rel="noopener noreferrer">Examples</a>
+        <a class="btn" href="https://discourse.paraview.org/c/in-situ-support" target="_blank" rel="noopener noreferrer">Ask on Discourse</a>
       </div>
       <p class="claim quiet" style="margin-top:1.2rem">Or watch one. All free, all recorded:
-        <a href="https://www.kitware.com/webinars/whats-new-in-in-situ-analysis-and-visualization/" style="color:var(--produced)">async
+        <a href="https://www.kitware.com/webinars/whats-new-in-in-situ-analysis-and-visualization/" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">async
         execution, GPU workflows and in-situ AI</a> ·
-        <a href="https://www.kitware.com/webinars/in-situ-analysis-with-catalyst-getting-started/" style="color:var(--produced)">getting
+        <a href="https://www.kitware.com/webinars/in-situ-analysis-with-catalyst-getting-started/" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">getting
         started</a> ·
-        <a href="https://www.kitware.com/webinars/catalyst-the-swiss-army-knife-for-smarter-simulations/" style="color:var(--produced)">the
+        <a href="https://www.kitware.com/webinars/catalyst-the-swiss-army-knife-for-smarter-simulations/" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">the
         wider toolkit</a></p>
     </div>
   </div>
@@ -1811,8 +1824,8 @@ ls
 
 <footer class="foot">
   <div class="wrap">
-    <div>Catalyst is developed by <a href="https://www.kitware.com/">Kitware</a> and released under BSD 3-Clause.</div>
-    <div><a href="https://kitware.github.io/paraview-catalyst/">Docs</a> · <a href="https://www.paraview.org/">ParaView</a> · <a href="https://catalyst-in-situ.readthedocs.io/">API reference</a></div>
+    <div>Catalyst is developed by <a href="https://www.kitware.com/" target="_blank" rel="noopener noreferrer">Kitware</a> and released under BSD 3-Clause.</div>
+    <div><a href="https://kitware.github.io/paraview-catalyst/" target="_blank" rel="noopener noreferrer">Docs</a> · <a href="https://www.paraview.org/" target="_blank" rel="noopener noreferrer">ParaView</a> · <a href="https://catalyst-in-situ.readthedocs.io/" target="_blank" rel="noopener noreferrer">API reference</a></div>
   </div>
 </footer>
 
