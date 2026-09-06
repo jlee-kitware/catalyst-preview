@@ -1746,14 +1746,18 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
     </div>
     <div>
       <table>
-        <caption>Reported from published conversions and third-party integrations.</caption>
-        <thead><tr><th>Measure</th><th>Legacy API</th><th>Catalyst 2</th></tr></thead>
+        <caption>One code, one conversion, measured and published: the LULESH proxy moved
+          from the legacy API to Catalyst 2. It is the cost of <em>porting an adaptor you
+          already have</em>, not of writing one from scratch. Source:
+          <a href="https://doi.org/10.1007/978-3-030-90539-2_33" target="_blank" rel="noopener noreferrer">Ayachit et al., Catalyst Revised, ISC High
+          Performance 2021</a>.</caption>
+        <thead><tr><th>LULESH adaptor</th><th>Legacy API</th><th>Catalyst 2</th></tr></thead>
         <tbody>
-          <tr><td>LULESH adaptor size</td><td class="n">325 lines</td><td class="n">155 lines</td></tr>
+          <tr><td>Lines of code</td><td class="n">325</td><td class="n">155</td></tr>
           <tr><td>Headers to include</td><td class="n">13</td><td class="n">1</td></tr>
           <tr><td>Build system change</td><td>CMake conversion required</td><td>two variables in the Makefile</td></tr>
           <tr><td>ParaView SDK at build time</td><td>required</td><td>not required</td></tr>
-          <tr><td>PLUTO adaptor (third party)</td><td>n/a</td><td class="n">273 lines</td></tr>
+          <tr><td>Swapping the implementation</td><td>rebuild</td><td>environment variable</td></tr>
         </tbody>
       </table>
       <figure class="figure mt5">
