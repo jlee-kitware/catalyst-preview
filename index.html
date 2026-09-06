@@ -960,8 +960,23 @@ conduit_node_set_path_external_float64_ptr(
           <p class="fd">Lift, drag, boundary-layer metrics, field energy. Engineering numbers at every timestep, not every hundredth.</p></div>
         <div class="flow"><span class="fn">Feature extraction</span>
           <p class="fd">Isosurfaces, vortex cores, streamlines, thresholds. Keep the structure, discard the volume it came from.</p></div>
+        <div class="flow"><span class="fn">Regression testing</span>
+          <p class="fd">Run the pipeline inside the test suite so a failure arrives with
+            pictures attached. A bitwise mismatch tells a reviewer that something
+            changed; a rendered field often tells them what and where.
+            <!-- HOLD FOR PUBLICATION: NCAR's GeoGate runs this inside the UFS Weather
+                 Model regression suite, 200+ coupled configurations per change, with
+                 automated range checks at the coupling interfaces. Kitware blog
+                 forthcoming (Turuncoglu). Add the link and the specifics once live. -->
+          </p></div>
         <div class="flow"><span class="fn">Live monitoring</span>
-          <p class="fd">See divergence in hour four of a three-day job instead of on Friday. Kill it, or fix it.</p></div>
+          <p class="fd">See divergence in hour four of a three-day job instead of on
+            Friday. On a coupled ocean model at roughly 8,000 cores, a rendered frame
+            exposed a domain-decomposition artifact at the very first coupling step;
+            in a write-then-look workflow it would have been buried in terabytes,
+            averaged away, or never written often enough to see.
+            <!-- HOLD: source is the forthcoming GeoGate blog. Link on publication. -->
+          </p></div>
         <div class="flow"><a class="fn" href="https://doi.org/10.1007/978-3-030-48340-1_31" target="_blank" rel="noopener noreferrer">Performance analysis</a>
           <p class="fd">Route profiler data down the same path and see load imbalance painted on the mesh that caused it.</p></div>
       </div>
@@ -1010,8 +1025,12 @@ conduit_node_set_path_external_float64_ptr(
       <div class="flowgroup">
         <h3>Then couple, and run many</h3>
         <p class="gd">Where the simulation is not one solver producing one answer.</p>
-        <div class="flow"><span class="fn">Co-simulation</span>
-          <p class="fd">Two or more solvers exchange fields every timestep through a common in-memory mesh description, instead of through disk and bespoke glue. What makes it work: consistent schema, careful partition handling, complete metadata.</p></div>
+        <div class="flow"><a class="fn" href="https://doi.org/10.5194/gmd-12-233-2019" target="_blank" rel="noopener noreferrer">Co-simulation</a>
+          <p class="fd">Two or more solvers exchange fields every timestep through a
+            common in-memory mesh description, instead of through disk and bespoke glue.
+            The strongest version instruments the coupler rather than the models: one
+            integration then serves every component, each grid arriving in its native
+            form with no forced regridding and no copy.</p></div>
         <div class="flow"><span class="fn todo">Digital twins</span>
           <p class="fd">Assimilate live telemetry, steer the model to track the asset, stay faster than real time using surrogates.</p></div>
         <div class="flow"><span class="fn todo">Ensembles and DoE</span>
@@ -1126,7 +1145,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
         <span class="lb">GPUs on Frontier, analysing a run in place rather than writing it</span>
         <span class="src">ECP ALPINE, IJHPCA 2024</span></a>
       <a class="kpi" href="#papers">
-        <b>22</b>
+        <b>23</b>
         <span class="lb">peer-reviewed papers, a decade of them, mostly not by us</span>
         <span class="src">read before committing engineering time</span></a>
     </div>
@@ -1340,6 +1359,16 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
       <details class="more">
         <summary>The rest of the reading list <span class="n">I/O, integrations, and tools built on Catalyst</span></summary>
         <div class="pubgroups">
+      <div class="pubgroup">
+        <h3>Coupled systems</h3>
+        <p>Instrumenting the coupler instead of the models.</p>
+        <div class="pubs">
+          <a class="pub" href="https://doi.org/10.5194/gmd-12-233-2019" target="_blank" rel="noopener noreferrer">
+            <span class="t">Toward modular in situ visualization in Earth system models: RegESM 1.1<span class="era old">Catalyst 1.0</span></span>
+            <span class="m">Turuncoglu &middot; NCAR &middot; Geoscientific Model Development 12:233-259, 2019 &middot; open access &middot; the first in situ integration in a fully coupled Earth system model, and an honest account of what the 1.0 API cost to do it</span></a>
+        </div>
+      </div>
+
       <div class="pubgroup">
         <h3>In situ is still an I/O problem</h3>
         <p>Extracts are smaller, not free. An isosurface can land almost entirely on a
