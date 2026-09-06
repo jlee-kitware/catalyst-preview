@@ -41,6 +41,23 @@ body{
 a{color:inherit}
 .wrap{max-width:1180px;margin:0 auto;padding:0 var(--gut)}
 
+
+/* ---------- spacing scale and utilities ----------
+   Vertical rhythm had drifted to 38 distinct values. These are the steps to
+   use; reach for a utility class before adding an inline style. */
+:root{
+  --s1:.5rem; --s2:.75rem; --s3:1rem; --s4:1.25rem;
+  --s5:1.5rem; --s6:2rem; --s7:3rem;
+}
+.lk{color:var(--produced)}
+.dim{color:var(--muted)}
+.norm{color:var(--text);font-weight:400}
+.m0{margin:0}
+.mt3{margin-top:var(--s3)}
+.mt4{margin-top:var(--s4)}
+.mt5{margin-top:var(--s5)}
+.mono-note{margin:var(--s5) 0 0;font:400 .8rem/1.7 var(--mono)}
+
 /* ---------- nav ---------- */
 .nav{
   position:sticky;top:0;z-index:50;
@@ -536,7 +553,7 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
              width="1280" height="720"
              aria-label="WarpX plasma accelerator simulation rendered in situ"></video>
       <figcaption>WarpX, rendered in situ on Frontier.
-        <a href="https://kitware.github.io/paraview-catalyst/usecase/warpx.html" style="color:var(--muted)" target="_blank" rel="noopener noreferrer">use case &rarr;</a></figcaption>
+        <a href="https://kitware.github.io/paraview-catalyst/usecase/warpx.html" class="dim" target="_blank" rel="noopener noreferrer">use case &rarr;</a></figcaption>
     </figure>
 
     <div class="products">
@@ -561,15 +578,15 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
         <figcaption><b>Statistics</b>pressure distribution</figcaption>
       </figure>
     </div>
-    <p class="lede" style="font-size:.88rem;margin-top:.9rem;color:var(--muted)">
+    <p style="font-size:.88rem" class="lede mt3 dim">
       <!-- CLEARANCE PENDING: the solver behind these four products is named only in
            strategy/clearances.md (private repo), deliberately not here, because HTML
            comments are readable in view-source on the public deploy. Restore the
            specific wording from that file once contracts confirms. -->
-      Four products from one <b style="color:var(--text);font-weight:400">production CFD
+      Four products from one <b class="norm">production CFD
       run</b>, requested in plain language while it was still solving. Catalyst served
       the live simulation to ParaView; trame drew the browser session; an MCP layer
-      turned the question into filters. <b style="color:var(--text);font-weight:400">No
+      turned the question into filters. <b class="norm">No
       solution files were written.</b> The same session reads from disk instead,
       unchanged, when the run is already over.</p>
   </div>
@@ -631,19 +648,19 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
 
     <p class="readout">timestep <b id="ts">0</b> &nbsp;·&nbsp; reduction <b id="rx">n/a</b>
       &nbsp;·&nbsp; pipeline <b id="pl">render one frame + integrate a scalar</b></p>
-    <p class="sub" style="margin:1.4rem 0 0;font:400 .8rem/1.7 var(--mono)">
+    <p class="sub mono-note">
       Where these numbers come from. The published WarpX timestep is a 5.75&nbsp;billion
       element mesh at 1.16&nbsp;TB, so N&nbsp;&asymp;&nbsp;1,792 on a side. Twenty
       integrated quantities are 160&nbsp;bytes. A 1920&times;1080 frame is about
       2&nbsp;MB whatever the mesh size. A slice is N&sup2;&nbsp;=&nbsp;3.2&nbsp;million
       cells, and as data with six fields at single precision that is roughly
       0.18&nbsp;GB. Writing everything is 1.16&nbsp;TB.
-      <b style="color:var(--text);font-weight:400">Six orders of magnitude separate the
+      <b class="norm">Six orders of magnitude separate the
       first from the last, and the choice is yours, not the filesystem's.</b>
       Only the last option registers on the lower bar. The other three are drawn as a
       marker because at this scale they are a rounding error, which is the entire
       argument.</p>
-    <p class="sub" style="margin:1.4rem 0 0">This is not a choice between in situ visualization and
+    <p class="sub mt5">This is not a choice between in situ visualization and
       post-processing. You may still write files, still load them in ParaView, still explore
       them afterwards. In situ is allows you to decide <em>what</em> gets extracted and <em>which</em> files, so what lands on disk is your say.</p>
   </div>
@@ -725,35 +742,35 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
         workflow composer, and a game-engine bridge.</p>
       <p>A site that wants none of it ships nothing extra; a site that wants all of it
         sets an environment variable.</p>
-      <p><b style="color:var(--text);font-weight:400">This is Catalyst 2.</b> The
+      <p><b class="norm">This is Catalyst 2.</b> The
         version numbering matters because the previous one worked differently. Under the
         1.0 API the implementation was
         linked in, and a published survey measured what that added to a statically built
-        executable: <b style="color:var(--text);font-weight:400">2.1&nbsp;MB</b> for the
-        smallest edition up to <b style="color:var(--text);font-weight:400">98&nbsp;MB</b>
+        executable: <b class="norm">2.1&nbsp;MB</b> for the
+        smallest edition up to <b class="norm">98&nbsp;MB</b>
         for full ParaView, replicated per process.
-        <a href="https://doi.org/10.1111/cgf.12930" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">Bauer et al., Computer Graphics
+        <a href="https://doi.org/10.1111/cgf.12930" class="lk" target="_blank" rel="noopener noreferrer">Bauer et al., Computer Graphics
         Forum 35(3), 2016, Table 2</a>. Under 2.0 the question does not arise: your
         binary carries the stub, and the implementation is a shared library the loader
         maps once per node.</p>
       <p>And it is vendor-portable by construction. Conduit is API-agnostic; Viskores
         filters compile through Kokkos to CUDA, HIP, SYCL or OpenMP. The
-        <a href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">same integration pattern runs on
+        <a href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/" class="lk" target="_blank" rel="noopener noreferrer">same integration pattern runs on
         NVIDIA, AMD MI300X and Intel Max GPUs without adaptor changes</a>. And on
         unified-memory parts like Grace Hopper and MI300A the model only gets simpler.</p>
       <p>A C interface because everything binds to C. There is a worked example for each:
-        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CUnstructuredGrid" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">C</a>,
-        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxUnstructuredGrid" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">C++</a>,
-        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/Fortran90ImageData" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">Fortran&nbsp;90</a> and
-        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/PythonImageData" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">Python</a>.
+        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CUnstructuredGrid" class="lk" target="_blank" rel="noopener noreferrer">C</a>,
+        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxUnstructuredGrid" class="lk" target="_blank" rel="noopener noreferrer">C++</a>,
+        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/Fortran90ImageData" class="lk" target="_blank" rel="noopener noreferrer">Fortran&nbsp;90</a> and
+        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/PythonImageData" class="lk" target="_blank" rel="noopener noreferrer">Python</a>.
         Your solver's language is not the question; whether it can describe its mesh is.</p>
       <p class="quiet">Swap implementations at run time with
         <code>CATALYST_IMPLEMENTATION_NAME</code> and
         <code>CATALYST_IMPLEMENTATION_PATHS</code>; Catalyst loads the named library with
         <code>dlopen</code> and checks it for compatibility.
-        <a href="https://catalyst-in-situ.readthedocs.io/en/latest/for_simulation_developers.html" style="color:var(--muted)" target="_blank" rel="noopener noreferrer">API reference</a>.
+        <a href="https://catalyst-in-situ.readthedocs.io/en/latest/for_simulation_developers.html" class="dim" target="_blank" rel="noopener noreferrer">API reference</a>.
         No recompile, and pipelines themselves
-        can be <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxDynamicPipelines" style="color:var(--muted)" target="_blank" rel="noopener noreferrer">added and
+        can be <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxDynamicPipelines" class="dim" target="_blank" rel="noopener noreferrer">added and
         removed while the solver runs</a>.</p>
     </div>
     <div>
@@ -770,14 +787,14 @@ conduit_node_set_path_external_float64_ptr(
 
 <span class="c">// once, at shutdown</span>
 <span class="fn">catalyst_finalize</span>(params);</pre>
-      <p class="claim quiet" style="margin-top:.9rem">Fields are passed by pointer.
+      <p class="claim quiet mt3">Fields are passed by pointer.
         Catalyst reads your arrays in place: no copy, no reformat, GPU-resident data
         stays on the GPU. A
-        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxLBMCylinder" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">D2Q9 lattice-Boltzmann
+        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxLBMCylinder" class="lk" target="_blank" rel="noopener noreferrer">D2Q9 lattice-Boltzmann
         example</a> keeps four field arrays in device memory for the whole run, hands
         Catalyst the raw pointers through <code>set_external</code>, and analyses them
         on the same buffer the solver just wrote, with no per-step transfer to host.</p>
-<pre style="margin-top:1.4rem"><span class="c"># the other side: your pipeline script, in Python</span>
+<pre class="mt5"><span class="c"># the other side: your pipeline script, in Python</span>
 <span class="kw">from</span> paraview.simple <span class="kw">import</span> *
 <span class="kw">from</span> vtk.util.numpy_support <span class="kw">import</span> vtk_to_numpy
 <span class="kw">import</span> numpy <span class="kw">as</span> np, torch
@@ -789,10 +806,10 @@ conduit_node_set_path_external_float64_ptr(
     <span class="c"># it is just an array now, so do whatever you do</span>
     loss = model.<span class="fn">train_step</span>(torch.from_numpy(omega).float())
     np.<span class="fn">save</span>(<span class="s">f"kpi_{info.cycle}.npy"</span>, omega.<span class="fn">mean</span>(axis=<span class="s">0</span>))</pre>
-      <p class="claim quiet" style="margin-top:.9rem">No C++ to write, no rebuild to
+      <p class="claim quiet mt3">No C++ to write, no rebuild to
         change the analysis, and nothing stopping you importing whatever the rest of your
         field already uses.</p>
-      <figure class="figure" style="margin-top:1.6rem">
+      <figure class="figure mt5">
         <video src="assets/amrex.mp4" poster="assets/amrex.jpg"
                autoplay muted loop playsinline preload="none"
                width="1100" height="619"
@@ -854,13 +871,13 @@ conduit_node_set_path_external_float64_ptr(
       <p>That is the part worth sitting with if you ship simulation software. You
         instrument once; your users reach all of it without another release from you.</p>
       <p>Roughly in the order teams adopt them. All of them run three ways without a
-        code change: <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxAsyncExecute" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">in line,
-        blocking or async</a>, <a href="https://doi.org/10.1007/978-3-031-40843-4_20" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">in
-        transit</a> on separate nodes, or <a href="https://arxiv.org/abs/2406.18112" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">hybrid</a>,
+        code change: <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxAsyncExecute" class="lk" target="_blank" rel="noopener noreferrer">in line,
+        blocking or async</a>, <a href="https://doi.org/10.1007/978-3-031-40843-4_20" class="lk" target="_blank" rel="noopener noreferrer">in
+        transit</a> on separate nodes, or <a href="https://arxiv.org/abs/2406.18112" class="lk" target="_blank" rel="noopener noreferrer">hybrid</a>,
         reducing in place and rendering elsewhere. Fides ships inside ParaView and hands
         the Conduit node straight to ADIOS2, so moving off-node is a change to the
         pipeline script rather than to your solver.
-        <a href="#guide" style="color:var(--produced)">Which one fits you &rarr;</a></p>
+        <a href="#guide" class="lk">Which one fits you &rarr;</a></p>
       <p class="quiet">Linked names go to published work using that pattern. Grey ones
         are established practice with no public reference we could verify, so we have not
         linked them.</p>
@@ -1042,8 +1059,8 @@ conduit_node_set_path_external_float64_ptr(
         in situ training and inference, and <b>catalyst-cosim</b> for multi-physics
         coupling. Kitware is extending this with NASA and the University of Colorado
         Boulder, so validated solvers gain modern AI workflows without being rewritten.
-        <a href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/" style="color:var(--muted)" target="_blank" rel="noopener noreferrer">roadmap &rarr;</a></p>
-      <div class="btns" style="margin-top:1.2rem">
+        <a href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/" class="dim" target="_blank" rel="noopener noreferrer">roadmap &rarr;</a></p>
+      <div class="btns mt4">
         <a class="btn" href="#talk">Talk about AI in the loop</a>
       </div>
     </div>
@@ -1054,7 +1071,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
           <span class="fn">&rarr;</span>  ParaView filters <span class="c">(deterministic)</span>
           <span class="fn">&rarr;</span>  Catalyst         <span class="c">(the live solver)</span>
           <span class="fn">&rarr;</span>  LLM explains what came back</pre>
-      <table style="margin-top:1.3rem">
+      <table class="mt4">
         <caption>The ablation locates the ontology's effect precisely: it does not change
           which tools get selected, which was already reliable. It corrects how results
           are read.</caption>
@@ -1063,11 +1080,11 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
           <tr><td>Interpretation accuracy</td><td class="n">0.41</td><td class="n">0.91</td></tr>
         </tbody>
       </table>
-      <figure class="figure" style="margin-top:1.6rem">
+      <figure class="figure mt5">
         <img src="assets/aiflow.jpg" width="1500" height="613" loading="lazy"
              alt="Diagram of a deep learning workflow coupled to a running simulation">
         <figcaption>Training coupled to the running solver.
-          <a href="https://kitware.github.io/paraview-catalyst/usecase/deep_learning.html" style="color:var(--muted)" target="_blank" rel="noopener noreferrer">use case &rarr;</a></figcaption>
+          <a href="https://kitware.github.io/paraview-catalyst/usecase/deep_learning.html" class="dim" target="_blank" rel="noopener noreferrer">use case &rarr;</a></figcaption>
       </figure>
       <!-- PARKED, do not restore without a citation. These three figures came from
            kitware.com/in-situ and no benchmark, workload or hardware description has
@@ -1079,7 +1096,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
              Sustained throughput on GPU:          80,000+ steps/s
            Restore as a table once the benchmark is published or linkable. -->
 
-      <p class="claim quiet" style="margin-top:1.1rem">Surrogates and reduced-order models
+      <p class="claim quiet mt3">Surrogates and reduced-order models
         train on the same runtime stream, with no disk round trip and GPU-resident data
         staying on the GPU. That gap is training that keeps pace with the solver versus
         training that throttles it.</p>
@@ -1208,32 +1225,32 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
     
     <div class="gallery">
       <a class="tile" href="https://kitware.github.io/paraview-catalyst/usecase/ai_and_cfd.html" target="_blank" rel="noopener noreferrer">
-        <figure style="margin:0"><video src="assets/phasta.mp4" poster="assets/phasta.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>
+        <figure class="m0"><video src="assets/phasta.mp4" poster="assets/phasta.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>
           <figcaption><b>PHASTA</b>wingtip vortices, 256K MPI ranks</figcaption>
         </figure>
       </a>
       <a class="tile" href="https://kitware.github.io/paraview-catalyst/usecase/cyclonic.html" target="_blank" rel="noopener noreferrer">
-        <figure style="margin:0"><video src="assets/cyclone.mp4" poster="assets/cyclone.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>
+        <figure class="m0"><video src="assets/cyclone.mp4" poster="assets/cyclone.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>
           <figcaption><b>Cyclonic forecast</b>tracked while the forecast runs</figcaption>
         </figure>
       </a>
       <a class="tile" href="https://kitware.github.io/paraview-catalyst/usecase/mpaso.html" target="_blank" rel="noopener noreferrer">
-        <figure style="margin:0"><video src="assets/mpaso.mp4" poster="assets/mpaso.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>
+        <figure class="m0"><video src="assets/mpaso.mp4" poster="assets/mpaso.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>
           <figcaption><b>MPAS-Ocean</b>Arctic eddies, extracted in situ</figcaption>
         </figure>
       </a>
       <a class="tile" href="https://kitware.github.io/paraview-catalyst/usecase/rotor.html" target="_blank" rel="noopener noreferrer">
-        <figure style="margin:0"><video src="assets/rotor.mp4" poster="assets/rotor.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>
+        <figure class="m0"><video src="assets/rotor.mp4" poster="assets/rotor.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video>
           <figcaption><b>Rotorcraft</b>moving geometry, unsteady</figcaption>
         </figure>
       </a>
       <a class="tile" href="https://kitware.github.io/paraview-catalyst/usecase/turbulence.html" target="_blank" rel="noopener noreferrer">
-        <figure style="margin:0"><img src="assets/supersonic.jpg" loading="lazy" alt="Supersonic turbulence">
+        <figure class="m0"><img src="assets/supersonic.jpg" loading="lazy" alt="Supersonic turbulence">
           <figcaption><b>Supersonic turbulence</b>shock structure at full cadence</figcaption>
         </figure>
       </a>
       <a class="tile" href="https://kitware.github.io/paraview-catalyst/usecase/combustion.html" target="_blank" rel="noopener noreferrer">
-        <figure style="margin:0"><img src="assets/combustion.jpg" loading="lazy" alt="Combustion">
+        <figure class="m0"><img src="assets/combustion.jpg" loading="lazy" alt="Combustion">
           <figcaption><b>Combustion</b>engine cycle analysis</figcaption>
         </figure>
       </a>
@@ -1251,7 +1268,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
       <p>Much of this predates the current API, and that is the point. Catalyst&nbsp;2
         arrived with ParaView&nbsp;5.9 in 2021; the work before it is a decade of
         independent evidence that analysing data in memory holds up, at scale, across
-        domains, on machines that no longer exist. <b style="color:var(--text);font-weight:400">The
+        domains, on machines that no longer exist. <b class="norm">The
         older papers make the case for in situ. The current API is what you would
         actually build against.</b> Tagged below so you can tell which is which, and so
         that nothing a 1.0 paper says about build complexity or binary size gets mistaken
@@ -1650,7 +1667,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
       <p class="quiet">The clearest number we have, and note what it measures: this is
         the cost of moving an existing 1.0 adaptor to the 2.0 API, not the cost of
         starting from nothing. Converting LULESH cut it roughly in half. The
-        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/Lulesh-tutorial" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">tutorial walks it in
+        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/Lulesh-tutorial" class="lk" target="_blank" rel="noopener noreferrer">tutorial walks it in
         six stages</a>, from an uninstrumented solver to a steered one. Read it before
         estimating your own.</p>
       <p class="quiet">On runtime cost, be careful what you compare against. A solve with
@@ -1682,23 +1699,23 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
           <tr><td>PLUTO adaptor (third party)</td><td>n/a</td><td class="n">273 lines</td></tr>
         </tbody>
       </table>
-      <figure class="figure" style="margin-top:1.5rem">
+      <figure class="figure mt5">
         <video src="assets/lulesh.mp4" poster="assets/lulesh.jpg"
                autoplay muted loop playsinline preload="none"
                width="1000" height="729"
                aria-label="LULESH hydrodynamics proxy rendered in situ"></video>
         <figcaption>LULESH: the 325-to-155-line conversion above, running.
-          <a href="https://kitware.github.io/paraview-catalyst/usecase/lulesh.html" style="color:var(--muted)" target="_blank" rel="noopener noreferrer">use case &rarr;</a></figcaption>
+          <a href="https://kitware.github.io/paraview-catalyst/usecase/lulesh.html" class="dim" target="_blank" rel="noopener noreferrer">use case &rarr;</a></figcaption>
       </figure>
-      <p class="claim quiet" style="margin-top:1.1rem">The PLUTO adaptor was written by one
+      <p class="claim quiet mt3">The PLUTO adaptor was written by one
         graduate student for a code with no official Catalyst support: polar grid,
         zero-copy field passing, 273 lines, and a generator script to emit it. They then
         <!-- VERIFY this link resolves for anonymous visitors before publishing; taken
              from the repository README, which appends ?authuser=0 -->
-        <a href="https://sites.google.com/view/ritalighosh/use-catalyst-with-your-simulations" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">published
+        <a href="https://sites.google.com/view/ritalighosh/use-catalyst-with-your-simulations" class="lk" target="_blank" rel="noopener noreferrer">published
         a walkthrough</a> so others could repeat it.</p>
 
-      <div class="offers" style="margin-top:1.6rem">
+      <div class="offers mt5">
         <div class="offer">
           <h3>What drives the runtime cost</h3>
           <p>Four things, roughly in order. Tune the first two and most workloads land
@@ -1792,7 +1809,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
           <span class="dur">annual · response commitment in contract</span>
         </div>
       </div>
-      <div class="btns" style="margin-top:1.4rem">
+      <div class="btns mt5">
         <a class="btn solid" href="https://www.kitware.com/catalyst-assessment" target="_blank" rel="noopener noreferrer">Book an assessment</a>
         <a class="btn" href="#docs">Try it yourself first</a>
       </div>
@@ -1817,21 +1834,21 @@ cd catalyst-examples/ParaView/<span class="fn">Lulesh-tutorial</span>
 <span class="c"># six versions, uninstrumented through steered</span>
 ls
 <span class="c">Version0  Version1  Version2  Version3  Version4  Version5</span></pre>
-      <p class="claim quiet" style="margin-top:.9rem">A prebuilt container is on the way
+      <p class="claim quiet mt3">A prebuilt container is on the way
         for a zero-build first look. Until then the examples build against an installed
         ParaView, and the tutorial's first version needs no Catalyst at all.</p>
-      <div class="btns" style="margin-top:1.2rem">
+      <div class="btns mt4">
         <a class="btn" href="https://catalyst-in-situ.readthedocs.io/en/latest/for_simulation_developers.html" target="_blank" rel="noopener noreferrer">Catalyst API</a>
         <a class="btn" href="https://kitware.github.io/paraview-catalyst/" target="_blank" rel="noopener noreferrer">ParaView Catalyst</a>
         <a class="btn" href="https://gitlab.kitware.com/paraview/catalyst-examples" target="_blank" rel="noopener noreferrer">Examples</a>
         <a class="btn" href="https://discourse.paraview.org/c/in-situ-support" target="_blank" rel="noopener noreferrer">Ask on Discourse</a>
       </div>
-      <p class="claim quiet" style="margin-top:1.2rem">Or watch one. All free, all recorded:
-        <a href="https://www.kitware.com/webinars/whats-new-in-in-situ-analysis-and-visualization/" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">async
+      <p class="claim quiet mt4">Or watch one. All free, all recorded:
+        <a href="https://www.kitware.com/webinars/whats-new-in-in-situ-analysis-and-visualization/" class="lk" target="_blank" rel="noopener noreferrer">async
         execution, GPU workflows and in-situ AI</a> ·
-        <a href="https://www.kitware.com/webinars/in-situ-analysis-with-catalyst-getting-started/" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">getting
+        <a href="https://www.kitware.com/webinars/in-situ-analysis-with-catalyst-getting-started/" class="lk" target="_blank" rel="noopener noreferrer">getting
         started</a> ·
-        <a href="https://www.kitware.com/webinars/catalyst-the-swiss-army-knife-for-smarter-simulations/" style="color:var(--produced)" target="_blank" rel="noopener noreferrer">the
+        <a href="https://www.kitware.com/webinars/catalyst-the-swiss-army-knife-for-smarter-simulations/" class="lk" target="_blank" rel="noopener noreferrer">the
         wider toolkit</a></p>
     </div>
   </div>
