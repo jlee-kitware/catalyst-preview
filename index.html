@@ -711,8 +711,9 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
       <li>
         <p class="said">Two solvers exchange fields every timestep, through the disk,
           across coupling code we wrote and now maintain ourselves.</p>
-        <p class="cost"><b>headcount</b>: bespoke plumbing that no one else can
-          support and no one wants to own.</p>
+        <p class="cost"><b>headcount</b>: bespoke plumbing that no one else can support
+          and no one wants to own. <a href="#workflows" class="lk">Instrument the coupler
+          instead &rarr;</a></p>
       </li>
     </ul>
   </div>
@@ -1030,7 +1031,8 @@ conduit_node_set_path_external_float64_ptr(
             common in-memory mesh description, instead of through disk and bespoke glue.
             The strongest version instruments the coupler rather than the models: one
             integration then serves every component, each grid arriving in its native
-            form with no forced regridding and no copy.</p></div>
+            form with no forced regridding and no copy. A dedicated package,
+            <b class="norm">catalyst-cosim</b>, is being built on this pattern.</p></div>
         <div class="flow"><span class="fn todo">Digital twins</span>
           <p class="fd">Assimilate live telemetry, steer the model to track the asset, stay faster than real time using surrogates.</p></div>
         <div class="flow"><span class="fn todo">Ensembles and DoE</span>
