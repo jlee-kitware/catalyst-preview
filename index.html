@@ -585,8 +585,9 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
            strategy/clearances.md (private repo), deliberately not here, because HTML
            comments are readable in view-source on the public deploy. Restore the
            specific wording from that file once contracts confirms. -->
-      Four products from one <b class="norm">production CFD
-      run</b>, requested in plain language while it was still solving. Catalyst served
+      Four products from one <b class="norm">coupled production CFD run</b>, a primal
+      solve and its adjoint running together, requested in plain language while it was
+      still solving. Catalyst served
       the live simulation to ParaView; trame drew the browser session; an MCP layer
       turned the question into filters. <b class="norm">No
       solution files were written.</b> The same session reads from disk instead,
@@ -1029,10 +1030,13 @@ conduit_node_set_path_external_float64_ptr(
         <div class="flow"><a class="fn" href="https://doi.org/10.5194/gmd-12-233-2019" target="_blank" rel="noopener noreferrer">Co-simulation</a>
           <p class="fd">Two or more solvers exchange fields every timestep through a
             common in-memory mesh description, instead of through disk and bespoke glue.
-            The strongest version instruments the coupler rather than the models: one
-            integration then serves every component, each grid arriving in its native
-            form with no forced regridding and no copy. A dedicated package,
-            <b class="norm">catalyst-cosim</b>, is being built on this pattern.</p></div>
+            Two patterns. Across components, the strongest version instruments the
+            coupler rather than the models: one integration then serves every component,
+            each grid arriving in its native form with no forced regridding and no copy.
+            Within one physics, a primal solve and its adjoint run together, the adjoint
+            consuming state the primal has just produced rather than a trajectory
+            checkpointed to disk. A dedicated package,
+            <b class="norm">catalyst-cosim</b>, is being built on this.</p></div>
         <div class="flow"><span class="fn todo">Digital twins</span>
           <p class="fd">Assimilate live telemetry, steer the model to track the asset, stay faster than real time using surrogates.</p></div>
         <div class="flow"><span class="fn todo">Ensembles and DoE</span>
