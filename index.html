@@ -221,6 +221,17 @@ details.more > summary .n{font:400 .78rem var(--mono);opacity:.75}
 .tile figcaption b{display:block;color:var(--text);font-weight:500}
 .tile:hover figcaption b{color:var(--produced)}
 
+
+/* ---------- timing diagram ---------- */
+.timing{margin:.9rem 0 0}
+.timing svg{display:block;width:100%;height:auto}
+.timing .t-lbl{font:500 10px var(--mono);fill:var(--text)}
+.timing .t-sub{font:400 9px var(--mono);fill:var(--muted)}
+.timing .solve{fill:#2f2947;stroke:#463d68;stroke-width:.8}
+.timing .anal{fill:rgba(240,192,90,.85)}
+.timing .idle{fill:none;stroke:var(--written);stroke-width:1;stroke-dasharray:2 2}
+.timing .brace{stroke:var(--muted);stroke-width:.8;fill:none}
+
 /* ---------- decision guide ---------- */
 .guide{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(min(21rem,100%),1fr));
@@ -1426,6 +1437,52 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
           iterations</b>. GPU solvers usually leave CPU cores idle, which is exactly what
           async is for. The trade is bounded memory for the queue.
           <span class="why"><a href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/">Catalyst 2.1 demonstration, 2026</a></span></p>
+        <figure class="timing">
+          <svg viewBox="0 0 400 116" xmlns="http://www.w3.org/2000/svg" role="img"
+               aria-label="Synchronous execution leaves the solver waiting; asynchronous overlaps analysis with the next step">
+        <text class="t-lbl" x="0" y="10">synchronous</text>
+        <rect class="solve" x="66" y="16" width="46" height="14" rx="1"/>
+        <rect class="solve" x="112" y="16" width="22" height="14" opacity=".28"/>
+        <line class="idle" x1="112" y1="23" x2="134" y2="23"/>
+        <rect class="anal" x="112" y="33" width="22" height="7" rx="1"/>
+        <rect class="solve" x="134" y="16" width="46" height="14" rx="1"/>
+        <rect class="solve" x="180" y="16" width="22" height="14" opacity=".28"/>
+        <line class="idle" x1="180" y1="23" x2="202" y2="23"/>
+        <rect class="anal" x="180" y="33" width="22" height="7" rx="1"/>
+        <rect class="solve" x="202" y="16" width="46" height="14" rx="1"/>
+        <rect class="solve" x="248" y="16" width="22" height="14" opacity=".28"/>
+        <line class="idle" x1="248" y1="23" x2="270" y2="23"/>
+        <rect class="anal" x="248" y="33" width="22" height="7" rx="1"/>
+        <rect class="solve" x="270" y="16" width="46" height="14" rx="1"/>
+        <rect class="solve" x="316" y="16" width="22" height="14" opacity=".28"/>
+        <line class="idle" x1="316" y1="23" x2="338" y2="23"/>
+        <rect class="anal" x="316" y="33" width="22" height="7" rx="1"/>
+        <text class="t-sub" x="0" y="54">solver waits for the pipeline. 33% of wall-clock blocked.</text>
+        <text class="t-lbl" x="0" y="68">asynchronous</text>
+        <rect class="solve" x="66" y="74" width="46" height="14" rx="1"/>
+        <rect class="solve" x="112" y="74" width="4" height="14" opacity=".28"/>
+        <line class="idle" x1="112" y1="81" x2="116" y2="81"/>
+        <rect class="anal" x="86" y="91" width="44" height="7" rx="1"/>
+        <rect class="solve" x="116" y="74" width="46" height="14" rx="1"/>
+        <rect class="solve" x="162" y="74" width="4" height="14" opacity=".28"/>
+        <line class="idle" x1="162" y1="81" x2="166" y2="81"/>
+        <rect class="anal" x="136" y="91" width="44" height="7" rx="1"/>
+        <rect class="solve" x="166" y="74" width="46" height="14" rx="1"/>
+        <rect class="solve" x="212" y="74" width="4" height="14" opacity=".28"/>
+        <line class="idle" x1="212" y1="81" x2="216" y2="81"/>
+        <rect class="anal" x="186" y="91" width="44" height="7" rx="1"/>
+        <rect class="solve" x="216" y="74" width="46" height="14" rx="1"/>
+        <rect class="solve" x="262" y="74" width="4" height="14" opacity=".28"/>
+        <line class="idle" x1="262" y1="81" x2="266" y2="81"/>
+        <rect class="anal" x="236" y="91" width="44" height="7" rx="1"/>
+        <rect class="solve" x="266" y="74" width="46" height="14" rx="1"/>
+        <rect class="solve" x="312" y="74" width="4" height="14" opacity=".28"/>
+        <line class="idle" x1="312" y1="81" x2="316" y2="81"/>
+        <rect class="anal" x="286" y="91" width="44" height="7" rx="1"/>
+        <text class="t-sub" x="0" y="112">pipeline runs alongside the next step. 6% blocked, 27% more iterations.</text>
+            <text class="t-sub" x="330" y="112">time &rarr;</text>
+          </svg>
+        </figure>
       </div>
 
       <div class="gq">
