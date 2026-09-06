@@ -1038,8 +1038,11 @@ conduit_node_set_path_external_float64_ptr(
             Inside a single solve, a model can join the physics itself: on every
             nonlinear iteration the pipeline reads a feature from the volume channel and
             writes a correction straight back into the solver's memory through
-            <code>catalyst_results</code>. No disk, no host staging, no lag. A dedicated
-            package, <b class="norm">catalyst-cosim</b>, is being built on this.</p></div>
+            <code>catalyst_results</code>. No disk, no host staging, no lag. And because
+            the pipeline is Python, an autodiff framework runs in the same process as
+            those arrays, so gradients can be taken where the data already is rather than
+            rebuilt from checkpoints. A dedicated package,
+            <b class="norm">catalyst-cosim</b>, is being built on this.</p></div>
         <div class="flow"><span class="fn todo">Digital twins</span>
           <p class="fd">Assimilate live telemetry, steer the model to track the asset, stay faster than real time using surrogates.</p></div>
         <div class="flow"><span class="fn todo">Ensembles and DoE</span>
