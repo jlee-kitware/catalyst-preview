@@ -298,6 +298,14 @@ details.more > summary .n{font:400 .78rem var(--mono);opacity:.75}
 }
 a[target="_blank"] .era::after{content:none}
 
+
+/* third-party embed: sized to the source, never letterboxed */
+.embed{
+  position:relative;width:100%;aspect-ratio:426/210;
+  border:1px solid var(--rule);background:#0f0d18;
+}
+.embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+
 /* ---------- placement diagram ---------- */
 .placement{margin:0 0 2.4rem}
 .placement svg{display:block;width:100%;height:auto;max-width:58rem}
@@ -1114,9 +1122,14 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
         </tbody>
       </table>
       <figure class="figure mt5">
-        <img src="assets/aiflow.jpg" width="1500" height="613" loading="lazy"
-             alt="Diagram of a deep learning workflow coupled to a running simulation">
-        <figcaption>Training coupled to the running solver.
+        <div class="embed">
+          <iframe data-src="https://player.vimeo.com/video/681359142?h=256ce5d59f&amp;dnt=1&amp;app_id=122963&amp;muted=1&amp;loop=1&amp;title=0&amp;byline=0&amp;portrait=0"
+                  title="Inference filter results once the turbulent flow is established"
+                  loading="lazy" frameborder="0" allow="autoplay; fullscreen"
+                  referrerpolicy="no-referrer"></iframe>
+        </div>
+        <figcaption>A surrogate model inferring the flow while the solver runs, from
+          EDF Lab's work on deep learning surrogates.
           <a href="https://kitware.github.io/paraview-catalyst/usecase/deep_learning.html" class="dim" target="_blank" rel="noopener noreferrer">use case &rarr;</a></figcaption>
       </figure>
       <!-- PARKED, do not restore without a citation. These three figures came from
@@ -2014,6 +2027,17 @@ if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     v.setAttribute('controls', '');
   });
 }
+
+// Third-party embeds cannot be paused from here once they are running, so the
+// autoplay parameter is added at load time only if motion is welcome.
+(function () {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('iframe[data-src]').forEach(function (f) {
+    var src = f.getAttribute('data-src');
+    f.src = reduce ? src : src + '&autoplay=1';
+    f.removeAttribute('data-src');
+  });
+})();
 </script>
 </body>
 </html>
