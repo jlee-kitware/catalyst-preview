@@ -1173,7 +1173,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
         <span class="lb">GPUs on Frontier, analysing a run in place rather than writing it</span>
         <span class="src">ECP ALPINE, IJHPCA 2024</span></a>
       <a class="kpi" href="#papers">
-        <b>23</b>
+        <b>24</b>
         <span class="lb">peer-reviewed papers, a decade of them, mostly not by us</span>
         <span class="src">read before committing engineering time</span></a>
     </div>
@@ -1368,6 +1368,9 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
           <a class="pub" href="https://www.kennethmoreland.com/documents/InSituTensions.pdf" target="_blank" rel="noopener noreferrer">
             <span class="t">The tensions of in situ visualization<span class="era old">Catalyst 1.0</span></span>
             <span class="m">Moreland · IEEE Computer Graphics and Applications 36(2) · 2016 · the tradeoffs named honestly, by one of Catalyst's own authors. Describes the 1.0 API; read it alongside the 2021 redesign above.</span></a>
+          <a class="pub" href="https://doi.org/10.1177/1094342020935991" target="_blank" rel="noopener noreferrer">
+            <span class="t">A terminology for in situ visualization and analysis systems</span>
+            <span class="m">Childs et al. &middot; over fifty authors from across the field &middot; IJHPCA 34(6) &middot; 2020 &middot; a year of meetings to agree six axes, then fifteen systems classified against them. The place to start if you are comparing anything. <a href="https://cdux.cs.uoregon.edu/pubs/ChildsIJHPCA.pdf" target="_blank" rel="noopener noreferrer">open copy</a></span></a>
           <a class="pub" href="https://doi.org/10.1111/cgf.12930" target="_blank" rel="noopener noreferrer">
             <span class="t">In situ methods, infrastructures, and applications on high performance computing platforms<span class="era old">Catalyst 1.0</span></span>
             <span class="m">Bauer et al. · Computer Graphics Forum 35(3) · 2016 · state-of-the-art report</span></a>
@@ -1640,76 +1643,69 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
   <div class="wrap">
     <div class="lead">
       <h2>Compare on the field&rsquo;s own axes, not ours.</h2>
-      <p>The <a href="https://doi.org/10.1111/cgf.12930" target="_blank" rel="noopener noreferrer">2016 state-of-the-art report</a>,
-        written by a group spanning Kitware, ORNL, LANL, Sandia, Argonne, LBNL and
-        Intelligent Light, categorised sixteen in situ infrastructures on four axes. It
-        is still the best map of the field, and it is the right place to start if you are
-        choosing.</p>
-      <p>In that table, Catalyst&rsquo;s row was
-        <b class="norm">Synchronous &middot; All &middot; Direct integration &middot; Public</b>.
-        Three of those four still hold. Here is the one that changed, and five things the
-        table had no column for.</p>
+      <p>In 2020 more than fifty people from across this field spent a year agreeing on
+        how to describe in situ systems, because the words had stopped meaning the same
+        thing to everyone. The result is
+        <a href="https://doi.org/10.1177/1094342020935991" target="_blank" rel="noopener noreferrer">a six-axis terminology</a> and a survey of
+        fifteen systems against it. If you are comparing anything, start there rather
+        than here.
+        <a href="https://cdux.cs.uoregon.edu/pubs/ChildsIJHPCA.pdf" target="_blank" rel="noopener noreferrer">Open copy</a>.</p>
+      <p>ParaView Catalyst has a row in that table. Two of its five entries have changed
+        since, and both moved the same way.</p>
     </div>
 
     <div class="flows">
       <div class="flowgroup">
-        <h3>The four axes that survey used</h3>
+        <h3>Catalyst&rsquo;s row, then and now</h3>
         <table class="thennow">
-          <caption>Only synchronization moved. Since 2.1 the pipeline can be queued to a
-            worker thread while the solver continues: in the published demonstration the
-            solver went from blocked 33% of wall-clock to 6%, and completed 27% more
-            iterations in the same window. Integration type is still direct, but the
-            surface shrank to one header with no SDK, and the implementation now loads at
-            run time instead of linking in.
-            <a href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/" target="_blank" rel="noopener noreferrer">the measurement</a> &middot;
-            <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/Lulesh-tutorial" target="_blank" rel="noopener noreferrer">the integration</a></caption>
+          <caption>Proximity and division of execution are the two that moved, and they
+            move together: once analysis can run off node, it can be given its own
+            resources. In 2020 that combination belonged to the data-management
+            frameworks; a dedicated analysis API doing both is the change.
+            <a href="https://arxiv.org/abs/2406.18112" target="_blank" rel="noopener noreferrer">hybrid measurement</a> &middot;
+            <a href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/" target="_blank" rel="noopener noreferrer">async and GPU</a></caption>
           <thead>
-            <tr><th>Axis</th><th>2016 survey</th><th>Today</th></tr>
+            <tr><th>Axis</th><th>2020 survey</th><th>Today</th></tr>
           </thead>
           <tbody>
-            <tr class="changed">
-              <td>Synchronization</td><td class="was">Synchronous</td><td class="now">Both</td></tr>
-            <tr><td>Operation controls</td><td class="was">All</td><td>All</td></tr>
-            <tr><td>Integration type</td><td class="was">Direct integration</td><td>Direct integration</td></tr>
-            <tr><td>Availability</td><td class="was">Public</td><td>Public</td></tr>
+            <tr><td>Integration type</td><td class="was">Dedicated API</td><td>Dedicated API</td></tr>
+            <tr class="changed"><td>Proximity</td><td class="was">On node</td><td class="now">On node, off node</td></tr>
+            <tr class="changed"><td>Access</td><td class="was">Direct, shallow copy where possible</td><td class="now">Direct, shallow copy, including device memory</td></tr>
+            <tr class="changed"><td>Division of execution</td><td class="was">Time division</td><td class="now">Time or space division</td></tr>
+            <tr><td>Operation controls</td><td class="was">Automatic non-adaptive; human in the loop, blocking and non-blocking</td><td>Unchanged, and already the most complete entry in that column</td></tr>
           </tbody>
         </table>
       </div>
 
       <div class="flowgroup">
-        <h3>Five it had no column for</h3>
-        <p class="gd">These were not differentiators in 2016. They are the ones
-          evaluations turn on now, so ask them of whatever you are considering, and ask
-          them of the current release rather than the paper.</p>
-        <div class="flow"><a class="fn" href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxLBMCylinder" target="_blank" rel="noopener noreferrer">GPU-resident data</a>
-          <p class="fd">Device pointers passed straight through, filters running on the buffer the solver just wrote. No host round trip.</p></div>
-        <div class="flow"><a class="fn" href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/" target="_blank" rel="noopener noreferrer">Vendor portability</a>
-          <p class="fd">CUDA, HIP, SYCL and OpenMP from one adaptor, through Kokkos. Your next procurement does not invalidate the work.</p></div>
+        <h3>Two things the taxonomy has no axis for</h3>
+        <p class="gd">Worth asking anyway, of anything you are considering.</p>
+        <div class="flow"><a class="fn" href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/" target="_blank" rel="noopener noreferrer">Which accelerators</a>
+          <p class="fd">CUDA, HIP, SYCL and OpenMP from one adaptor, through Kokkos. The
+            axes assume you have chosen a machine; procurement does not.</p></div>
         <div class="flow"><a class="fn" href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxSteering" target="_blank" rel="noopener noreferrer">Feedback into the solve</a>
-          <p class="fd">Results return through <code>catalyst_results</code>, tightly enough to correct a closure every nonlinear iteration.</p></div>
-        <div class="flow"><a class="fn" href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxDynamicPipelines" target="_blank" rel="noopener noreferrer">Changing it mid-run</a>
-          <p class="fd">Pipelines added and removed while the solver runs; a live session can attach to look at something unplanned.</p></div>
-        <div class="flow"><a class="fn" href="https://arxiv.org/abs/2406.18112" target="_blank" rel="noopener noreferrer">Getting data off-node</a>
-          <p class="fd">In 2016 that survey noted in transit "requires the writing of an additional communication routine". Fides now hands the Conduit node to ADIOS2; it is a few lines of pipeline script.</p></div>
+          <p class="fd">Operation controls describe who chooses what runs. They do not
+            describe results going back the other way, into the solver, tightly enough to
+            correct a closure every nonlinear iteration.</p></div>
       </div>
     </div>
 
     <div class="lead" style="margin-top:2.6rem">
       <h3 style="font:600 1rem var(--sans);color:var(--text);margin:0 0 .6rem">
         The others are real, and one of them is underneath us</h3>
-      <p><b class="norm">Ascent</b> is the sibling: the ECP exascale programme shipped it
-        alongside ParaView Catalyst deliberately, and it is built for the smallest
-        possible dependency footprint. <b class="norm">SENSEI</b> is a layer above rather
-        than a rival, and can drive Catalyst underneath. <b class="norm">libsim</b> is the
-        same idea in VisIt&rsquo;s ecosystem; the argument between them is which
-        application your scientists already have open, not which is better engineered.
-        <b class="norm">ADIOS2</b> is not an alternative at all, it is the transport our
-        in transit path runs on.
-        <a href="https://doi.org/10.1177/10943420241286521" target="_blank" rel="noopener noreferrer">ECP ALPINE</a> covers the first of those
-        properly.</p>
+      <p>That survey covers fifteen systems properly, so read it rather than us on this.
+        In short: <b class="norm">Ascent</b> is the sibling, shipped alongside Catalyst by
+        the same ECP programme and built for a smaller dependency footprint.
+        <b class="norm">SENSEI</b> is a layer above rather than a rival and can drive
+        Catalyst underneath. <b class="norm">libsim</b> is the same idea in
+        VisIt&rsquo;s ecosystem; the argument between them is which application your
+        scientists already have open. <b class="norm">ADIOS2</b> is not an alternative at
+        all, it is the transport our off-node path runs on.
+        <a href="https://doi.org/10.1177/10943420241286521" target="_blank" rel="noopener noreferrer">ECP ALPINE</a> covers the first properly.</p>
       <p><b class="norm">Writing your own</b> is a legitimate choice for one stable
-        analysis you fully understand. It stops being cheap at the second analysis, at
-        the first GPU, when a result needs to come back into the solve, or when the
+        analysis you fully understand. The survey calls this Bespoke and is fair about
+        it: minimal effort, minimal reuse. It stops being cheap at the second analysis,
+        at the first GPU, when a result needs to come back into the solve, or when the
         person who wrote it leaves.</p>
     </div>
   </div>
