@@ -1658,10 +1658,12 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
       <div class="flowgroup">
         <h3>Catalyst&rsquo;s row, then and now</h3>
         <table class="thennow">
-          <caption>Proximity and division of execution are the two that moved, and they
-            move together: once analysis can run off node, it can be given its own
-            resources. In 2020 that combination belonged to the data-management
-            frameworks; a dedicated analysis API doing both is the change.
+          <caption>Proximity and division of execution moved together: once analysis
+            can run off node, it can be given its own resources. Both are additions
+            rather than swaps, and the hybrid path uses both at once, reducing on the
+            solver&rsquo;s own ranks and rendering on dedicated ones in the same run. In
+            2020 that combination belonged to the data-management frameworks; a dedicated
+            analysis API doing it is the change.
             <a href="https://arxiv.org/abs/2406.18112" target="_blank" rel="noopener noreferrer">hybrid measurement</a> &middot;
             <a href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/" target="_blank" rel="noopener noreferrer">async and GPU</a></caption>
           <thead>
@@ -1669,9 +1671,9 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
           </thead>
           <tbody>
             <tr><td>Integration type</td><td class="was">Dedicated API</td><td>Dedicated API</td></tr>
-            <tr class="changed"><td>Proximity</td><td class="was">On node</td><td class="now">On node, off node</td></tr>
+            <tr class="changed"><td>Proximity</td><td class="was">On node</td><td class="now">On node and off node</td></tr>
             <tr class="changed"><td>Access</td><td class="was">Direct, shallow copy where possible</td><td class="now">Direct, shallow copy, including device memory</td></tr>
-            <tr class="changed"><td>Division of execution</td><td class="was">Time division</td><td class="now">Time or space division</td></tr>
+            <tr class="changed"><td>Division of execution</td><td class="was">Time division</td><td class="now">Time and space division</td></tr>
             <tr><td>Operation controls</td><td class="was">Automatic non-adaptive; human in the loop, blocking and non-blocking</td><td>Unchanged, and already the most complete entry in that column</td></tr>
           </tbody>
         </table>
