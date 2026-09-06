@@ -298,6 +298,18 @@ a[target="_blank"] .era::after{content:none}
 }
 .embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 
+
+/* then-and-now table: one changed cell should be obvious */
+.thennow{margin:0}
+.thennow th{
+  text-align:left;font:500 .8rem/1.5 var(--mono);color:var(--muted);
+  border-bottom:1px solid var(--rule);padding:.5rem .8rem .5rem 0;font-weight:500;
+}
+.thennow td{padding:.62rem .8rem .62rem 0;border-bottom:1px solid var(--rule);font-size:.9rem}
+.thennow .was{color:var(--muted)}
+.thennow tr.changed .now{color:var(--produced);font-weight:500}
+.thennow tr.changed td:first-child{box-shadow:inset 2px 0 0 var(--produced);padding-left:.7rem}
+
 /* ---------- placement diagram ---------- */
 .placement{margin:0 0 2.4rem}
 .placement svg{display:block;width:100%;height:auto;max-width:58rem}
@@ -1642,15 +1654,26 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
     <div class="flows">
       <div class="flowgroup">
         <h3>The four axes that survey used</h3>
-        <p class="gd">One of them has changed.</p>
-        <div class="flow"><a class="fn" href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/" target="_blank" rel="noopener noreferrer">Synchronization</a>
-          <p class="fd"><b class="norm">Synchronous &rarr; Both.</b> Since 2.1 the pipeline can be queued to a worker thread. The solver went from blocked 33% of wall-clock to 6%.</p></div>
-        <div class="flow"><span class="fn">Operation controls</span>
-          <p class="fd"><b class="norm">All.</b> Batch and interactive, simultaneously. Unchanged, and it was already the least common answer in that column.</p></div>
-        <div class="flow"><a class="fn" href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/Lulesh-tutorial" target="_blank" rel="noopener noreferrer">Integration type</a>
-          <p class="fd"><b class="norm">Direct integration.</b> Still direct, but the surface shrank: one header, no SDK, and the implementation now loads at run time rather than linking in.</p></div>
-        <div class="flow"><span class="fn">Availability</span>
-          <p class="fd"><b class="norm">Public.</b> BSD 3-Clause. Unchanged.</p></div>
+        <table class="thennow">
+          <caption>Only synchronization moved. Since 2.1 the pipeline can be queued to a
+            worker thread while the solver continues: in the published demonstration the
+            solver went from blocked 33% of wall-clock to 6%, and completed 27% more
+            iterations in the same window. Integration type is still direct, but the
+            surface shrank to one header with no SDK, and the implementation now loads at
+            run time instead of linking in.
+            <a href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/" target="_blank" rel="noopener noreferrer">the measurement</a> &middot;
+            <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/Lulesh-tutorial" target="_blank" rel="noopener noreferrer">the integration</a></caption>
+          <thead>
+            <tr><th>Axis</th><th>2016 survey</th><th>Today</th></tr>
+          </thead>
+          <tbody>
+            <tr class="changed">
+              <td>Synchronization</td><td class="was">Synchronous</td><td class="now">Both</td></tr>
+            <tr><td>Operation controls</td><td class="was">All</td><td>All</td></tr>
+            <tr><td>Integration type</td><td class="was">Direct integration</td><td>Direct integration</td></tr>
+            <tr><td>Availability</td><td class="was">Public</td><td>Public</td></tr>
+          </tbody>
+        </table>
       </div>
 
       <div class="flowgroup">
