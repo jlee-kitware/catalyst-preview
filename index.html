@@ -470,7 +470,7 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
     9  adopters     Who exactly?                     Here is who, and how you can check
    10  papers       Has it been scrutinised?         And a decade of peer-reviewed work
    11  guide        Does it fit MY case?             Which of those applies to you
-   12  alternatives What about Ascent, SENSEI, ...?   It is not the only way to do this
+   12  alternatives How does it compare?             If you are comparing, compare on these
    13  effort       What will it cost me?            What it actually costs to adopt
    14  licence      Can I ship it?                   BSD 3-Clause
    15  talk         Can I get help?                  Or have the people who wrote it do it
@@ -493,7 +493,7 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
     <a href="#workflows">Workflows</a>
     <a href="#adopters">Adopters</a>
     <a href="#papers">Papers</a>
-    <a href="#alternatives">Alternatives</a>
+    <a href="#alternatives">Compare</a>
     <a href="#guide">Which fits you</a>
     <a href="#docs">Docs</a>
     <a href="#talk">Talk to us</a>
@@ -607,7 +607,7 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
       <a class="route" href="#guide">
         <span class="who">Evaluating for your code</span>
         <span class="goes">Would it fit my problem, and what would it cost?</span>
-        <span class="cost">seven questions, the alternatives, then the effort table &middot; ten minutes</span></a>
+        <span class="cost">seven questions, ten comparison axes, then the effort table &middot; ten minutes</span></a>
       <a class="route" href="#product">
         <span class="who">Shipping simulation software</span>
         <span class="goes">What does this do for my product and my licence?</span>
@@ -1627,78 +1627,58 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
 <section class="wide" id="alternatives">
   <div class="wrap">
     <div class="lead">
-      <h2>It is not the only way to do this.</h2>
-      <p>Catalyst is one of several production in situ infrastructures, and the honest
-        landscape was surveyed in 2016 by a group spanning Kitware, ORNL, LANL, Sandia,
-        Argonne, LBNL and Intelligent Light. If you are choosing, read
-        <a href="https://doi.org/10.1111/cgf.12930" target="_blank" rel="noopener noreferrer">their table</a> before ours.</p>
-      <p>Here is where we would and would not point you at Catalyst.</p>
+      <h2>If you are comparing, compare on these.</h2>
+      <p>Evaluations of in situ infrastructure tend to turn on the same ten questions.
+        Here is what Catalyst answers on each, with a link to the code or the measurement
+        rather than an assurance.</p>
+      <p>Ask the same ten of anything else you are considering, and ask them of the
+        current release. Most published comparisons, including the
+        <a href="https://doi.org/10.1111/cgf.12930" target="_blank" rel="noopener noreferrer">2016 survey</a> that is still the best map
+        of the field, predate asynchronous execution and GPU-resident data on our side
+        and have moved on the others too.</p>
+    </div>
+    <div class="flows">
+      <div class="flowgroup">
+        <div class="flow"><a class="fn" href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxAsyncExecute" target="_blank" rel="noopener noreferrer">Where the analysis runs</a>
+          <p class="fd">In line on the solver ranks, in transit on separate nodes, or hybrid. One adaptor, chosen at launch.</p></div>
+        <div class="flow"><a class="fn" href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/" target="_blank" rel="noopener noreferrer">Blocking or not</a>
+          <p class="fd">Synchronous, or queued to a worker thread so the solver carries on. Measured at 33% blocked to 6%.</p></div>
+        <div class="flow"><a class="fn" href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxLBMCylinder" target="_blank" rel="noopener noreferrer">GPU-resident data</a>
+          <p class="fd">Device pointers passed straight through. Filters run on the buffer the solver just wrote, with no host round trip.</p></div>
+        <div class="flow"><a class="fn" href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/" target="_blank" rel="noopener noreferrer">Which GPUs</a>
+          <p class="fd">CUDA, HIP, SYCL and OpenMP from the same adaptor, through Kokkos. Your next procurement does not invalidate the work.</p></div>
+        <div class="flow"><a class="fn" href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/Fortran90ImageData" target="_blank" rel="noopener noreferrer">Your solver&rsquo;s language</a>
+          <p class="fd">A worked example in C, C++, Fortran 90 and Python. The API is C because everything binds to C.</p></div>
+        <div class="flow"><a class="fn" href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxSteering" target="_blank" rel="noopener noreferrer">Feedback into the solve</a>
+          <p class="fd">Results return to the solver through <code>catalyst_results</code>, tightly enough to correct a closure every nonlinear iteration.</p></div>
+        <div class="flow"><span class="fn">Who writes the analysis</span>
+          <p class="fd">Python, with ParaView&rsquo;s filter set and the rest of the scientific Python stack in scope. Authored in the GUI, or not.</p></div>
+        <div class="flow"><a class="fn" href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxDynamicPipelines" target="_blank" rel="noopener noreferrer">Changing it mid-run</a>
+          <p class="fd">Pipelines can be added and removed while the solver runs, and a live session can attach to look at something unplanned.</p></div>
+        <div class="flow"><span class="fn">What it costs your build</span>
+          <p class="fd">One header, no SDK, no ParaView in your dependency tree. The implementation loads at run time.</p></div>
+        <div class="flow"><span class="fn">Licence</span>
+          <p class="fd">BSD 3-Clause. Ships inside a commercial product with no royalty and no copyleft.</p></div>
+      </div>
     </div>
 
-    <div class="guide">
-      <div class="gq">
-        <h3><span class="n">Ascent</span></h3>
-        <p>Lightweight, VTK-m native, built for minimal dependencies and GPU-first
-          execution. The ECP exascale programme shipped Ascent and ParaView Catalyst
-          side by side, deliberately, because they are aimed at different constraints.</p>
-        <p class="ans"><b>Choose Ascent</b> if the smallest possible dependency footprint
-          is the binding constraint and you do not need ParaView's filter set or the
-          application your users already run. It is a good piece of engineering and the
-          published in situ cost model was measured on it.
-          <span class="why"><a href="https://doi.org/10.1177/10943420241286521" target="_blank" rel="noopener noreferrer">ECP ALPINE, IJHPCA 2024</a></span></p>
-      </div>
-
-      <div class="gq">
-        <h3><span class="n">SENSEI</span></h3>
-        <p>An abstraction layer above the infrastructures rather than a competitor to
-          them. Instrument once against SENSEI and it can drive Catalyst, Ascent or
-          libsim underneath.</p>
-        <p class="ans"><b>Choose SENSEI</b> if you genuinely cannot commit to a back end,
-          or you are a facility supporting many codes with different preferences. You
-          pay for the indirection in one more layer to debug, and you reach each back end
-          through the subset SENSEI exposes.</p>
-      </div>
-
-      <div class="gq">
-        <h3><span class="n">libsim</span></h3>
-        <p>VisIt's in situ library. The same idea in a different ecosystem, with the same
-          basic trade: your analysis is authored in the tool it belongs to.</p>
-        <p class="ans"><b>Choose libsim</b> if your users work in VisIt. The argument for
-          Catalyst over libsim is not technical superiority, it is which application your
-          scientists already have open.</p>
-      </div>
-
-      <div class="gq">
-        <h3><span class="n">ADIOS2</span></h3>
-        <p>Not an alternative at all. It is data transport, and it is already wired in:
-          Fides ships inside ParaView and translates between Catalyst's Conduit node and
-          ADIOS2 without a manual conversion step. The in transit and hybrid paths on
-          this page are ADIOS2 underneath.</p>
-        <p class="ans"><b>Use both.</b> If someone offers you ADIOS2 instead of Catalyst,
-          they have answered a different question. ADIOS2 moves the data; something still
-          has to decide what the data should be.</p>
-      </div>
-
-      <div class="gq">
-        <h3><span class="n">Roll your own</span></h3>
-        <p>Plenty of teams have. It is a legitimate choice for a narrow, stable analysis
-          you fully understand, and it starts smaller than any of the above.</p>
-        <p class="ans"><b>It stops being cheap</b> when the second analysis arrives, when
-          somebody wants it on a GPU, when the answer needs to come back into the solve,
-          or when the person who wrote it leaves. That is the point at which most of the
-          codes on the wall above stopped rolling their own.</p>
-      </div>
-
-      <div class="gq">
-        <h3><span class="n">Catalyst</span></h3>
-        <p>What the rest of this page is about, stated against the alternatives rather
-          than on its own.</p>
-        <p class="ans"><b>Choose Catalyst</b> when the analysis is the hard part rather
-          than the plumbing. Pipelines are Python against ParaView's full filter set and
-          the rest of the scientific Python ecosystem; your users already know the
-          application; the same session serves a live run or a file; and one adaptor
-          covers in line, in transit and hybrid without a code change.</p>
-      </div>
+    <div class="lead" style="margin-top:2.6rem">
+      <h3 style="font:600 1rem var(--sans);color:var(--text);margin:0 0 .6rem">
+        The others are real, and some of them are underneath us</h3>
+      <p><b class="norm">Ascent</b> is the sibling: the ECP exascale programme shipped it
+        alongside ParaView Catalyst deliberately, and it is built for the smallest
+        possible dependency footprint. <b class="norm">SENSEI</b> is a layer above rather
+        than a rival, and can drive Catalyst underneath. <b class="norm">libsim</b> is the
+        same idea in VisIt&rsquo;s ecosystem; the argument between them is which
+        application your scientists already have open, not which is better engineered.
+        <b class="norm">ADIOS2</b> is not an alternative at all, it is the transport our
+        in transit path runs on.
+        <a href="https://doi.org/10.1177/10943420241286521" target="_blank" rel="noopener noreferrer">ECP ALPINE</a> covers the first of those
+        properly.</p>
+      <p><b class="norm">Writing your own</b> is a legitimate choice for one stable
+        analysis you fully understand. It stops being cheap at the second analysis, at
+        the first GPU, when a result needs to come back into the solve, or when the
+        person who wrote it leaves.</p>
     </div>
   </div>
 </section>
