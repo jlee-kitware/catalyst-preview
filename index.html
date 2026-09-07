@@ -777,13 +777,21 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
         on the solver's ranks, on a separate allocation fed over the network, or splits
         the difference by reducing in place and rendering elsewhere, is a launch-time
         decision. Your adaptor does not know which one it is feeding.</p>
-      <p><b class="norm">It also does not know what is behind them.</b> Catalyst is an
-        API with an ABI, and the implementation is a separate shared library. ParaView is
-        the one we build and support, and the one most people want. It is not the only one
-        that has been written: Kitware Europe built an ADIOS-backed implementation before
-        Fides made it unnecessary, an Ascent-backed one has existed, and the stub itself
-        is a working null implementation you can link and ignore.
-        <a href="https://catalyst-in-situ.readthedocs.io/en/latest/for_simulation_developers.html" target="_blank" rel="noopener noreferrer">How the loader finds one</a>.</p>
+      <p><b class="norm">It also does not know what is behind them.</b> Catalyst is a
+        published specification with a stable ABI; the implementation is a separate shared
+        library the loader finds at run time. ParaView is the one we build and support.</p>
+      <p>Writing another is possible, and it is a serious undertaking rather than a
+        weekend. Kitware Europe did it once:
+        <a href="https://www.kitware.com/catalyst-adios2-a-new-catalyst2-implementation-for-in-transit-analysis/" target="_blank" rel="noopener noreferrer">AdiosCatalyst</a> implemented the API over
+        ADIOS2 so a simulation could stream to a dedicated analysis node, with a replay
+        process handing the data on to the ParaView implementation at the other end
+        (<a href="https://doi.org/10.1007/978-3-031-40843-4_20" target="_blank" rel="noopener noreferrer">ISC 2023</a>).
+        <b class="norm">Note where that went.</b> Fides now does the same job inside the
+        ParaView implementation, so the separate one is no longer needed, and the
+        Ascent-backed implementation is being retired for want of a functional gap to
+        fill. The specification is real and independently implementable. In practice the
+        ecosystem has converged on one implementation rather than splintering, which is
+        the more useful fact.</p>
       <p>What runs at run time is a Python pipeline, and that is a wider door than it
         sounds. Your solver's arrays arrive as NumPy, so NumPy, SciPy, pandas, PyTorch,
         scikit-learn, Matplotlib and any wrapped C++ library are all in scope, operating
@@ -901,13 +909,12 @@ conduit_node_set_path_external_float64_ptr(
           keep getting for free as it improves.</p>
       </div>
       <div class="offer">
-        <h3>Or bring your own analysis engine</h3>
-        <p>The instrumentation is an API, not a hook into our product. If you already have
-          an analysis or visualization code you would rather ship, you can implement the
-          Catalyst API over it and put your engine behind the same three calls. Your
-          customers who want ParaView get ParaView by pointing an environment variable at
-          it. Others have done this: an ADIOS-backed implementation, an Ascent-backed one.
-          You are adopting a contract, not a dependency.</p>
+        <h3>You are adopting a specification, not a dependency</h3>
+        <p>What you instrument against is a published API with a stable ABI, and it has
+          been implemented independently more than once. You are unlikely to want to do
+          that yourself, and the reason is the reassuring part: the alternatives keep
+          being absorbed rather than multiplying. If your requirements ever did diverge
+          from ours, the door is open and someone has walked through it.</p>
       </div>
       <div class="offer">
         <h3>New capability without a new release</h3>
@@ -1704,8 +1711,8 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
         fifteen systems against it. If you are comparing anything, start there rather
         than here.
         <a href="https://cdux.cs.uoregon.edu/pubs/ChildsIJHPCA.pdf" target="_blank" rel="noopener noreferrer">Open copy</a>.</p>
-      <p>ParaView Catalyst has a row in that table. Three of its five entries read
-        differently today.</p>
+      <p>ParaView Catalyst has a row in that table. Two of its five entries read
+        differently today, and both moved the same way.</p>
     </div>
 
     <div class="flows">
@@ -1716,17 +1723,18 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
             can run off node, it can be given its own resources. Both are additions
             rather than swaps, and the hybrid path uses both at once, reducing on the
             solver&rsquo;s own ranks and rendering on dedicated ones in the same run. In
-            2020 that combination belonged to the data-management frameworks. Integration
-            type is the subtler one: still a dedicated API, but with several
-            implementations now written against a stable ABI, it functions as the
-            taxonomy&rsquo;s shared protocol as well.
+            2020 that combination belonged to the data-management frameworks; a dedicated
+            analysis API doing it is the change. Integration type stays where it was, and
+            deliberately so: the API has been implemented independently, but the
+            alternatives have been absorbed rather than multiplying, so calling it a
+            shared protocol would overstate what happened.
             <a href="https://arxiv.org/abs/2406.18112" target="_blank" rel="noopener noreferrer">hybrid measurement</a> &middot;
             <a href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/" target="_blank" rel="noopener noreferrer">async and GPU</a></caption>
           <thead>
             <tr><th>Axis</th><th>2020 survey</th><th>Today</th></tr>
           </thead>
           <tbody>
-            <tr class="changed"><td>Integration type</td><td class="was">Dedicated API</td><td class="now">Dedicated API, and in practice a shared protocol</td></tr>
+            <tr><td>Integration type</td><td class="was">Dedicated API</td><td>Dedicated API</td></tr>
             <tr class="changed"><td>Proximity</td><td class="was">On node</td><td class="now">On node and off node</td></tr>
             <tr class="changed"><td>Access</td><td class="was">Direct, shallow copy where possible</td><td class="now">Direct, shallow copy, including device memory</td></tr>
             <tr class="changed"><td>Division of execution</td><td class="was">Time division</td><td class="now">Time and space division</td></tr>
