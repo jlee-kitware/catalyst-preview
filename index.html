@@ -1231,10 +1231,11 @@ conduit_node_set_path_external_float64_ptr(
         interesting one.</p>
       <p><b class="norm">What it can do with that handle.</b> Explain what a result
         means and where it came from. Steer: change a boundary condition or a closure
-        coefficient from what the analysis just found. Debug at a scale where nobody can
-        read the output by hand, by asking which ranks disagree and why. Adjust what is
-        being kept, so an extract that turns out to matter starts being written from
-        timestep four hundred rather than never. Choose where the next ensemble member
+        coefficient from what the analysis just found. Catch the thing a log would never
+        show: a field drifting out of physical bounds, a decomposition artefact printed
+        across a coupling interface, an integrated quantity going the wrong way. Adjust
+        what is being kept, so an extract that turns out to matter starts being written
+        from timestep four hundred rather than never. Choose where the next ensemble member
         should sit. All of it through the same three calls.</p>
       <p>The objection is trust, and the architecture answers it rather than asking for
         faith. The model interprets and plans; deterministic ParaView filters do the
