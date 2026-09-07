@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ParaView Catalyst: in situ analysis, from the solve to the decision</title>
-<meta name="description" content="Compute scaled. Data scaled. The route from a run to a decision did not. Catalyst runs your analysis inside the solve, so results exist while the run is still going.">
+<meta name="description" content="The simulation ends and the waiting begins: write it out, move it, read it back, post-process, then look. Catalyst runs your analysis inside the solve, so the results are there while the run is still going.">
 <meta property="og:title" content="ParaView Catalyst">
-<meta property="og:description" content="Compute scaled. Data scaled. The route from a run to a decision did not. Catalyst runs your analysis inside the solve.">
+<meta property="og:description" content="The simulation ends. The waiting begins. Catalyst runs your analysis inside the solve, so the results are there while the run is still going.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://jlee-kitware.github.io/catalyst-preview/assets/warpx.jpg">
 <meta name="twitter:card" content="summary_large_image">
@@ -572,13 +572,13 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
 <header class="counter" id="running" style="border-top:0">
   <div class="wrap">
     <div class="lead-in">
-      <h1>Compute scaled. Data scaled. The route from a run to a decision did not.</h1>
-      <p>Solvers are orders of magnitude faster than they were a decade ago, and what
-        they produce has grown with them. What has not changed is everything after:
-        write it all out, move it, read it back, post-process, then finally look.</p>
-      <p>In situ analysis removes that middle. Catalyst runs your analysis inside the
-        solve, so the results exist while the run is still going and the next design
-        decision is not waiting on a file.</p>
+      <h1>The simulation ends. The waiting begins.</h1>
+      <p>Solvers got orders of magnitude faster over the last decade and their output
+        grew with them. Everything after stayed exactly where it was: write it all out,
+        move it, read it back, post-process, and only then look. That stretch is now most
+        of the distance between a run and a design decision.</p>
+      <p>In situ analysis removes the middle of it. Catalyst runs your analysis inside
+        the solve, so the results are there while the run is still going.</p>
     </div>
     <figure class="herofig">
       <video src="assets/phasta.mp4" poster="assets/phasta.jpg"
