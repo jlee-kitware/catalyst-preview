@@ -509,8 +509,9 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
 .lead-in h1{font-weight:300;font-size:clamp(1.7rem,4.4vw,2.9rem);letter-spacing:-.03em;
   line-height:1.1;margin:0 0 var(--s3);color:var(--text)}
 .lead-in p{margin:0;color:var(--muted);font-size:1.05rem;line-height:1.55}
-.counter .sub,.counter .mono-note{max-width:none}
-.counter .lede{max-width:none}
+.counter p.sub,.counter p.mono-note{max-width:70ch;margin-left:auto;margin-right:auto}
+.counter p.lede{max-width:70ch;margin-left:auto;margin-right:auto}
+.counter .readout,.counter .modes{max-width:70ch;margin-left:auto;margin-right:auto}
 .herofig{margin:0 0 var(--s6);border:1px solid var(--rule);background:#0f0d18}
 .herofig video{display:block;width:100%;height:auto}
 .herofig figcaption{border-top:1px solid var(--rule);padding:.55rem .85rem;
@@ -652,14 +653,14 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
         Catalyst adaptor, from a workstation to Frontier.</p>
     </div>
     <div class="domains-strip">
-      <figure class="dtile"><video src="assets/warpx.mp4" poster="assets/warpx.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video><figcaption>Plasma and accelerators</figcaption></figure>
-      <figure class="dtile"><video src="assets/mpaso.mp4" poster="assets/mpaso.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video><figcaption>Ocean and climate</figcaption></figure>
-      <figure class="dtile"><video src="assets/combustion.mp4" poster="assets/combustion.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video><figcaption>Combustion</figcaption></figure>
-      <figure class="dtile"><video src="assets/rotor.mp4" poster="assets/rotor.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video><figcaption>Rotorcraft</figcaption></figure>
-      <figure class="dtile"><video src="assets/supersonic.mp4" poster="assets/supersonic.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video><figcaption>Turbulence</figcaption></figure>
-      <figure class="dtile"><video src="assets/lulesh.mp4" poster="assets/lulesh.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video><figcaption>Shock physics</figcaption></figure>
-      <figure class="dtile"><video src="assets/cyclone.mp4" poster="assets/cyclone.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video><figcaption>Weather</figcaption></figure>
-      <figure class="dtile"><video src="assets/amrex.mp4" poster="assets/amrex.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video><figcaption>Adaptive meshes</figcaption></figure>
+      <figure class="dtile"><video src="assets/warpx.mp4" poster="assets/warpx.jpg" data-lazy muted loop playsinline preload="none" aria-hidden="true"></video><figcaption>Plasma and accelerators</figcaption></figure>
+      <figure class="dtile"><video src="assets/mpaso.mp4" poster="assets/mpaso.jpg" data-lazy muted loop playsinline preload="none" aria-hidden="true"></video><figcaption>Ocean and climate</figcaption></figure>
+      <figure class="dtile"><video src="assets/combustion.mp4" poster="assets/combustion.jpg" data-lazy muted loop playsinline preload="none" aria-hidden="true"></video><figcaption>Combustion</figcaption></figure>
+      <figure class="dtile"><video src="assets/rotor.mp4" poster="assets/rotor.jpg" data-lazy muted loop playsinline preload="none" aria-hidden="true"></video><figcaption>Rotorcraft</figcaption></figure>
+      <figure class="dtile"><video src="assets/supersonic.mp4" poster="assets/supersonic.jpg" data-lazy muted loop playsinline preload="none" aria-hidden="true"></video><figcaption>Turbulence</figcaption></figure>
+      <figure class="dtile"><video src="assets/lulesh.mp4" poster="assets/lulesh.jpg" data-lazy muted loop playsinline preload="none" aria-hidden="true"></video><figcaption>Shock physics</figcaption></figure>
+      <figure class="dtile"><video src="assets/cyclone.mp4" poster="assets/cyclone.jpg" data-lazy muted loop playsinline preload="none" aria-hidden="true"></video><figcaption>Weather</figcaption></figure>
+      <figure class="dtile"><video src="assets/amrex.mp4" poster="assets/amrex.jpg" data-lazy muted loop playsinline preload="none" aria-hidden="true"></video><figcaption>Adaptive meshes</figcaption></figure>
     </div>
   </div>
 </section>
@@ -830,6 +831,31 @@ if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     f.src = reduce ? src : src + '&autoplay=1';
     f.removeAttribute('data-src');
   });
+})();
+</script>
+<script>
+// Nine videos cannot all load at once. Start each one when it scrolls into
+// view, stop it when it leaves, and respect a reduced-motion preference.
+(function () {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var vids = [].slice.call(document.querySelectorAll('video[data-lazy]'));
+  if (reduce) {
+    vids.forEach(function (v) { v.removeAttribute('autoplay'); v.load(); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      var v = e.target;
+      if (e.isIntersecting) {
+        if (v.preload !== 'auto') { v.preload = 'auto'; v.load(); }
+        var p = v.play();
+        if (p && p.catch) { p.catch(function () {}); }
+      } else if (!v.paused) {
+        v.pause();
+      }
+    });
+  }, { rootMargin: '200px 0px', threshold: 0.1 });
+  vids.forEach(function (v) { io.observe(v); });
 })();
 </script>
 </body>
