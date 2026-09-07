@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ParaView Catalyst: decide what your simulation keeps</title>
+<meta name="description" content="Something in your workflow decides what to throw away. Catalyst analyses simulation data while it is still in memory, so you choose what to measure instead of which timesteps to lose.">
+<meta property="og:title" content="ParaView Catalyst">
+<meta property="og:description" content="Analyse simulation data while it is still in memory. Choose what to measure instead of which timesteps to lose.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://jlee-kitware.github.io/catalyst-preview/assets/warpx.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#14121f;
+  --slab:#1e1b2e;
+  --rule:#332e4a;
+  --text:#e8e6f0;
+  --muted:#9a94b3;
+  --produced:#f0c05a;
+  --written:#cb4f7d;
+  --violet:#5b53a8;
+  --sans:"IBM Plex Sans",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --gut:clamp(1.25rem,4vw,4.5rem);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--void);color:var(--text);
+  font:400 17px/1.65 var(--sans);
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 var(--gut)}
+
+
+/* ---------- spacing scale and utilities ----------
+   Vertical rhythm had drifted to 38 distinct values. These are the steps to
+   use; reach for a utility class before adding an inline style. */
+:root{
+  --s1:.5rem; --s2:.75rem; --s3:1rem; --s4:1.25rem;
+  --s5:1.5rem; --s6:2rem; --s7:3rem;
+  /* one vertical rhythm for every full-width section band */
+  --pad:clamp(2.5rem,5.5vw,4rem);
+}
+.lk{color:var(--produced)}
+.dim{color:var(--muted)}
+.norm{color:var(--text);font-weight:400}
+.m0{margin:0}
+.mt3{margin-top:var(--s3)!important}
+.mt4{margin-top:var(--s4)!important}
+.mt5{margin-top:var(--s5)!important}
+.mono-note{margin:var(--s5) 0 0;font:400 .8rem/1.7 var(--mono)}
+
+/* ---------- nav ---------- */
+.nav{
+  position:sticky;top:0;z-index:50;
+  background:color-mix(in srgb,var(--void) 88%,transparent);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--rule);
+}
+.nav .wrap{display:flex;align-items:center;gap:2rem;height:60px}
+.brand{
+  font-weight:600;letter-spacing:-.02em;margin-right:.9rem;
+  display:inline-flex;align-items:center;gap:.5rem;
+}
+.brand img{display:block;width:20px;height:20px;flex:none}
+.brand span{color:var(--muted);font-weight:300}
+
+.nav a:not(.brand){
+  color:var(--muted);text-decoration:none;font-size:.9rem;
+}
+.nav a:not(.brand):hover{color:var(--text)}
+
+/* ---------- hero ---------- */
+.hero{padding:clamp(3.5rem,9vw,7rem) 0 clamp(2.5rem,6vw,4rem)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(2rem,5vw,4.5rem);align-items:center}
+h1{
+  font-weight:300;font-size:clamp(2.1rem,4.6vw,3.5rem);
+  line-height:1.08;letter-spacing:-.035em;margin:0 0 1.4rem;
+  max-width:20ch;
+}
+.lede{color:var(--muted);font-size:1.06rem;max-width:44ch;margin:0 0 2rem}
+.btns{display:flex;flex-wrap:wrap;gap:.7rem}
+.btn{
+  display:inline-block;padding:.7rem 1.15rem;border-radius:2px;
+  text-decoration:none;font-size:.95rem;border:1px solid var(--rule);
+  transition:border-color .15s,background .15s;
+}
+.btn:hover{border-color:var(--muted)}
+.btn.solid{background:var(--produced);color:#1a1508;border-color:var(--produced);font-weight:600}
+.btn.solid:hover{background:#f6cd75;border-color:#f6cd75}
+.figure{
+  margin:0;border:1px solid var(--rule);background:#0f0d18;position:relative;
+}
+.figure img,.figure video{display:block;width:100%;height:auto}
+.figure .embed{border:0}
+.figure svg{display:block;width:100%;height:auto}
+.figure figcaption{
+  border-top:1px solid var(--rule);padding:.6rem .85rem;
+  font:400 .78rem/1.4 var(--mono);color:var(--muted);
+}
+
+/* ---------- counter: the one loud moment ---------- */
+.counter{border-top:1px solid var(--rule);background:var(--slab)}
+.counter .wrap{padding:var(--pad) var(--gut)}
+.counter h2{max-width:26ch}
+.counter p.sub{color:var(--muted);margin:0 0 2rem;max-width:56ch;font-size:.98rem}
+.gauge{display:grid;gap:1.1rem;margin-bottom:1.6rem}
+.row{display:grid;grid-template-columns:8.5rem minmax(0,1fr);gap:1rem;align-items:center}
+.row .lbl{font:400 .9rem/1.3 var(--sans);color:var(--muted)}
+.track{position:relative;height:34px;background:#171426;border:1px solid var(--rule);overflow:hidden}
+.fill{position:absolute;inset:0 auto 0 0;width:0;transition:width .28s linear}
+.fill.p{background:linear-gradient(90deg,var(--violet),var(--produced))}
+.fill.w{background:linear-gradient(90deg,#3c2a3d,var(--written))}
+.fill.w.hairline{
+  background:var(--written);min-width:3px;
+  box-shadow:0 0 0 1px var(--written),0 0 12px 2px rgba(203,79,125,.5);
+}
+.val{
+  position:absolute;right:.7rem;top:50%;transform:translateY(-50%);
+  font:500 .95rem/1 var(--mono);color:var(--text);
+  text-shadow:0 1px 3px rgba(10,8,18,.9);
+}
+.modes{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.mode{
+  padding:.5rem .95rem;border:1px solid var(--rule);background:transparent;
+  color:var(--muted);font:400 .9rem var(--sans);cursor:pointer;border-radius:2px;
+}
+.mode[aria-pressed="true"]{border-color:var(--produced);color:var(--text);background:#241f1a}
+.mode:focus-visible,.btn:focus-visible,a:focus-visible{outline:2px solid var(--produced);outline-offset:2px}
+.readout{font:400 .82rem/1.5 var(--mono);color:var(--muted);margin:1.1rem 0 0}
+.readout b{color:var(--text);font-weight:500}
+
+
+
+/* ---------- progressive disclosure ---------- */
+details.more{margin-top:1.4rem}
+details.more > summary{
+  list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:.55rem;
+  padding:.55rem .95rem;border:1px solid var(--rule);border-radius:2px;
+  font:400 .9rem var(--sans);color:var(--muted);
+}
+details.more > summary::-webkit-details-marker{display:none}
+details.more > summary:hover{border-color:var(--produced);color:var(--produced)}
+details.more > summary::after{content:"\203a";font-size:1.1rem;line-height:1;transition:transform .18s}
+details.more[open] > summary::after{transform:rotate(90deg)}
+details.more[open] > summary{margin-bottom:1.6rem}
+details.more > summary .n{font:400 .78rem var(--mono);opacity:.75}
+
+/* ---------- persona router ---------- */
+.router{border-top:1px solid var(--rule);background:#16131f}
+.router .wrap{padding:var(--pad) var(--gut)}
+.router > .wrap > p{
+  margin:0 0 1.3rem;color:var(--muted);font:400 .9rem/1.6 var(--sans);max-width:56ch;
+}
+.tracks{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(15rem,100%),1fr));gap:0}
+.route{
+  display:block;text-decoration:none;padding:1.15rem 1.3rem 1.2rem;
+  border:1px solid var(--rule);margin:-1px 0 0 -1px;transition:background .15s;
+}
+.route:hover{background:#1f1b2c}
+.route .who{
+  display:block;font:400 .76rem/1.4 var(--mono);color:var(--muted);
+  text-transform:uppercase;letter-spacing:.07em;margin-bottom:.5rem;
+}
+.route .goes{display:block;font:400 1rem/1.4 var(--sans);color:var(--text);margin-bottom:.5rem}
+.route:hover .goes{color:var(--produced)}
+.route .cost{display:block;font:400 .76rem/1.4 var(--mono);color:var(--muted)}
+
+/* ---------- KPI band: every number links to its source ---------- */
+.kpiband{border-top:1px solid var(--rule);background:#181524}
+.kpiband .wrap{padding:var(--pad) var(--gut)}
+.kpihead{max-width:56ch;margin-bottom:1.6rem}
+.kpihead h2{margin-bottom:.55rem}
+.kpihead p{margin:0;color:var(--muted);font-size:.92rem;line-height:1.6}
+.kpihead p b{color:var(--text);font-weight:400}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.kpi{
+  display:block;text-decoration:none;padding:1.5rem 1.4rem 1.35rem;
+  border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  transition:background .15s;
+}
+.kpi:nth-child(3n){border-right:0}
+.kpi:nth-last-child(-n+3){border-bottom:0}
+.kpi:hover{background:#1f1b30}
+.kpi b{
+  display:block;font:500 clamp(1.5rem,3vw,2.1rem)/1 var(--mono);
+  color:var(--produced);letter-spacing:-.03em;margin-bottom:.5rem;
+}
+.kpi .lb{display:block;font-size:.95rem;line-height:1.4;margin-bottom:.65rem;max-width:26ch}
+.kpi .src{
+  display:block;font:400 .74rem/1.4 var(--mono);color:var(--muted);
+  border-top:1px dotted var(--rule);padding-top:.5rem;
+}
+.kpi:hover .src{color:var(--produced)}
+@media (max-width:820px){
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .kpi:nth-child(3n){border-right:1px solid var(--rule)}
+  .kpi:nth-child(2n){border-right:0}
+  .kpi:nth-last-child(-n+3){border-bottom:1px solid var(--rule)}
+  .kpi:last-child{border-bottom:0}
+}
+
+
+/* ---------- imagery ---------- */
+.products{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(min(13rem,100%),1fr));
+  gap:1rem;margin-top:1rem;
+}
+.prod{margin:0}
+.prod img{
+  display:block;width:100%;height:auto;border:1px solid var(--rule);
+  background:#fff;border-radius:2px;
+}
+.prod figcaption{
+  margin-top:.45rem;font:400 .74rem/1.45 var(--mono);color:var(--muted);
+}
+.prod b{color:var(--produced);font-weight:500;display:block}
+
+
+/* ---------- media ---------- */
+.gallery{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(min(15rem,100%),1fr));
+  gap:1.1rem;margin-top:2.2rem;
+}
+.tile{margin:0;text-decoration:none;display:block}
+.tile video,.tile img{
+  display:block;width:100%;aspect-ratio:16/10;object-fit:cover;
+  border:1px solid var(--rule);background:#0f0d18;
+}
+.tile:hover video,.tile:hover img{border-color:var(--produced)}
+.tile figcaption{
+  margin-top:.5rem;font:400 .78rem/1.5 var(--mono);color:var(--muted);
+}
+.tile figcaption b{display:block;color:var(--text);font-weight:500}
+.tile:hover figcaption b{color:var(--produced)}
+
+
+/* ---------- timing diagram ---------- */
+.timing{margin:.9rem 0 0}
+.timing svg{display:block;width:100%;height:auto}
+.timing .t-lbl{font:500 10px var(--mono);fill:var(--text)}
+.timing .t-sub{font:400 9px var(--mono);fill:var(--muted)}
+.timing .solve{fill:#2f2947;stroke:#463d68;stroke-width:.8}
+.timing .anal{fill:rgba(240,192,90,.85)}
+.timing .idle{fill:none;stroke:var(--written);stroke-width:1;stroke-dasharray:2 2}
+
+/* ---------- decision guide ---------- */
+.guide{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(min(21rem,100%),1fr));
+  gap:0 2.6rem;border-top:1px solid var(--rule);
+}
+.gq{padding:1.15rem 0;border-bottom:1px solid var(--rule)}
+.gq h3{
+  margin:0 0 .5rem;font:500 .92rem/1.4 var(--sans);color:var(--text);
+}
+.gq h3 .n{
+  font:500 .78rem var(--mono);color:var(--muted);margin-right:.5rem;
+}
+.gq p{margin:0 0 .45rem;color:var(--muted);font-size:.89rem;line-height:1.55}
+.gq .ans{
+  margin:0;padding-left:.85rem;border-left:2px solid var(--produced);
+  color:var(--text);font-size:.89rem;line-height:1.55;
+}
+.gq .ans b{color:var(--produced);font-weight:500;font-family:var(--mono);font-size:.84rem}
+.gq .why{
+  display:block;margin-top:.45rem;font:400 .78rem/1.5 var(--mono);color:var(--muted);
+}
+.gq .why a{color:var(--muted)}
+.gq .why a:hover{color:var(--produced)}
+
+
+
+/* external links leave the page, so say so where it is not obvious */
+.claim a[target="_blank"]::after,
+.lead a[target="_blank"]::after,
+.gq a[target="_blank"]::after,
+.fd a[target="_blank"]::after,
+.sub a[target="_blank"]::after,
+.pub .m a[target="_blank"]::after{
+  content:"\2197";font-size:.78em;margin-left:.18em;opacity:.6;
+}
+a[target="_blank"] .era::after{content:none}
+
+
+/* third-party embed: sized to the source, never letterboxed */
+.embed{
+  position:relative;width:100%;aspect-ratio:426/210;
+  border:1px solid var(--rule);background:#0f0d18;
+}
+.embed iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+
+
+/* then-and-now table: one changed cell should be obvious */
+.thennow{margin:0}
+.thennow th{
+  text-align:left;font:500 .8rem/1.5 var(--mono);color:var(--muted);
+  border-bottom:1px solid var(--rule);padding:.5rem .8rem .5rem 0;font-weight:500;
+}
+.thennow td{padding:.62rem .8rem .62rem 0;border-bottom:1px solid var(--rule);font-size:.9rem}
+.thennow .was{color:var(--muted)}
+.thennow tr.changed .now{color:var(--produced);font-weight:500}
+.thennow tr.changed td:first-child{box-shadow:inset 2px 0 0 var(--produced);padding-left:.7rem}
+
+
+/* a heading that introduces a card grid must not look like a card */
+.blockhead{
+  margin:0 0 .35rem;font:600 1.02rem/1.3 var(--sans);color:var(--text);
+}
+.blockintro{margin:0 0 var(--s4);color:var(--muted);font-size:.92rem;max-width:52ch}
+.offer h3 .ord{
+  display:inline-block;min-width:1.15rem;margin-right:.4rem;
+  font:500 .78rem var(--mono);color:var(--produced);
+}
+
+
+/* small eyebrow that says what a block of evidence is showing */
+.evlabel{
+  margin:0 0 .55rem;font:400 .74rem/1.4 var(--mono);color:var(--muted);
+  letter-spacing:.08em;text-transform:uppercase;
+  padding-bottom:.4rem;border-bottom:1px solid var(--rule);
+}
+
+
+/* supporting paragraph outside a .claim column. Must be a rule on the element
+   itself: .claim p and .claim .quiet are descendant selectors and do not match
+   a paragraph that carries both class names. */
+.note{
+  margin:0;color:var(--muted);font-size:.88rem;line-height:1.6;max-width:52ch;
+}
+
+/* ---------- placement diagram ---------- */
+.placement{margin:0 0 2.4rem}
+.placement svg{display:block;width:100%;height:auto;max-width:58rem}
+.placement figcaption{
+  margin-top:.7rem;font:400 .8rem/1.6 var(--mono);color:var(--muted);max-width:60ch;
+}
+.placement .lbl{font:500 11px var(--mono);fill:var(--text)}
+.placement .sub{font:400 9.5px var(--mono);fill:var(--muted)}
+.placement .box{fill:#1c1828;stroke:#2e2842}
+.placement .solver{fill:#221d33;stroke:#3a3350}
+.placement .anfill{fill:rgba(240,192,90,.13);stroke:var(--produced);stroke-width:1.2}
+.placement .flow{stroke:var(--produced);stroke-width:1.6;fill:none;marker-end:url(#ah)}
+.placement .thin{stroke:var(--written);stroke-width:1.2;fill:none;
+  stroke-dasharray:3 3;marker-end:url(#ah2)}
+
+/* ---------- workflows ---------- */
+.wide{padding:var(--pad) 0;border-top:1px solid var(--rule)}
+.wide .wrap{padding:0 var(--gut)}
+.wide .lead{max-width:64ch;margin-bottom:2.6rem}
+.wide .lead h2{margin-bottom:.9rem}
+.wide .lead p{margin:0 0 .8rem;color:var(--muted);line-height:1.65}
+.wide .lead p.quiet{font-size:.87rem}
+.wide .lead a{color:var(--produced);text-decoration:none;white-space:nowrap}
+.wide .lead a:hover{text-decoration:underline}
+.flows{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(min(19rem,100%),1fr));
+  gap:2.2rem 3rem;align-items:start;
+}
+.flowgroup{break-inside:avoid}
+.flowgroup > h3{margin:0 0 .1rem;font:600 .95rem/1.3 var(--sans);color:var(--text);}
+.flowgroup > .gd{margin:0 0 .55rem;color:var(--muted);font-size:.85rem}
+.flow{
+  display:block;padding:.6rem 0;border-top:1px solid var(--rule);
+}
+.flow .fn{
+  display:block;font:500 .87rem/1.35 var(--mono);color:var(--text);
+  text-decoration:none;margin-bottom:.2rem;
+}
+.flow a.fn{border-bottom:1px dotted var(--muted);width:fit-content}
+.flow a.fn:hover{color:var(--produced);border-bottom-color:var(--produced)}
+.flow .fn.todo{color:var(--muted)}
+.flow .fd{margin:0;color:var(--muted);font-size:.88rem;line-height:1.5}
+
+/* ---------- symptoms ---------- */
+.symp{display:grid;gap:0;border-top:1px solid var(--rule)}
+.symp li{
+  list-style:none;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.85fr);
+  gap:clamp(1rem,3vw,2.5rem);padding:1.2rem 0;border-bottom:1px solid var(--rule);
+}
+.symp .said{font-size:1.02rem;max-width:44ch;margin:0}
+.symp .cost{margin:0;color:var(--muted);font-size:.9rem;max-width:40ch}
+.symp .cost b{color:var(--produced);font-weight:500;font-family:var(--mono);font-size:.85rem}
+@media (max-width:820px){ .symp li{grid-template-columns:1fr;gap:.45rem} }
+
+/* ---------- publications ---------- */
+.pubgroups{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(min(24rem,100%),1fr));
+  gap:1.8rem 3rem;align-items:start;
+}
+.pubs{display:grid;gap:0;border-top:1px solid var(--rule)}
+.era{
+  display:inline-block;margin-left:.45rem;padding:.1rem .4rem;
+  border:1px solid var(--rule);border-radius:2px;
+  font:400 .68rem/1.5 var(--mono);color:var(--muted);vertical-align:.08em;
+}
+.era.old{border-color:#4a3f5e}
+.era.other{border-color:#4a3f5e;color:#8b7fa8}
+.pub{display:block;padding:.85rem 0;border-bottom:1px solid var(--rule);text-decoration:none}
+.pub .t{display:block;font-size:.97rem;line-height:1.4;margin-bottom:.2rem}
+.pub:hover .t{color:var(--produced)}
+.pub .m{display:block;font:400 .8rem/1.5 var(--mono);color:var(--muted)}
+.pubgroup{margin-bottom:1.6rem}
+.pubgroup > h3{margin:0 0 .2rem;font:600 .95rem/1.3 var(--sans);color:var(--text);}
+.pubgroup > p{margin:0 0 .3rem;color:var(--muted);font-size:.85rem;max-width:52ch}
+.cite{border:1px solid var(--rule);background:#0f0d18;padding:1.05rem 1.2rem;margin-top:.4rem}
+.cite h3{margin:0 0 .5rem;font:600 .95rem var(--sans)}
+.cite p{margin:0;color:var(--muted);font:400 .82rem/1.7 var(--mono)}
+
+/* ---------- claim / evidence rows ---------- */
+.row2{border-top:1px solid var(--rule)}
+.row2 .wrap{
+  display:grid;grid-template-columns:minmax(0,.62fr) minmax(0,1fr);
+  gap:clamp(1.5rem,4vw,3.5rem);
+  padding:var(--pad) var(--gut);
+}
+.claim h2{max-width:24ch}
+.claim p{color:var(--muted);margin:0 0 .8rem;font-size:1rem;max-width:38ch}
+.claim p:last-child{margin-bottom:0}
+.claim .quiet{font-size:.88rem}
+
+.skip{
+  position:absolute;left:-9999px;top:0;z-index:99;
+  background:var(--produced);color:#14121f;padding:.6rem 1rem;
+  font:500 .9rem var(--sans);text-decoration:none;
+}
+.skip:focus{left:0}
+
+h2{
+  font-weight:300;font-size:clamp(1.45rem,2.8vw,2.1rem);letter-spacing:-.03em;
+  line-height:1.14;margin:0 0 .9rem;color:var(--text);
+}
+
+pre{
+  margin:0;padding:1.15rem 1.25rem;background:#0f0d18;border:1px solid var(--rule);
+  overflow-x:auto;font:400 .84rem/1.75 var(--mono);color:#cfc9e0;
+}
+pre .c{color:#6f688a}
+pre .fn{color:var(--produced)}
+pre .s{color:#8fb8a8}
+pre .kw{color:#a99ad6}
+
+/* ---------- code wall ---------- */
+.domains{display:grid;gap:1.35rem}
+.dom h3{margin:0 0 .5rem;font:600 .95rem/1.3 var(--sans);color:var(--text);border-bottom:1px solid var(--rule);padding-bottom:.4rem;}
+.names{display:flex;flex-wrap:wrap;gap:.4rem}
+.names a,.names span{
+  font:500 .87rem/1 var(--mono);text-decoration:none;
+  padding:.42rem .6rem;border:1px solid var(--rule);border-radius:2px;color:var(--text);
+}
+.names a:hover{border-color:var(--produced);color:var(--produced)}
+.names span{color:var(--muted);border-style:dashed}
+
+/* ---------- effort table ---------- */
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+th,td{text-align:left;padding:.62rem .7rem;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:.85rem}
+td.n{font:500 .9rem var(--mono);color:var(--produced);white-space:nowrap}
+caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted);font-size:.83rem}
+
+/* ---------- engagement ---------- */
+.offers{display:grid;gap:0;border:1px solid var(--rule)}
+.offer{padding:1.35rem 1.4rem;border-bottom:1px solid var(--rule)}
+.offer:last-child{border-bottom:0}
+.offer h3{margin:0 0 .35rem;font:600 1.02rem var(--sans)}
+.offer p{margin:0;color:var(--muted);font-size:.94rem;max-width:52ch}
+.offer .dur{font:400 .82rem var(--mono);color:var(--produced);display:block;margin-top:.5rem}
+
+/* ---------- foot ---------- */
+.foot{border-top:1px solid var(--rule);padding:3rem 0 4rem;color:var(--muted);font-size:.9rem}
+.foot .wrap{display:flex;flex-wrap:wrap;gap:1.5rem;justify-content:space-between}
+.foot a{color:var(--muted)}
+
+@media (max-width:820px){
+  .hero .wrap,.row2 .wrap{grid-template-columns:1fr}
+  .row{grid-template-columns:5.5rem minmax(0,1fr)}
+  h1{max-width:none}
+}
+@media (prefers-reduced-motion:reduce){
+  video{animation:none}
+  html{scroll-behavior:auto}
+  .fill{transition:none}
+}
+</style>
+<style>
+/* ---------- landing only ---------- */
+.lead-in{max-width:46ch;margin:0 auto var(--s6);text-align:center}
+.lead-in h1{font-weight:300;font-size:clamp(1.7rem,4.4vw,2.9rem);letter-spacing:-.03em;
+  line-height:1.1;margin:0 0 var(--s3);color:var(--text)}
+.lead-in p{margin:0;color:var(--muted);font-size:1.05rem;line-height:1.55}
+.subtract{display:flex;flex-wrap:wrap;gap:0;border-top:1px solid var(--rule);
+  border-bottom:1px solid var(--rule)}
+.subtract div{flex:1 1 14rem;padding:1.1rem 1.3rem;border-left:1px solid var(--rule);
+  font:400 .95rem/1.5 var(--sans);color:var(--muted)}
+.subtract div:first-child{border-left:0}
+.subtract b{display:block;color:var(--text);font-weight:400;font-family:var(--mono);
+  font-size:.86rem;margin-bottom:.3rem}
+.domains-strip{display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(min(11rem,100%),1fr));
+  gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.dtile{margin:0;background:var(--void);position:relative}
+.dtile img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;opacity:.72;
+  transition:opacity .2s}
+.dtile:hover img{opacity:1}
+.dtile figcaption{position:absolute;left:0;right:0;bottom:0;padding:.5rem .6rem;
+  font:400 .78rem/1.3 var(--mono);color:var(--text);
+  background:linear-gradient(transparent,rgba(20,18,31,.92) 55%)}
+.proof{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--rule)}
+.proof a{flex:1 1 12rem;padding:1.2rem 1.3rem;border-left:1px solid var(--rule);
+  text-decoration:none;transition:background .15s}
+.proof a:first-child{border-left:0}
+.proof a:hover{background:#1f1b2c}
+.proof b{display:block;font:500 1.7rem/1 var(--mono);color:var(--produced);
+  letter-spacing:-.03em;margin-bottom:.45rem}
+.proof span{font-size:.9rem;color:var(--muted);line-height:1.4}
+.exits{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(20rem,100%),1fr));
+  gap:0;border:1px solid var(--rule)}
+.exit{padding:1.5rem 1.6rem;border-left:1px solid var(--rule)}
+.exit:first-child{border-left:0}
+.exit h2{font-size:1.15rem;margin:0 0 .5rem;font-weight:600;letter-spacing:0}
+.exit p{margin:0 0 .9rem;color:var(--muted);font-size:.92rem;line-height:1.55}
+</style>
+</head>
+<body>
+<!--
+  STRAWMAN LANDING PAGE, generated by build_landing.py from index.html.
+  Deliberately NOT a compressed version of the long page: its job is
+  orientation, not argument. Every claim here stands without a citation beside
+  it, because a landing page cannot carry the evidence and rings hollow when it
+  tries. Counts are read out of index.html so the two cannot disagree.
+-->
+<a class="skip" href="#running">Skip to content</a>
+<nav class="nav">
+  <div class="wrap">
+    <a class="brand" href="#running"><img src="assets/favicon-32x32.png" alt="" width="20"
+       height="20" decoding="async">ParaView&nbsp;<span>Catalyst</span></a>
+    <a href="index.html">Read the evidence</a>
+    <a href="https://www.kitware.com/catalyst-assessment" target="_blank" rel="noopener noreferrer">Book a review</a>
+  </div>
+</nav>
+
+<header class="counter" id="running" style="border-top:0">
+  <div class="wrap">
+    <div class="lead-in">
+      <h1>Something in your workflow decides what to throw away.</h1>
+      <p>Usually a number in a config file. Catalyst analyses the data while it is still
+        in memory, so you choose what to measure instead of which timesteps to lose.</p>
+    </div>
+    
+    <p class="sub">A WarpX timestep on Frontier produces a 5.75&nbsp;billion element mesh,
+      1.16&nbsp;TB. Post-hoc, all of it has to land on disk before you can look at any of
+      it, and then be read back again to do the analysis. In situ, only the results you
+      asked for are ever written.</p>
+
+    <div class="gauge">
+      <div class="row">
+        <div class="lbl">Solver produced</div>
+        <div class="track"><div class="fill p" id="fp"></div><div class="val" id="vp">0 GB</div></div>
+      </div>
+      <div class="row">
+        <div class="lbl">Written to disk</div>
+        <div class="track"><div class="fill w" id="fw"></div><div class="val" id="vw">0 GB</div></div>
+      </div>
+    </div>
+
+    <div class="modes" role="group" aria-label="Output mode">
+      <button class="mode" id="mKpi"   aria-pressed="false">KPIs only</button>
+      <button class="mode" id="mImg"   aria-pressed="true">Rendered frame</button>
+      <button class="mode" id="mSlice" aria-pressed="false">Slice extract</button>
+      <button class="mode" id="mPost"  aria-pressed="false">Write everything</button>
+      <button class="mode" id="mReset">Restart run</button>
+    </div>
+
+    <p class="readout">timestep <b id="ts">0</b> &nbsp;·&nbsp; reduction <b id="rx">n/a</b>
+      &nbsp;·&nbsp; pipeline <b id="pl">render one frame + integrate a scalar</b></p>
+    <p class="sub mono-note">
+      Where these numbers come from. The published WarpX timestep is a 5.75&nbsp;billion
+      element mesh at 1.16&nbsp;TB, so N&nbsp;&asymp;&nbsp;1,792 on a side. Twenty
+      integrated quantities are 160&nbsp;bytes. A 1920&times;1080 frame is about
+      2&nbsp;MB whatever the mesh size. A slice is N&sup2;&nbsp;=&nbsp;3.2&nbsp;million
+      cells, and as data with six fields at single precision that is roughly
+      0.18&nbsp;GB. Writing everything is 1.16&nbsp;TB.
+      <b class="norm">Six orders of magnitude separate the
+      first from the last, and the choice is yours, not the filesystem's.</b>
+      Only the last option registers on the lower bar. The other three are drawn as a
+      marker because at this scale they are a rounding error, which is the entire
+      argument.</p>
+    <p class="sub mt5">This is not a choice between in situ visualization and
+      post-processing. You may still write files, still load them in ParaView, still explore
+      them afterwards. In situ is allows you to decide <em>what</em> gets extracted and <em>which</em> files, so what lands on disk is your say.</p>
+  
+  </div>
+</header>
+
+<section class="wide" style="border-top:0;padding-top:0">
+  <div class="wrap">
+    <div class="subtract">
+      <div><b>no dump</b>The full timestep never has to land before you can look at it.</div>
+      <div><b>no transfer</b>Analysis runs on the solver&rsquo;s own nodes, or streams to
+        neighbouring ones. Never by way of the filesystem.</div>
+      <div><b>no waiting</b>Answers arrive while the run is still going, and can be fed
+        back into it.</div>
+    </div>
+  </div>
+</section>
+
+<section class="wide">
+  <div class="wrap">
+    <div class="lead">
+      <h2>Wherever your physics lives.</h2>
+      <p>28 simulation codes across eight domains already ship a
+        Catalyst adaptor, from a workstation to Frontier.</p>
+    </div>
+    <div class="domains-strip">
+      <figure class="dtile"><img src="assets/phasta.jpg" alt="" loading="lazy" decoding="async"><figcaption>Aerospace CFD</figcaption></figure>
+      <figure class="dtile"><img src="assets/warpx.jpg" alt="" loading="lazy" decoding="async"><figcaption>Plasma and accelerators</figcaption></figure>
+      <figure class="dtile"><img src="assets/mpaso.jpg" alt="" loading="lazy" decoding="async"><figcaption>Ocean and climate</figcaption></figure>
+      <figure class="dtile"><img src="assets/combustion.jpg" alt="" loading="lazy" decoding="async"><figcaption>Combustion</figcaption></figure>
+      <figure class="dtile"><img src="assets/rotor.jpg" alt="" loading="lazy" decoding="async"><figcaption>Rotorcraft</figcaption></figure>
+      <figure class="dtile"><img src="assets/supersonic.jpg" alt="" loading="lazy" decoding="async"><figcaption>Turbulence</figcaption></figure>
+      <figure class="dtile"><img src="assets/lulesh.jpg" alt="" loading="lazy" decoding="async"><figcaption>Shock physics</figcaption></figure>
+      <figure class="dtile"><img src="assets/cyclone.jpg" alt="" loading="lazy" decoding="async"><figcaption>Weather</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="wide">
+  <div class="wrap">
+    <div class="lead">
+      <h2>Somebody already did the hard part.</h2>
+      <p>None of this is a pilot. Every number links to its source, and most of the
+        sources are not ours.</p>
+    </div>
+    <div class="proof">
+      <a href="index.html#adopters"><b>28</b><span>simulation codes shipping a Catalyst adaptor</span></a>
+      <a href="index.html#papers"><b>24</b><span>peer-reviewed papers, a decade of them</span></a>
+      <a href="index.html#evidence"><b>4,416</b><span>GPUs on Frontier, analysing a run in place</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="wide">
+  <div class="wrap">
+    <div class="exits">
+      <div class="exit">
+        <h2>Read the evidence</h2>
+        <p>The full technical page: what it costs to adopt, twenty-two workflows, the
+          adopter list, the reading list, and a comparison against the field&rsquo;s own
+          taxonomy. About thirty minutes.</p>
+        <a class="btn" href="index.html">Open the full page</a>
+      </div>
+      <div class="exit">
+        <h2>Or have us look at your solver</h2>
+        <p>A fixed-fee review of your code and its parallel decomposition, delivering an
+          adaptor architecture, an effort estimate in engineer-weeks, and the performance
+          risks worth knowing about first.</p>
+        <a class="btn solid" href="https://www.kitware.com/catalyst-assessment" target="_blank" rel="noopener noreferrer">Book an assessment</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap">
+    <div>Catalyst is developed by <a href="https://www.kitware.com/" target="_blank" rel="noopener noreferrer">Kitware</a>,
+      built on <a href="https://www.paraview.org/" target="_blank" rel="noopener noreferrer">ParaView</a> and
+      <a href="https://vtk.org/" target="_blank" rel="noopener noreferrer">VTK</a>, and released under BSD 3-Clause.</div>
+    <div><a href="index.html">Full page</a> &middot;
+      <a href="https://gitlab.kitware.com/paraview/catalyst" target="_blank" rel="noopener noreferrer">Catalyst source</a> &middot;
+      <a href="#running">Back to top</a></div>
+  </div>
+</footer>
+<script>
+(function(){
+  // Derived from the published WarpX pulsar run: a 5.75 billion element AMR mesh
+  // totalling 1.16 TB per timestep (ECP ALPINE, IJHPCA 2024).
+  //   bytes per element = 1.16 TB / 5.75e9 ~= 217 B  (several fields, AMR overhead)
+  //   linear dimension N = cbrt(5.75e9)    ~= 1792
+  // A slice through an N^3 mesh is N^2 cells, so it costs about 1/N of the timestep:
+  //   N^2 * 217 B = 3.21e6 * 217 B         ~= 0.65 GB
+  // The integrated scalar is 8 bytes and rounds away entirely.
+  // What "in situ" costs depends entirely on what you ask for. These four are
+  // the same run with four different pipelines, and they span six orders of
+  // magnitude. That is the point of the panel.
+  var TB  = 1160;                // GB produced per timestep
+  var MAX = 24;                  // timesteps in the visualised run
+  var PIPE = {
+    // 20 integrated quantities, 8 bytes each. 160 B.
+    kpi:   {gb: 160 / 1073741824,        label: 'integrate 20 quantities of interest'},
+    // one 1920x1080 frame, PNG, ~2 MB. Independent of mesh size.
+    img:   {gb: 2 / 1024,                label: 'render one frame + integrate a scalar'},
+    // slice of an N^3 mesh is N^2 = 3.21e6 cells. Points 12 B, connectivity
+    // 20 B, six fields at float32 24 B, so ~56 B/cell ~= 0.18 GB.
+    slice: {gb: 0.18,                    label: 'extract the slice as data, six fields'},
+    // nothing is analysed until the whole timestep has landed.
+    post:  {gb: 1160,                    label: 'dump the timestep, read it all back later'}
+  };
+  var mode = 'img';
+  var ts = 0, produced = 0, written = 0, timer = null, rx = 0;
+  var fp=document.getElementById('fp'), fw=document.getElementById('fw'),
+      vp=document.getElementById('vp'), vw=document.getElementById('vw'),
+      tsEl=document.getElementById('ts'), rxEl=document.getElementById('rx');
+
+  function fmt(gb){
+    if(gb >= 1000) return (gb/1000).toFixed(2)+' TB';
+    if(gb >= 1)    return gb.toFixed(0)+' GB';
+    if(gb >= 0.001) return (gb*1000).toFixed(0)+' MB';
+    if(gb > 0)      return (gb*1048576).toFixed(0)+' KB';
+    return '0';
+  }
+
+  function share(w, p){            // written as a share of produced, in words
+    if(!p) return '';
+    var pct = w / p * 100;
+    if(pct >= 1)    return pct.toFixed(0) + '% of it';
+    if(pct >= 0.01) return pct.toFixed(2) + '% of it';
+    if(pct > 0)     return 'under 0.01% of it';
+    return '';
+  }
+
+  function paint(){
+    var cap = MAX * TB;
+    var wpct = written / cap * 100;
+    fp.style.width = (produced/cap*100)+'%';
+    // floor the fill so a negligible value still reads as "present but tiny"
+    fw.style.width = (written > 0 ? Math.max(wpct, 0.6) : 0) + '%';
+    fw.classList.toggle('hairline', written > 0 && wpct < 0.6);
+    vp.textContent = fmt(produced);
+    vw.textContent = fmt(written) + (written ? '  \u00b7  ' + share(written, produced) : '');
+    tsEl.textContent = ts;
+    rxEl.textContent = rx > 1 ? Math.round(rx).toLocaleString() + '\u00d7 less' : 'n/a';
+  }
+
+  function step(){
+    if(ts >= MAX){ stop(); return; }
+    ts++;
+    produced += TB;
+    written += PIPE[mode].gb;
+    rx = written ? produced / written : 0;
+    paint();
+  }
+
+  function start(){ if(!timer) timer = setInterval(step, 320); }
+  function stop(){ clearInterval(timer); timer = null; }
+  function reset(){ stop(); ts=0; produced=0; written=0; paint(); start(); }
+
+  function setMode(key){
+    mode = key;
+    [['kpi','mKpi'],['img','mImg'],['slice','mSlice'],['post','mPost']].forEach(function(p){
+      var b = document.getElementById(p[1]);
+      if(b) b.setAttribute('aria-pressed', String(p[0] === key));
+    });
+    document.getElementById('pl').textContent = PIPE[key].label;
+    reset();
+  }
+
+  document.getElementById('mKpi').onclick   = function(){ setMode('kpi'); };
+  document.getElementById('mImg').onclick   = function(){ setMode('img'); };
+  document.getElementById('mSlice').onclick = function(){ setMode('slice'); };
+  document.getElementById('mPost').onclick  = function(){ setMode('post'); };
+  document.getElementById('mReset').onclick = reset;
+
+  paint();
+  // only run when the panel is actually on screen
+  var sec = document.getElementById('running');
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(e){
+      e[0].isIntersecting ? start() : stop();
+    },{threshold:.25}).observe(sec);
+  } else { start(); }
+})();
+
+// Respect reduced motion: pause every looping video and show its poster instead.
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  document.querySelectorAll('video[autoplay]').forEach(function (v) {
+    v.autoplay = false;
+    v.removeAttribute('autoplay');
+    v.loop = false;
+    v.pause();
+    v.setAttribute('controls', '');
+  });
+}
+
+// Third-party embeds cannot be paused from here once they are running, so the
+// autoplay parameter is added at load time only if motion is welcome.
+(function () {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('iframe[data-src]').forEach(function (f) {
+    var src = f.getAttribute('data-src');
+    f.src = reduce ? src : src + '&autoplay=1';
+    f.removeAttribute('data-src');
+  });
+})();
+</script>
+</body>
+</html>
