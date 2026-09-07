@@ -1820,6 +1820,17 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
         it: minimal effort, minimal reuse. It stops being cheap at the second analysis,
         at the first GPU, when a result needs to come back into the solve, or when the
         person who wrote it leaves.</p>
+      <p><b class="norm">And on the commercial side</b>, the closest equivalent is
+        Intelligent Light&rsquo;s <a href="https://www.ilight.com/en/products/xdbview" target="_blank" rel="noopener noreferrer">FieldView and its
+        XDB extract database</a>, which has been doing extract-based post-processing
+        since 2005 and is deployed in situ on production work including DoD
+        CREATE-AV Kestrel. It is a good idea, and the same idea: keep extracts at full
+        numerical fidelity instead of full fields. Worth knowing that their in situ
+        instrumentation is libsim, which is open source, and that Intelligent Light are
+        co-authors on <a href="https://doi.org/10.1111/cgf.12930" target="_blank" rel="noopener noreferrer">the 2016 survey</a> above. The
+        in situ APIs in production use are open source; the commercial market sits
+        downstream of the extract. If your engineers already work in FieldView, that
+        pairing is the honest recommendation.</p>
     </div>
   </div>
 </section>
