@@ -1527,7 +1527,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
             <span class="m">Bauer et al. · Computer Graphics Forum 35(3) · 2016 · state-of-the-art report</span></a>
           <a class="pub" href="https://doi.org/10.1145/2597652.2597668" target="_blank" rel="noopener noreferrer">
             <span class="t">Evaluation of methods to integrate analysis into a large-scale shock physics code<span class="era old">Catalyst 1.0</span></span>
-            <span class="m">Oldfield, Moreland, Fabian, Rogers · ICS 2014 · the rigorous three-way comparison: in situ, in transit and post-processing on CTH, 10.58M processor-hours. Concludes all three are needed, and Catalyst supports all three.</span></a>
+            <span class="m">Oldfield, Moreland, Fabian, Rogers · ICS 2014 · the rigorous three-way comparison of in situ, in transit and post-processing, on CTH over 10.58M processor-hours. Measured on Cielo, retired 2016, so the I/O balance is a generation behind; the structural findings hold, the verdict on post-processing is of its time.</span></a>
           <a class="pub" href="https://www.osti.gov/servlets/purl/1649280" target="_blank" rel="noopener noreferrer">
             <span class="t">Opportunities for cost savings with in-transit visualization<span class="era other">measured on Ascent</span></span>
             <span class="m">Kress et al. · ISC HPC 2020 · the cost model: in-line visualization cost grows 0.6× → 2.2× of solver cycle time with scale while transfer cost barely moves; volume rendering 4× cheaper at lower concurrency</span></a>
@@ -1764,13 +1764,17 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
 
       <div class="gq">
         <h3><span class="n">06</span>Is your filesystem actually keeping up today?</h3>
-        <p>Worth asking honestly. On Cielo in 2014, with a strong Lustre filesystem and
-          one moderate analysis every ten cycles, post-processing performed well.</p>
+        <p>Measure it rather than assume. Time how long one timestep takes to land, and
+          what fraction of a solver cycle that is. For plenty of sites the answer is
+          still that the filesystem copes.</p>
         <p class="ans"><b>If yes &rarr; keep post-processing, and use in situ to choose
-          what you keep.</b> That study's own conclusion was that all three approaches
-          are needed and in situ does not displace post-processing. The gap has widened
-          since, and at a projected 60 TB/s exascale I/O lands under 1% of what the
-          simulation generates, but the honest starting point is that this is additive.
+          what you keep.</b> In situ is additive; nothing here asks you to stop writing
+          files. For context rather than as a benchmark: Sandia measured post-processing
+          performing well on <b class="norm">Cielo in 2014</b>, with a strong Lustre
+          filesystem and one moderate analysis every ten cycles, and concluded that all
+          three approaches were needed. That machine was retired in 2016 and the
+          compute-to-storage ratio has widened by orders of magnitude since, so read it
+          as the direction of travel rather than as a current answer.
           <span class="why"><a href="https://doi.org/10.1145/2597652.2597668" target="_blank" rel="noopener noreferrer">Oldfield et al., ICS 2014</a></span></p>
       </div>
 
