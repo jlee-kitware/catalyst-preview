@@ -1180,19 +1180,14 @@ conduit_node_set_path_external_float64_ptr(
         <h3>Then couple, and run many</h3>
         <p class="gd">Where the simulation is not one solver producing one answer.</p>
         <div class="flow"><a class="fn" href="https://doi.org/10.5194/gmd-12-233-2019" target="_blank" rel="noopener noreferrer">Co-simulation</a>
-          <p class="fd">Two or more solvers exchange fields every timestep through a
-            common in-memory mesh description, instead of through disk and bespoke glue.
-            Two patterns. Across components, the strongest version instruments the
-            coupler rather than the models: one integration then serves every component,
-            each grid arriving in its native form with no forced regridding and no copy.
-            Inside a single solve, a model can join the physics itself: on every
-            nonlinear iteration the pipeline reads a feature from the volume channel and
-            writes a correction straight back into the solver's memory through
-            <code>catalyst_results</code>. No disk, no host staging, no lag. And because
-            the pipeline is Python, an autodiff framework runs in the same process as
-            those arrays, so gradients can be taken where the data already is rather than
-            rebuilt from checkpoints. A dedicated package,
-            <b class="norm">catalyst-cosim</b>, is being built on this.</p></div>
+          <p class="fd">Solvers exchange fields every timestep through a common
+            in-memory mesh description rather than through disk and bespoke glue. Across
+            components, instrument the coupler rather than the models: one integration
+            serves every component, each grid in its native form. Inside one solve, a
+            model can join the physics, correcting a closure every nonlinear iteration
+            through <code>catalyst_results</code>. Because the pipeline is Python,
+            gradients can be taken where the data already is.
+            <b class="norm">catalyst-cosim</b> is being built on this.</p></div>
         <div class="flow"><span class="fn todo">Digital twins</span>
           <p class="fd">Assimilate live telemetry, steer the model to track the asset, stay faster than real time using surrogates.</p></div>
         <div class="flow"><span class="fn todo">Ensembles and DoE</span>
