@@ -509,6 +509,8 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
 .lead-in h1{font-weight:300;font-size:clamp(1.7rem,4.4vw,2.9rem);letter-spacing:-.03em;
   line-height:1.1;margin:0 0 var(--s3);color:var(--text)}
 .lead-in p{margin:0;color:var(--muted);font-size:1.05rem;line-height:1.55}
+.counter .sub,.counter .mono-note{max-width:none}
+.counter .lede{max-width:none}
 .herofig{margin:0 0 var(--s6);border:1px solid var(--rule);background:#0f0d18}
 .herofig video{display:block;width:100%;height:auto}
 .herofig figcaption{border-top:1px solid var(--rule);padding:.55rem .85rem;
@@ -520,13 +522,14 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
 .subtract div:first-child{border-left:0}
 .subtract b{display:block;color:var(--text);font-weight:400;font-family:var(--mono);
   font-size:.86rem;margin-bottom:.3rem}
-.domains-strip{display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(min(11rem,100%),1fr));
+.domains-strip{display:grid;grid-template-columns:repeat(4,1fr);
   gap:1px;background:var(--rule);border:1px solid var(--rule)}
+@media (max-width:820px){.domains-strip{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:420px){.domains-strip{grid-template-columns:1fr}}
 .dtile{margin:0;background:var(--void);position:relative}
-.dtile img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;opacity:.72;
+.dtile video{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;opacity:.75;
   transition:opacity .2s}
-.dtile:hover img{opacity:1}
+.dtile:hover video{opacity:1}
 .dtile figcaption{position:absolute;left:0;right:0;bottom:0;padding:.5rem .6rem;
   font:400 .78rem/1.3 var(--mono);color:var(--text);
   background:linear-gradient(transparent,rgba(20,18,31,.92) 55%)}
@@ -649,14 +652,14 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
         Catalyst adaptor, from a workstation to Frontier.</p>
     </div>
     <div class="domains-strip">
-      <figure class="dtile"><img src="assets/warpx.jpg" alt="" loading="lazy" decoding="async"><figcaption>Plasma and accelerators</figcaption></figure>
-      <figure class="dtile"><img src="assets/mpaso.jpg" alt="" loading="lazy" decoding="async"><figcaption>Ocean and climate</figcaption></figure>
-      <figure class="dtile"><img src="assets/combustion.jpg" alt="" loading="lazy" decoding="async"><figcaption>Combustion</figcaption></figure>
-      <figure class="dtile"><img src="assets/rotor.jpg" alt="" loading="lazy" decoding="async"><figcaption>Rotorcraft</figcaption></figure>
-      <figure class="dtile"><img src="assets/supersonic.jpg" alt="" loading="lazy" decoding="async"><figcaption>Turbulence</figcaption></figure>
-      <figure class="dtile"><img src="assets/lulesh.jpg" alt="" loading="lazy" decoding="async"><figcaption>Shock physics</figcaption></figure>
-      <figure class="dtile"><img src="assets/cyclone.jpg" alt="" loading="lazy" decoding="async"><figcaption>Weather</figcaption></figure>
-      <figure class="dtile"><img src="assets/amrex.jpg" alt="" loading="lazy" decoding="async"><figcaption>Adaptive meshes</figcaption></figure>
+      <figure class="dtile"><video src="assets/warpx.mp4" poster="assets/warpx.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video><figcaption>Plasma and accelerators</figcaption></figure>
+      <figure class="dtile"><video src="assets/mpaso.mp4" poster="assets/mpaso.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video><figcaption>Ocean and climate</figcaption></figure>
+      <figure class="dtile"><video src="assets/combustion.mp4" poster="assets/combustion.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video><figcaption>Combustion</figcaption></figure>
+      <figure class="dtile"><video src="assets/rotor.mp4" poster="assets/rotor.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video><figcaption>Rotorcraft</figcaption></figure>
+      <figure class="dtile"><video src="assets/supersonic.mp4" poster="assets/supersonic.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video><figcaption>Turbulence</figcaption></figure>
+      <figure class="dtile"><video src="assets/lulesh.mp4" poster="assets/lulesh.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video><figcaption>Shock physics</figcaption></figure>
+      <figure class="dtile"><video src="assets/cyclone.mp4" poster="assets/cyclone.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video><figcaption>Weather</figcaption></figure>
+      <figure class="dtile"><video src="assets/amrex.mp4" poster="assets/amrex.jpg" autoplay muted loop playsinline preload="none" aria-hidden="true"></video><figcaption>Adaptive meshes</figcaption></figure>
     </div>
   </div>
 </section>
