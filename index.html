@@ -329,6 +329,14 @@ a[target="_blank"] .era::after{content:none}
   padding-bottom:.4rem;border-bottom:1px solid var(--rule);
 }
 
+
+/* supporting paragraph outside a .claim column. Must be a rule on the element
+   itself: .claim p and .claim .quiet are descendant selectors and do not match
+   a paragraph that carries both class names. */
+.note{
+  margin:0;color:var(--muted);font-size:.88rem;line-height:1.6;max-width:52ch;
+}
+
 /* ---------- placement diagram ---------- */
 .placement{margin:0 0 2.4rem}
 .placement svg{display:block;width:100%;height:auto;max-width:58rem}
@@ -820,7 +828,7 @@ conduit_node_set_path_external_float64_ptr(
 
 <span class="c">// once, at shutdown</span>
 <span class="fn">catalyst_finalize</span>(params);</pre>
-      <p class="claim quiet mt3">Fields are passed by pointer.
+      <p class="note mt3">Fields are passed by pointer.
         Catalyst reads your arrays in place: no copy, no reformat, GPU-resident data
         stays on the GPU. A
         <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxLBMCylinder" class="lk" target="_blank" rel="noopener noreferrer">D2Q9 lattice-Boltzmann
@@ -839,7 +847,7 @@ conduit_node_set_path_external_float64_ptr(
     <span class="c"># it is just an array now, so do whatever you do</span>
     loss = model.<span class="fn">train_step</span>(torch.from_numpy(omega).float())
     np.<span class="fn">save</span>(<span class="s">f"kpi_{info.cycle}.npy"</span>, omega.<span class="fn">mean</span>(axis=<span class="s">0</span>))</pre>
-      <p class="claim quiet mt3">No C++ to write, no rebuild to
+      <p class="note mt3">No C++ to write, no rebuild to
         change the analysis, and nothing stopping you importing whatever the rest of your
         field already uses.</p>
       <figure class="figure mt5">
@@ -1168,7 +1176,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
            Restore as a table once the benchmark is published or linkable. -->
 
       <p class="evlabel mt5">The same stream, for training</p>
-      <p class="claim quiet">Surrogates and reduced-order models
+      <p class="note">Surrogates and reduced-order models
         train on the same runtime stream, with no disk round trip and GPU-resident data
         staying on the GPU, so training keeps pace with the solver instead of throttling
         it.</p>
@@ -1791,7 +1799,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
         <figcaption>LULESH: the 325-to-155-line conversion above, running.
           <a href="https://kitware.github.io/paraview-catalyst/usecase/lulesh.html" class="dim" target="_blank" rel="noopener noreferrer">use case &rarr;</a></figcaption>
       </figure>
-      <p class="claim quiet mt3">The PLUTO adaptor was written by one
+      <p class="note mt3">The PLUTO adaptor was written by one
         graduate student for a code with no official Catalyst support: polar grid,
         zero-copy field passing, 273 lines, and a generator script to emit it. They then
         <!-- VERIFY this link resolves for anonymous visitors before publishing; taken
@@ -1918,7 +1926,7 @@ cd catalyst-examples/ParaView/<span class="fn">Lulesh-tutorial</span>
 <span class="c"># six versions, uninstrumented through steered</span>
 ls
 <span class="c">Version0  Version1  Version2  Version3  Version4  Version5</span></pre>
-      <p class="claim quiet mt3">A prebuilt container is on the way
+      <p class="note mt3">A prebuilt container is on the way
         for a zero-build first look. Until then the examples build against an installed
         ParaView, and the tutorial's first version needs no Catalyst at all.</p>
       <div class="btns mt4">
@@ -1927,7 +1935,7 @@ ls
         <a class="btn" href="https://gitlab.kitware.com/paraview/catalyst-examples" target="_blank" rel="noopener noreferrer">Examples</a>
         <a class="btn" href="https://discourse.paraview.org/c/in-situ-support" target="_blank" rel="noopener noreferrer">Ask on Discourse</a>
       </div>
-      <p class="claim quiet mt4">Or watch one. All free, all recorded:
+      <p class="note mt4">Or watch one. All free, all recorded:
         <a href="https://www.kitware.com/webinars/whats-new-in-in-situ-analysis-and-visualization/" class="lk" target="_blank" rel="noopener noreferrer">async
         execution, GPU workflows and in-situ AI</a> ·
         <a href="https://www.kitware.com/webinars/in-situ-analysis-with-catalyst-getting-started/" class="lk" target="_blank" rel="noopener noreferrer">getting
