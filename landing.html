@@ -75,8 +75,10 @@ a{color:inherit}
 .brand span{color:var(--muted);font-weight:300}
 
 .nav a:not(.brand){
-  color:var(--muted);text-decoration:none;font-size:.9rem;
+  color:var(--muted);text-decoration:none;font-size:.9rem;white-space:nowrap;
 }
+.nav .wrap{overflow-x:auto;scrollbar-width:none}
+.nav .wrap::-webkit-scrollbar{display:none}
 .nav a:not(.brand):hover{color:var(--text)}
 
 /* ---------- hero ---------- */
@@ -139,7 +141,7 @@ h1{
 }
 .mode[aria-pressed="true"]{border-color:var(--produced);color:var(--text);background:#241f1a}
 .mode:focus-visible,.btn:focus-visible,a:focus-visible{outline:2px solid var(--produced);outline-offset:2px}
-.readout{font:400 .82rem/1.5 var(--mono);color:var(--muted);margin:1.1rem 0 0}
+.readout{font:400 .82rem/1.5 var(--mono);color:var(--muted);margin:1.1rem 0 0;padding-bottom:.9rem;border-bottom:1px solid var(--rule)}
 .readout b{color:var(--text);font-weight:500}
 
 
