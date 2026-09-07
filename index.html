@@ -2049,9 +2049,14 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
       <h2>Everything above is a published example.</h2>
       <p>The same repository this page has been linking to all the way down. Clone it and
         run the integration patterns described here: sync and async execution, GPU device pointers,
-        closed-loop steering, dynamic pipelines, adaptors in four languages.</p>
-      <p class="quiet">Start with the LULESH tutorial if you want the graduated path, or
-        the LBM cylinder if you want to see all three GPU patterns at once.</p>
+        closed-loop steering, dynamic pipelines, high-order and discontinuous elements,
+        adaptors in four languages.</p>
+      <p class="quiet">Start with the LULESH tutorial if you want the graduated path, the
+        LBM cylinder if you want all three GPU patterns at once, or
+        <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CellGridMiniapp" class="lk" target="_blank" rel="noopener noreferrer">the CellGrid miniapp</a>
+        if your elements are high-order: it builds hex, tet, wedge, pyramid, quad and
+        triangle cells in one run, at first or second order, with shape and field order
+        set independently.</p>
     </div>
     <div>
       <pre>git clone https://gitlab.kitware.com/paraview/catalyst-examples
