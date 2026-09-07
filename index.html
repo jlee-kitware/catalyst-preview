@@ -321,6 +321,14 @@ a[target="_blank"] .era::after{content:none}
   font:500 .78rem var(--mono);color:var(--produced);
 }
 
+
+/* small eyebrow that says what a block of evidence is showing */
+.evlabel{
+  margin:0 0 .55rem;font:400 .74rem/1.4 var(--mono);color:var(--muted);
+  letter-spacing:.08em;text-transform:uppercase;
+  padding-bottom:.4rem;border-bottom:1px solid var(--rule);
+}
+
 /* ---------- placement diagram ---------- */
 .placement{margin:0 0 2.4rem}
 .placement svg{display:block;width:100%;height:auto;max-width:58rem}
@@ -1120,13 +1128,15 @@ conduit_node_set_path_external_float64_ptr(
       </div>
     </div>
     <div>
+      <p class="evlabel">How it fits together</p>
       <pre><span class="c">// intent, execution and explanation stay separate</span>
 engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(constrained by ontology)</span>
           <span class="fn">&rarr;</span>  MCP
           <span class="fn">&rarr;</span>  ParaView filters <span class="c">(deterministic)</span>
           <span class="fn">&rarr;</span>  Catalyst         <span class="c">(the live solver)</span>
           <span class="fn">&rarr;</span>  LLM explains what came back</pre>
-      <table class="mt4">
+      <p class="evlabel mt5">What the ontology changes</p>
+      <table>
         <caption>The ablation locates the ontology's effect precisely: it does not change
           which tools get selected, which was already reliable. It corrects how results
           are read.</caption>
@@ -1135,7 +1145,8 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
           <tr><td>Interpretation accuracy</td><td class="n">0.41</td><td class="n">0.91</td></tr>
         </tbody>
       </table>
-      <figure class="figure mt5">
+      <p class="evlabel mt5">What it looks like running</p>
+      <figure class="figure">
         <div class="embed">
           <iframe data-src="https://player.vimeo.com/video/681359142?h=256ce5d59f&amp;dnt=1&amp;app_id=122963&amp;muted=1&amp;loop=1&amp;title=0&amp;byline=0&amp;portrait=0"
                   title="Inference filter results once the turbulent flow is established"
@@ -1156,10 +1167,11 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
              Sustained throughput on GPU:          80,000+ steps/s
            Restore as a table once the benchmark is published or linkable. -->
 
-      <p class="claim quiet mt3">Surrogates and reduced-order models
+      <p class="evlabel mt5">The same stream, for training</p>
+      <p class="claim quiet">Surrogates and reduced-order models
         train on the same runtime stream, with no disk round trip and GPU-resident data
-        staying on the GPU. That gap is training that keeps pace with the solver versus
-        training that throttles it.</p>
+        staying on the GPU, so training keeps pace with the solver instead of throttling
+        it.</p>
     </div>
   </div>
 </section>
