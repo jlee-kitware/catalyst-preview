@@ -317,7 +317,8 @@ a[target="_blank"] .era::after{content:none}
   margin:0 0 .35rem;font:600 1.02rem/1.3 var(--sans);color:var(--text);
 }
 .blockintro{margin:0 0 var(--s4);color:var(--muted);font-size:.92rem;max-width:52ch}
-.offer h3 .ord{
+.offer h4{margin:0 0 .35rem;font:600 1.02rem var(--sans);color:var(--text)}
+.offer h4 .ord{
   display:inline-block;min-width:1.15rem;margin-right:.4rem;
   font:500 .78rem var(--mono);color:var(--produced);
 }
@@ -796,18 +797,13 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
       <p><b class="norm">It also does not know what is behind them.</b> Catalyst is a
         published specification with a stable ABI; the implementation is a separate shared
         library the loader finds at run time. ParaView is the one we build and support.</p>
-      <p>Writing another is possible, and it is a serious undertaking rather than a
-        weekend. Kitware Europe did it once:
-        <a href="https://www.kitware.com/catalyst-adios2-a-new-catalyst2-implementation-for-in-transit-analysis/" target="_blank" rel="noopener noreferrer">AdiosCatalyst</a> implemented the API over
-        ADIOS2 so a simulation could stream to a dedicated analysis node, with a replay
-        process handing the data on to the ParaView implementation at the other end
-        (<a href="https://doi.org/10.1007/978-3-031-40843-4_20" target="_blank" rel="noopener noreferrer">ISC 2023</a>).
-        <b class="norm">Note where that went.</b> Fides now does the same job inside the
-        ParaView implementation, so the separate one is no longer needed, and the
-        Ascent-backed implementation is being retired for want of a functional gap to
-        fill. The specification is real and independently implementable. In practice the
-        ecosystem has converged on one implementation rather than splintering, which is
-        the more useful fact.</p>
+      <p>Writing another is possible and rarely necessary, which is the reassuring
+        part. Kitware Europe built
+        <a href="https://www.kitware.com/catalyst-adios2-a-new-catalyst2-implementation-for-in-transit-analysis/" target="_blank" rel="noopener noreferrer">one over ADIOS2</a>
+        (<a href="https://doi.org/10.1007/978-3-031-40843-4_20" target="_blank" rel="noopener noreferrer">ISC 2023</a>);
+        Fides now does that job inside the ParaView implementation, and the Ascent-backed
+        one is being retired for want of a gap to fill. Independently implementable, and
+        converging rather than splintering.</p>
       <p>What runs at run time is a Python pipeline, and that is a wider door than it
         sounds. Your solver's arrays arrive as NumPy, so NumPy, SciPy, pandas, PyTorch,
         scikit-learn, Matplotlib and any wrapped C++ library are all in scope, operating
@@ -821,17 +817,12 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
         workflow composer, and a game-engine bridge.</p>
       <p>A site that wants none of it ships nothing extra; a site that wants all of it
         sets an environment variable.</p>
-      <p><b class="norm">This is Catalyst 2.</b> The
-        version numbering matters because the previous one worked differently. Under the
-        1.0 API the implementation was
-        linked in, and a published survey measured what that added to a statically built
-        executable: <b class="norm">2.1&nbsp;MB</b> for the
-        smallest edition up to <b class="norm">98&nbsp;MB</b>
-        for full ParaView, replicated per process.
-        <a href="https://doi.org/10.1111/cgf.12930" class="lk" target="_blank" rel="noopener noreferrer">Bauer et al., Computer Graphics
-        Forum 35(3), 2016, Table 2</a>. Under 2.0 the question does not arise: your
-        binary carries the stub, and the implementation is a shared library the loader
-        maps once per node.</p>
+      <p><b class="norm">This is Catalyst 2</b>, and the number matters because the
+        previous API linked the implementation in. A published survey measured what that
+        cost a static build: <b class="norm">2.1&nbsp;MB</b> to
+        <b class="norm">98&nbsp;MB</b>, replicated per process
+        (<a href="https://doi.org/10.1111/cgf.12930" class="lk" target="_blank" rel="noopener noreferrer">Bauer et al. 2016, Table&nbsp;2</a>).
+        Under 2.0 the question does not arise.</p>
       <p>And it is vendor-portable by construction. Conduit is API-agnostic; Viskores
         filters compile through Kokkos to CUDA, HIP, SYCL or OpenMP. The
         <a href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/" class="lk" target="_blank" rel="noopener noreferrer">same integration pattern runs on
@@ -1945,24 +1936,24 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
       </div>
       <div class="offers">
         <div class="offer">
-          <h3><span class="ord">1</span>What the pipeline computes</h3>
+          <h4><span class="ord">1</span>What the pipeline computes</h4>
           <p>A scalar integral over the field is nearly free. Isosurface extraction is
             modest. Volume rendering at high resolution is a real cost, and should be
             budgeted like one.</p>
         </div>
         <div class="offer">
-          <h3><span class="ord">2</span>How often it runs</h3>
+          <h4><span class="ord">2</span>How often it runs</h4>
           <p>Every timestep is a choice, not a requirement. Most teams run the expensive
             parts on a stride and the cheap KPIs every step.</p>
         </div>
         <div class="offer">
-          <h3><span class="ord">3</span>Mesh conversion</h3>
+          <h4><span class="ord">3</span>Mesh conversion</h4>
           <p>Translating your native domain into the Conduit Mesh Blueprint is typically
             the most expensive part of the adaptor itself. Fields can be passed by
             pointer; topology usually cannot.</p>
         </div>
         <div class="offer">
-          <h3><span class="ord">4</span>Where the data already is</h3>
+          <h4><span class="ord">4</span>Where the data already is</h4>
           <p>GPU-resident data that stays on the GPU avoids the transfer entirely. Data
             that has to be marshalled across the bus does not.</p>
         </div>
