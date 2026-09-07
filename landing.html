@@ -337,6 +337,19 @@ a[target="_blank"] .era::after{content:none}
   margin:0;color:var(--muted);font-size:.88rem;line-height:1.6;max-width:52ch;
 }
 
+
+/* bandwidth tiers */
+.tiers{margin:0}
+.tiers th{
+  text-align:left;font:500 .8rem/1.5 var(--mono);color:var(--muted);font-weight:500;
+  border-bottom:1px solid var(--rule);padding:.5rem .8rem .5rem 0;
+}
+.tiers th:not(:first-child),.tiers td:not(:first-child){text-align:right}
+.tiers td{padding:.62rem .8rem .62rem 0;border-bottom:1px solid var(--rule);font-size:.9rem}
+.tiers tr:first-child td{color:var(--text)}
+.tiers tr:first-child td.n{color:var(--produced);font-weight:500}
+.tiers tr:last-child td{color:var(--muted)}
+
 /* ---------- placement diagram ---------- */
 .placement{margin:0 0 2.4rem}
 .placement svg{display:block;width:100%;height:auto;max-width:58rem}

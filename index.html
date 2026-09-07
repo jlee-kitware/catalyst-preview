@@ -338,6 +338,19 @@ a[target="_blank"] .era::after{content:none}
   margin:0;color:var(--muted);font-size:.88rem;line-height:1.6;max-width:52ch;
 }
 
+
+/* bandwidth tiers */
+.tiers{margin:0}
+.tiers th{
+  text-align:left;font:500 .8rem/1.5 var(--mono);color:var(--muted);font-weight:500;
+  border-bottom:1px solid var(--rule);padding:.5rem .8rem .5rem 0;
+}
+.tiers th:not(:first-child),.tiers td:not(:first-child){text-align:right}
+.tiers td{padding:.62rem .8rem .62rem 0;border-bottom:1px solid var(--rule);font-size:.9rem}
+.tiers tr:first-child td{color:var(--text)}
+.tiers tr:first-child td.n{color:var(--produced);font-weight:500}
+.tiers tr:last-child td{color:var(--muted)}
+
 /* ---------- placement diagram ---------- */
 .placement{margin:0 0 2.4rem}
 .placement svg{display:block;width:100%;height:auto;max-width:58rem}
@@ -548,10 +561,17 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
         at the run.</p>
 
       <p class="lede" style="margin:1.3rem 0 0;font-size:.95rem">
-        Why the number in that config file is small: on Titan, compute bandwidth was
-        <b style="color:var(--produced);font-weight:500;font-family:var(--mono)">125 PB/s</b>
-        against <b style="color:var(--written);font-weight:500;font-family:var(--mono)">1.4 TB/s</b>
-        to storage. A gap near 89,000&#8239;:&#8239;1, and widening.
+        Why the number in that config file is small: a machine's bandwidth falls away in
+        steps. On Titan, computation ran at
+        <b style="color:var(--produced);font-weight:500;font-family:var(--mono)">125 PB/s</b>,
+        node memory at
+        <b style="color:var(--produced);font-weight:500;font-family:var(--mono)">4.5 PB/s</b>,
+        the interconnect at
+        <b style="color:var(--produced);font-weight:500;font-family:var(--mono)">24 TB/s</b>,
+        and storage at
+        <b style="color:var(--written);font-weight:500;font-family:var(--mono)">1.4 TB/s</b>.
+        Five orders of magnitude from top to bottom, and post-processing reads from the
+        bottom.
         <a href="https://www.kennethmoreland.com/documents/InSituTensions.pdf"
            style="color:var(--muted);font:400 .8rem var(--mono);display:block;margin-top:.4rem" target="_blank" rel="noopener noreferrer">Moreland, IEEE CG&amp;A 36(2), 2016, Fig. 1</a>
       </p>
@@ -1011,6 +1031,32 @@ conduit_node_set_path_external_float64_ptr(
         pipeline: instantiate a Fides writer and give it the Conduit node Catalyst
         already holds. ADIOS2 carries it from there.</figcaption>
     </figure>
+
+    <p class="evlabel">Why the placement is the decision</p>
+    <table class="tiers">
+      <caption>These are not three ways of doing the same thing. A machine&rsquo;s
+        bandwidth falls away in steps, and each placement reads the data at a different
+        one. The whole in situ argument is that the analysis should meet the data high on
+        this ladder rather than at the bottom of it. Titan, from
+        <a href="https://www.kennethmoreland.com/documents/InSituTensions.pdf" target="_blank" rel="noopener noreferrer">Moreland</a>, reproduced in the
+        <a href="https://doi.org/10.1111/cgf.12930" target="_blank" rel="noopener noreferrer">2016 survey</a>, Fig. 1.</caption>
+      <thead>
+        <tr><th>Where the analysis reads from</th><th>Bandwidth</th><th>Against post hoc</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>The solver&rsquo;s own memory, in line</td>
+            <td class="n">4.5 PB/s</td><td class="n">3,200&times;</td></tr>
+        <tr><td>The interconnect, in transit</td>
+            <td class="n">24 TB/s</td><td class="n">17&times;</td></tr>
+        <tr><td>Storage, after the run</td>
+            <td class="n">1.4 TB/s</td><td class="n">baseline</td></tr>
+      </tbody>
+    </table>
+    <p class="note mt3">Computation on that machine ran at 125&nbsp;PB/s, five orders of
+      magnitude above storage. That gap is the reason any of this exists. The hybrid path
+      is the arithmetic taken seriously: reduce at 4.5&nbsp;PB/s where the data already
+      sits, then move only the reduction across an interconnect that is 188 times slower
+      than memory and 17 times faster than disk.</p>
 
     <div class="flows">
 
