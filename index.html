@@ -519,7 +519,7 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
     5  firststep    What must I commit to?           You can start without touching your solver
     6  product      What is in it for me? (ISV)      If you sell simulation software
     7  workflows    What can it do?                  Instrument once
-    8  ai           Can I trust the newest part?     Can you trust a model near your science?
+    8  ai           Can I trust the newest part?     A model is only as useful as what it can reach
     9  evidence     Is any of this real?             Somebody already did the hard part
    10  adopters     Who exactly?                     Here is who, and how you can check
    11  papers       Has it been scrutinised?         And a decade of peer-reviewed work
@@ -1219,20 +1219,32 @@ conduit_node_set_path_external_float64_ptr(
 <section class="row2" id="ai">
   <div class="wrap">
     <div class="claim">
-      <h2>Ask a running simulation a question, in plain language.</h2>
-      <p>Not a chatbot bolted to a plot. An engineer types what they want to know; a
-        language model interprets the
-        intent and plans; deterministic ParaView filters do the computing; the model
-        explains the result it is handed. It never writes the analysis code.</p>
-      <p>The obvious objection is trust, and the architecture answers it rather than
-        asking for faith. A domain ontology constrains planning to valid analysis chains,
-        so whole classes of failure disappear by construction: no hallucinated API calls,
-        no silently missing pipeline stage, no script that runs cleanly and returns the
-        wrong number. The measured effect is on interpretation, not tool choice, and it
-        is large.</p>
-      <p>Point that at a Catalyst-instrumented run and the loop closes: extract, steer and
-        monitor a live simulation from a browser, with a scalable pvserver backend
-        carrying it to production-scale data.</p>
+      <h2>A model is only as useful as what it can reach.</h2>
+      <p>Point a language model at a finished run and it can read the files somebody
+        already decided to write, at the cadence somebody already chose. It can summarise
+        them. It cannot ask for the extract nobody planned, cannot see the timestep that
+        was skipped, and cannot change anything.</p>
+      <p>A Catalyst session is a different proposition. The model gets a live handle on
+        the run: it can request a quantity that was not in the original pipeline, watch a
+        trace form, add or remove a pipeline stage, and hand a value back to the solver.
+        Asking a question in plain language is one use of that, and not the most
+        interesting one.</p>
+      <p><b class="norm">What it can do with that handle.</b> Explain what a result
+        means and where it came from. Steer: change a boundary condition or a closure
+        coefficient from what the analysis just found. Debug at a scale where nobody can
+        read the output by hand, by asking which ranks disagree and why. Adjust what is
+        being kept, so an extract that turns out to matter starts being written from
+        timestep four hundred rather than never. Choose where the next ensemble member
+        should sit. All of it through the same three calls.</p>
+      <p>The objection is trust, and the architecture answers it rather than asking for
+        faith. The model interprets and plans; deterministic ParaView filters do the
+        computing; it never writes the analysis code. A domain ontology constrains
+        planning to valid analysis chains, so whole classes of failure disappear by
+        construction: no hallucinated API calls, no silently missing pipeline stage, no
+        script that runs cleanly and returns the wrong number.</p>
+      <p>In practice that is a browser: extract, steer and monitor a live simulation
+        from one, with a scalable pvserver backend carrying it to production-scale
+        data.</p>
       <p>The same session works either way. Catalyst serves the running solver when there
         is one; the identical pipeline reads files when the run is already finished. The
         engineer asks the same question and does not need to know which mode they are in,
@@ -1254,7 +1266,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
           <span class="fn">&rarr;</span>  ParaView filters <span class="c">(deterministic)</span>
           <span class="fn">&rarr;</span>  Catalyst         <span class="c">(the live solver)</span>
           <span class="fn">&rarr;</span>  LLM explains what came back</pre>
-      <p class="evlabel mt5">What the ontology changes</p>
+      <p class="evlabel mt5">One measured piece of it</p>
       <table>
         <caption>The ablation locates the ontology's effect precisely: it does not change
           which tools get selected, which was already reliable. It corrects how results
