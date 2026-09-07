@@ -839,6 +839,13 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
         <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/Fortran90ImageData" class="lk" target="_blank" rel="noopener noreferrer">Fortran&nbsp;90</a> and
         <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/PythonImageData" class="lk" target="_blank" rel="noopener noreferrer">Python</a>.
         Your solver's language is not the question; whether it can describe its mesh is.</p>
+      <p><b class="norm">You do not need a running solver to use any of it.</b> A
+        file-based adaptor feeds the same pipelines from data already on disk, so an
+        existing archive can be mined with the analysis you were going to write anyway.
+        The practical consequence is that the pipeline can be developed and validated
+        against yesterday&rsquo;s files, then run unchanged inside tomorrow&rsquo;s solve.
+        For anyone with years of results nobody has had time to revisit, that is the
+        cheapest possible way to find out whether this is worth instrumenting for.</p>
       <p class="quiet">Swap implementations at run time with
         <code>CATALYST_IMPLEMENTATION_NAME</code> and
         <code>CATALYST_IMPLEMENTATION_PATHS</code>; Catalyst loads the named library with
@@ -1823,6 +1830,10 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
         A structured-mesh adaptor is a few hundred lines. Unstructured with AMR is more.</p>
       <p>Once the adaptor exists, every pipeline your users will ever want is a Python
         script they write themselves, with no further solver changes.</p>
+      <p>The cheapest first step costs nothing in solver changes at all. Point a
+        file-based adaptor at data you already have, write the pipeline you actually
+        want, and find out what it costs and what it tells you before anyone touches the
+        solver. If it earns its place, the same pipeline moves inside the run.</p>
       <p class="quiet">The clearest number we have, and note what it measures: this is
         the cost of moving an existing 1.0 adaptor to the 2.0 API, not the cost of
         starting from nothing. Converting LULESH cut it roughly in half. The

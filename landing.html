@@ -549,6 +549,8 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
 .way:nth-child(-n+2){border-top:0}
 .way:nth-child(odd){border-left:0}
 .way h3{margin:0 0 .45rem;font:600 1rem/1.3 var(--sans);color:var(--text)}
+.way-wide{border:1px solid var(--rule);border-left:1px solid var(--rule)}
+.way-wide h3{color:var(--produced)}
 .way p{margin:0;color:var(--muted);font-size:.92rem;line-height:1.55}
 @media (max-width:820px){
   .ways{grid-template-columns:1fr}
@@ -669,8 +671,8 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
     <div class="lead">
       <h2>However you work, it is the same middle you are waiting on.</h2>
       <p>Steering a live run, sweeping a design space, leaving a job unattended, training
-        a model on the output. Different workflows, one bottleneck, one place to remove
-        it.</p>
+        a model on the output, or going back through an archive you already have.
+        Different workflows, one bottleneck, one place to remove it.</p>
     </div>
     <div class="ways">
       <div class="way">
@@ -698,7 +700,15 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
           its own storage budget.</p>
       </div>
     </div>
-    <p class="note mt5">All four are the same three function calls and a Python script.
+    <div class="way way-wide mt5">
+      <h3>And none of it needs a live run to start</h3>
+      <p>A file-based adaptor feeds the same pipelines from data you already have, so an
+        existing archive can be mined this afternoon with the analysis you were going to
+        write anyway. Nothing about the solver changes, and the pipeline you develop
+        against yesterday&rsquo;s files is the one that runs inside tomorrow&rsquo;s
+        solve.</p>
+    </div>
+    <p class="note mt5">All of it is the same three function calls and a Python script.
       <a href="index.html#workflows" class="lk">Twenty-two of
       these, with the evidence &rarr;</a></p>
   </div>
