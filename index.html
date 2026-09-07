@@ -516,18 +516,19 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
     2  running      Is it really that bad?           Watch the two numbers separate
     3  why          Is it MY problem?                You probably arrived here with one of these
     4  architecture What is this thing?              You link a stub
-    5  product      What is in it for me? (ISV)      If you sell simulation software
-    6  workflows    What can it do?                  Instrument once
-    7  ai           Can I trust the newest part?     Can you trust a model near your science?
-    8  evidence     Is any of this real?             Somebody already did the hard part
-    9  adopters     Who exactly?                     Here is who, and how you can check
-   10  papers       Has it been scrutinised?         And a decade of peer-reviewed work
-   11  guide        Does it fit MY case?             Which of those applies to you
-   12  alternatives How does it compare?             If you are comparing, compare on these
-   13  effort       What will it cost me?            What it actually costs to adopt
-   14  licence      Can I ship it?                   BSD 3-Clause
-   15  talk         Can I get help?                  Or have the people who wrote it do it
-   16  docs         Can I try it myself first?       Everything above is a published example
+    5  firststep    What must I commit to?           You can start without touching your solver
+    6  product      What is in it for me? (ISV)      If you sell simulation software
+    7  workflows    What can it do?                  Instrument once
+    8  ai           Can I trust the newest part?     Can you trust a model near your science?
+    9  evidence     Is any of this real?             Somebody already did the hard part
+   10  adopters     Who exactly?                     Here is who, and how you can check
+   11  papers       Has it been scrutinised?         And a decade of peer-reviewed work
+   12  guide        Does it fit MY case?             Which of those applies to you
+   13  alternatives How does it compare?             If you are comparing, compare on these
+   14  effort       What will it cost me?            What it actually costs to adopt
+   15  licence      Can I ship it?                   BSD 3-Clause
+   16  talk         Can I get help?                  Or have the people who wrote it do it
+   17  docs         Can I try it myself first?       Everything above is a published example
 
   Two rules that follow from this:
   - Proof belongs in 8-10, together. Do not scatter evidence earlier to look credible.
@@ -542,6 +543,7 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
        height="20" decoding="async">ParaView&nbsp;<span>Catalyst</span></a>
     <a href="#why">The problem</a>
     <a href="#architecture">How it works</a>
+    <a href="#firststep">Start without it</a>
     <a href="#product">For ISVs</a>
     <a href="#workflows">What it does</a>
     <a href="#evidence">Who uses it</a>
@@ -841,13 +843,6 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
         <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/Fortran90ImageData" class="lk" target="_blank" rel="noopener noreferrer">Fortran&nbsp;90</a> and
         <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/PythonImageData" class="lk" target="_blank" rel="noopener noreferrer">Python</a>.
         Your solver's language is not the question; whether it can describe its mesh is.</p>
-      <p><b class="norm">You do not need a running solver to use any of it.</b> A
-        file-based adaptor feeds the same pipelines from data already on disk, so an
-        existing archive can be mined with the analysis you were going to write anyway.
-        The practical consequence is that the pipeline can be developed and validated
-        against yesterday&rsquo;s files, then run unchanged inside tomorrow&rsquo;s solve.
-        For anyone with years of results nobody has had time to revisit, that is the
-        cheapest possible way to find out whether this is worth instrumenting for.</p>
       <p class="quiet">Swap implementations at run time with
         <code>CATALYST_IMPLEMENTATION_NAME</code> and
         <code>CATALYST_IMPLEMENTATION_PATHS</code>; Catalyst loads the named library with
@@ -901,6 +896,45 @@ conduit_node_set_path_external_float64_ptr(
         <figcaption>An isosurface tracked through a live AMReX run. The AMR block
           structure is the solver's own, read in place, refining as the front moves.</figcaption>
       </figure>
+    </div>
+  </div>
+</section>
+
+<section class="row2" id="firststep">
+  <div class="wrap">
+    <div class="claim">
+      <h2>You can start without touching your solver.</h2>
+      <p>This is the part most people do not know about. A file-based adaptor runs the
+        same pipelines against data already on disk, so an existing archive can be mined
+        with the analysis you were going to write anyway. No instrumentation, no code
+        owner to convince, no risk to a binary anyone has validated.</p>
+      <p>The pipeline is the deliverable, and it does not change. Whatever you develop
+        and check against last year&rsquo;s results is the identical script that later
+        runs inside a live solve. So the evaluation produces the artefact rather than
+        just an opinion about it.</p>
+      <p class="quiet">For most teams this is the honest first step: find out what the
+        analysis actually tells you, and what it costs, before anyone commits engineering
+        time to instrumenting a solver.
+        <a href="#effort" class="lk">then what it costs to go further &rarr;</a></p>
+    </div>
+    <div>
+      <p class="evlabel">Two paths, one pipeline</p>
+      <table class="thennow">
+        <caption>The same Python, the same filters, the same extracts. What changes is
+          where the data comes from and when the answer arrives.</caption>
+        <thead>
+          <tr><th></th><th>Against an archive</th><th>Inside the solve</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Solver changes</td><td class="was">none</td><td>three calls, one header</td></tr>
+          <tr><td>Data source</td><td class="was">files you already have</td><td>memory, in place</td></tr>
+          <tr><td>Answer arrives</td><td class="was">when you run it</td><td>while the run is going</td></tr>
+          <tr class="changed"><td>The pipeline</td><td class="was">identical</td><td class="now">identical</td></tr>
+        </tbody>
+      </table>
+      <p class="note mt3">Worth saying plainly because it inverts the usual order:
+        the evidence comes first and the commitment second.
+        <a href="https://gitlab.kitware.com/paraview/catalyst-examples" target="_blank" rel="noopener noreferrer"" class="lk">the examples run either way &rarr;</a></p>
     </div>
   </div>
 </section>
