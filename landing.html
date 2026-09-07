@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ParaView Catalyst: decide what your simulation keeps</title>
-<meta name="description" content="Something in your workflow decides what to throw away. Catalyst analyses simulation data while it is still in memory, so you choose what to measure instead of which timesteps to lose.">
+<title>ParaView Catalyst: close the loop between the solve and the decision</title>
+<meta name="description" content="Solving got faster for a decade. The distance from a finished run to a decision did not. Catalyst does the analysis inside the solve, so the answer is ready when the run is.">
 <meta property="og:title" content="ParaView Catalyst">
-<meta property="og:description" content="Analyse simulation data while it is still in memory. Choose what to measure instead of which timesteps to lose.">
+<meta property="og:description" content="You bought more compute. The design loop did not get shorter. Catalyst does the analysis inside the solve, so the answer is ready when the run is.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://jlee-kitware.github.io/catalyst-preview/assets/warpx.jpg">
 <meta name="twitter:card" content="summary_large_image">
@@ -509,6 +509,7 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
 .lead-in h1{font-weight:300;font-size:clamp(1.7rem,4.4vw,2.9rem);letter-spacing:-.03em;
   line-height:1.1;margin:0 0 var(--s3);color:var(--text)}
 .lead-in p{margin:0;color:var(--muted);font-size:1.05rem;line-height:1.55}
+.counter .evlabel{max-width:70ch;margin-left:auto;margin-right:auto}
 .counter p.sub,.counter p.mono-note{max-width:70ch;margin-left:auto;margin-right:auto}
 .counter p.lede{max-width:70ch;margin-left:auto;margin-right:auto}
 .counter .readout,.counter .modes{max-width:70ch;margin-left:auto;margin-right:auto}
@@ -571,9 +572,11 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
 <header class="counter" id="running" style="border-top:0">
   <div class="wrap">
     <div class="lead-in">
-      <h1>Something in your workflow decides what to throw away.</h1>
-      <p>Usually a number in a config file. Catalyst analyses the data while it is still
-        in memory, so you choose what to measure instead of which timesteps to lose.</p>
+      <h1>You bought more compute. The design loop did not get shorter.</h1>
+      <p>Solving got faster for a decade. The distance between a finished run and a
+        decision did not: write everything, move it, read it back, post-process, then
+        look. Catalyst does the analysis inside the solve, so the answer is ready when
+        the run is, or before.</p>
     </div>
     <figure class="herofig">
       <video src="assets/phasta.mp4" poster="assets/phasta.jpg"
@@ -587,6 +590,7 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
              strategy/clearances.md item 4b. -->
       </figcaption>
     </figure>
+    <p class="evlabel">Why the round trip costs a week</p>
     
     <p class="sub">A WarpX timestep on Frontier produces a 5.75&nbsp;billion element mesh,
       1.16&nbsp;TB. Post-hoc, all of it has to land on disk before you can look at any of
@@ -636,11 +640,12 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
 <section class="wide" style="border-top:0;padding-top:0">
   <div class="wrap">
     <div class="subtract">
-      <div><b>no dump</b>The full timestep never has to land before you can look at it.</div>
-      <div><b>no transfer</b>Analysis runs on the solver&rsquo;s own nodes, or streams to
-        neighbouring ones. Never by way of the filesystem.</div>
-      <div><b>no waiting</b>Answers arrive while the run is still going, and can be fed
-        back into it.</div>
+      <div><b>no round trip</b>Nothing is written, moved and read back before anyone can
+        look at it. The analysis meets the data where it already is.</div>
+      <div><b>no queue for the answer</b>Engineering quantities land every timestep while
+        the run is going, not after it and not on a stride you had to guess.</div>
+      <div><b>no wasted machine time</b>See a diverging run in hour four of three days.
+        Kill it, fix it, or steer it from what the analysis just found.</div>
     </div>
   </div>
 </section>
@@ -648,7 +653,7 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
 <section class="wide">
   <div class="wrap">
     <div class="lead">
-      <h2>Wherever your physics lives.</h2>
+      <h2>Whatever you are designing.</h2>
       <p>28 simulation codes across eight domains already ship a
         Catalyst adaptor, from a workstation to Frontier. A few of them, running.</p>
     </div>
@@ -689,10 +694,10 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
         <a class="btn" href="index.html">Open the full page</a>
       </div>
       <div class="exit">
-        <h2>Or have us look at your solver</h2>
-        <p>A fixed-fee review of your code and its parallel decomposition, delivering an
-          adaptor architecture, an effort estimate in engineer-weeks, and the performance
-          risks worth knowing about first.</p>
+        <h2>Or have us shorten yours</h2>
+        <p>A fixed-fee review of your solver and where its analysis time actually goes,
+          delivering an adaptor architecture, an effort estimate in engineer-weeks, and
+          the performance risks worth knowing about first.</p>
         <a class="btn solid" href="https://www.kitware.com/catalyst-assessment" target="_blank" rel="noopener noreferrer">Book an assessment</a>
       </div>
     </div>
