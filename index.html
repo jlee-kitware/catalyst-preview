@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ParaView Catalyst: in situ analysis for HPC simulations</title>
-<meta name="description" content="Analyse simulation data while it is still in memory, in line or in transit, never through the filesystem. Three function calls, an ABI-stable C API, and ParaView never enters your build. 28 adopting codes, every claim linked to its evidence.">
+<meta name="description" content="The simulation ends and the waiting begins: write it out, move it, read it back, post-process, then look. Catalyst runs your analysis inside the solve. Three function calls, an ABI-stable C API, and ParaView never enters your build. 28 adopting codes, every claim linked to its evidence.">
 <meta property="og:title" content="ParaView Catalyst: analyse the data before it reaches the disk">
 <meta property="og:description" content="Something in your workflow decides what to throw away, before anyone has looked at the run. Catalyst does the analysis in memory, so that decision moves to after you have seen the data.">
 <meta property="og:type" content="website">
@@ -512,14 +512,14 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
   If you add a section, decide which question it answers first. If it does not
   answer one, it does not belong.
 
-    1  top          What is my problem?              Your simulation outruns your filesystem
+    1  top          What is my problem?              The simulation ends, the waiting begins
     2  running      Is it really that bad?           Watch the two numbers separate
     3  why          Is it MY problem?                You probably arrived here with one of these
     4  architecture What is this thing?              You link a stub
     5  product      What is in it for me? (ISV)      If you sell simulation software
     6  workflows    What can it do?                  Instrument once
     7  ai           Can I trust the newest part?     Can you trust a model near your science?
-    8  evidence     Is any of this real?             None of that is speculative
+    8  evidence     Is any of this real?             Somebody already did the hard part
     9  adopters     Who exactly?                     Here is who, and how you can check
    10  papers       Has it been scrutinised?         And a decade of peer-reviewed work
    11  guide        Does it fit MY case?             Which of those applies to you
@@ -554,11 +554,13 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
 <header class="hero" id="top">
   <div class="wrap">
     <div>
-      <h1>Something in your workflow decides what to throw away.</h1>
-      <p class="lede">Usually a number in a config file. Write every hundredth timestep,
-        because that is what the filesystem will take, and hope the one you needed was
-        not among the other ninety-nine. That decision gets made before anyone has looked
-        at the run.</p>
+      <h1>The simulation ends. The waiting begins.</h1>
+      <p class="lede">Write it all out, move it, read it back, post-process, and only
+        then look. That stretch is now most of the distance between a finished run and a
+        design decision, and it got longer while the solvers got faster.</p>
+      <p class="lede">It is also why a number in a config file says every hundredth
+        timestep. The filesystem sets the cadence, so what you keep is decided before
+        anyone has looked at anything.</p>
 
       <p class="lede" style="margin:1.3rem 0 2rem;font-size:.95rem">
         Why the number in that config file is small: a machine's bandwidth falls away in
@@ -575,9 +577,9 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
         <a href="https://www.kennethmoreland.com/documents/InSituTensions.pdf"
            style="color:var(--muted);font:400 .8rem var(--mono);display:block;margin-top:.4rem" target="_blank" rel="noopener noreferrer">Moreland, IEEE CG&amp;A 36(2), 2016, Fig. 1</a>
       </p>
-      <p class="lede">Catalyst does the analysis while the data is still in memory: on
-        the solver's own nodes, streamed to neighbouring ones, or both. Never by way of
-        the filesystem.</p>
+      <p class="lede">Catalyst removes the middle. Your analysis runs inside the solve,
+        while the data is still in memory: on the solver's own nodes, streamed to
+        neighbouring ones, or both, and never by way of the filesystem.</p>
       <p class="lede">So instead of picking which timesteps to lose, you pick what to
         measure, and you get it for every one of them. Nor are you stuck with that
         choice: pipelines can be swapped while the solver runs, you can attach a session
