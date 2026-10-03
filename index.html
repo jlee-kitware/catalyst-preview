@@ -807,9 +807,10 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
         on the solver's ranks, on a separate allocation fed over the network, or splits
         the difference by reducing in place and rendering elsewhere, is a launch-time
         decision. Your adaptor does not know which one it is feeding.</p>
-      <p><b class="norm">It also does not know what is behind them.</b> Catalyst is a
-        published specification with a stable ABI; the implementation is a separate shared
-        library the loader finds at run time. ParaView is the one we build and support.</p>
+      <p><b class="norm">The solver also does not know what is behind those calls.</b>
+        The header defines a C API with a stable ABI, and the implementation is a separate
+        shared library that the loader finds at run time. ParaView Catalyst is the
+        implementation Kitware builds and supports.</p>
       <p>Writing another is possible and rarely necessary, which is the reassuring
         part. Kitware Europe built
         <a href="https://www.kitware.com/catalyst-adios2-a-new-catalyst2-implementation-for-in-transit-analysis/" target="_blank" rel="noopener noreferrer">one over ADIOS2</a>
@@ -968,10 +969,10 @@ conduit_node_set_path_external_float64_ptr(
           keep getting for free as it improves.</p>
       </div>
       <div class="offer">
-        <h3>You are adopting a specification, not a dependency</h3>
-        <p>What you instrument against is a published API with a stable ABI, and it has
-          been implemented independently more than once. You are unlikely to want to do
-          that yourself, and the reason is the reassuring part: the alternatives keep
+        <h3>You instrument against a stable API</h3>
+        <p>What you instrument against is a documented C API with a stable ABI, and it
+          has been implemented independently more than once. You are unlikely to want to
+          do that yourself, and the reason is the reassuring part: the alternatives keep
           being absorbed rather than multiplying. If your requirements ever did diverge
           from ours, the door is open and someone has walked through it.</p>
       </div>
@@ -1324,9 +1325,9 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
     </div>
     <div class="kpis">
       <a class="kpi" href="#adopters">
-        <b>28</b>
+        <b>29</b>
         <span class="lb">simulation codes already ship a Catalyst adaptor, across eight domains</span>
-        <span class="src">every one linked to its evidence</span></a>
+        <span class="src">23 of them linked to published evidence</span></a>
       <a class="kpi" href="https://doi.org/10.1177/10943420241286521" target="_blank" rel="noopener noreferrer">
         <b>4,416</b>
         <span class="lb">GPUs on Frontier, analysing a run in place rather than writing it</span>
@@ -1373,6 +1374,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
           <a href="https://www.osti.gov/biblio/1481596" target="_blank" rel="noopener noreferrer">SPARC</a>
           <a href="https://www.osti.gov/servlets/purl/1643316" target="_blank" rel="noopener noreferrer">Nalu</a>
           <span>Alya</span>
+          <span>GENESIS</span>
           <a href="https://www.kennethmoreland.com/documents/InSituTensions.pdf" target="_blank" rel="noopener noreferrer">Hydra-TH</a>
         </div>
       </div>
