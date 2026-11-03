@@ -967,6 +967,13 @@ if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     update();
   });
 })();
+
+// media above an anchor can finish loading after the browser has scrolled to it,
+// which leaves a deep link short of its section; land on it again once loaded
+window.addEventListener('load', function () {
+  var h = location.hash.slice(1), el = h && document.getElementById(h);
+  if (el) { el.scrollIntoView(); }
+});
 </script>
 <script>
 // Links shared before the long page moved point at its sections on the root URL.
