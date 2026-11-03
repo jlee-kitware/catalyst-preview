@@ -1016,20 +1016,20 @@ conduit_node_set_path_external_float64_ptr(
     </div>
     <div class="offers">
       <div class="offer">
-        <h3>You stop taking analysis feature requests</h3>
+        <h3>Fewer analysis feature requests</h3>
         <p>Ship one adaptor and the pipeline becomes a Python script. "Can you add this
           plot, this export, this derived metric" turns into something your customer
           writes for themselves, on their own schedule, without a release from you.</p>
       </div>
       <div class="offer">
-        <h3>You stop maintaining an analysis stack</h3>
+        <h3>No analysis stack to maintain</h3>
         <p>Parallel rendering, unstructured meshes and AMR, GPU pipelines, temporal
           analysis, statistics, resampling, twenty file formats. That is a quarter
           century of work in VTK and ParaView that you can link instead of rebuild, and
           keep getting for free as it improves.</p>
       </div>
       <div class="offer">
-        <h3>You instrument against a stable API</h3>
+        <h3>A stable, documented API</h3>
         <p>What you instrument against is a documented C API with a stable ABI, and it
           has been implemented independently more than once. You are unlikely to want to
           do that yourself, and the alternatives keep
@@ -1169,7 +1169,7 @@ conduit_node_set_path_external_float64_ptr(
     <div class="flows">
 
       <div class="flowgroup">
-        <h3>First, measure something</h3>
+        <h3>First, measure during the run</h3>
         <p class="gd">Where almost everyone starts. Cheap, and it pays immediately.</p>
         <div class="flow"><span class="fn">Quantitative KPIs</span>
           <p class="fd">Lift, drag, boundary-layer metrics, field energy. Engineering numbers at every timestep, not every hundredth.</p></div>
@@ -1202,7 +1202,7 @@ conduit_node_set_path_external_float64_ptr(
       </div>
 
       <div class="flowgroup">
-        <h3>Then stop writing everything</h3>
+        <h3>Then write only what you need</h3>
         <p class="gd">Once the analysis runs in place, the disk holds results instead of raw state.</p>
         <div class="flow"><a class="fn" href="https://doi.org/10.1007/978-3-031-40843-4_19" target="_blank" rel="noopener noreferrer">Region of interest</a>
           <p class="fd">Detect what matters while it happens and save only that. Used to track a cyclone through a running forecast.</p></div>
@@ -1219,7 +1219,7 @@ conduit_node_set_path_external_float64_ptr(
       <summary>Four more capabilities <span class="n">steering, AI in the loop, coupling, exascale</span></summary>
       <div class="flows">
       <div class="flowgroup">
-        <h3>Then get into the loop</h3>
+        <h3>Then steer the run</h3>
         <p class="gd">Putting a person back in a workflow that post-hoc locks them out of.</p>
         <div class="flow"><a class="fn" href="https://www.kitware.com/webinars/whats-new-in-in-situ-analysis-and-visualization/" target="_blank" rel="noopener noreferrer">Computational steering</a>
           <p class="fd">Change a parameter or boundary condition mid-run through <code>catalyst_results</code>. An on-device reduction returned eight bytes to the driver and the field never left the GPU.</p></div>
@@ -1230,7 +1230,7 @@ conduit_node_set_path_external_float64_ptr(
       </div>
 
       <div class="flowgroup">
-        <h3>Then let a model into it</h3>
+        <h3>Then connect AI models</h3>
         <p class="gd">Models that learn from, explain, and act on the running solver.</p>
         <div class="flow"><a class="fn" href="https://github.com/aymanzyy/catalystml" target="_blank" rel="noopener noreferrer">Training</a>
           <p class="fd">Surrogates, reduced-order models and data-driven closures trained on runtime data, with no disk round trip.</p></div>
@@ -1246,7 +1246,7 @@ conduit_node_set_path_external_float64_ptr(
       </div>
 
       <div class="flowgroup">
-        <h3>Then couple, and run many</h3>
+        <h3>Then couple solvers and run ensembles</h3>
         <p class="gd">Where the simulation is not one solver producing one answer.</p>
         <div class="flow"><a class="fn" href="https://doi.org/10.5194/gmd-12-233-2019" target="_blank" rel="noopener noreferrer">Co-simulation</a>
           <p class="fd">Solvers exchange fields every timestep through a common
@@ -1266,7 +1266,7 @@ conduit_node_set_path_external_float64_ptr(
       </div>
 
       <div class="flowgroup">
-        <h3>And where post-hoc stops being an option</h3>
+        <h3>Runs where post-hoc is not possible</h3>
         <p class="gd">The cases that motivated all of this in the first place.</p>
         <div class="flow"><a class="fn" href="https://doi.org/10.1177/10943420241286521" target="_blank" rel="noopener noreferrer">Exascale</a>
           <p class="fd">Runs whose per-timestep output exceeds what the filesystem can absorb. The analysis goes to the data, on the same nodes or adjacent ones, because the data cannot go to the analysis.</p></div>
@@ -1649,7 +1649,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
       </div>
 
       <div class="gq">
-        <h3><span class="n">06</span>Is your filesystem actually keeping up today?</h3>
+        <h3><span class="n">06</span>Is your filesystem keeping up today?</h3>
         <p>Measure it rather than assume. Time how long one timestep takes to land, and
           what fraction of a solver cycle that is. For plenty of sites the answer is
           still that the filesystem copes.</p>
@@ -1665,7 +1665,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
       </div>
 
       <div class="gq">
-        <h3><span class="n">07</span>What are you actually optimising for?</h3>
+        <h3><span class="n">07</span>What are you optimising for?</h3>
         <p>Cost per run, time to answer, and capability you do not currently have are
           three different goals with three different answers.</p>
         <p class="ans"><b>Capability is usually the real one.</b> Most teams do not adopt
@@ -1697,7 +1697,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
 
     <div class="flows">
       <div class="flowgroup">
-        <h3>Catalyst&rsquo;s row, then and now</h3>
+        <h3>Catalyst&rsquo;s entry in 2020 and today</h3>
         <table class="thennow">
           <caption>Proximity and division of execution moved together: once analysis
             can run off node, it can be given its own resources. Both are additions
@@ -1724,7 +1724,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
       </div>
 
       <div class="flowgroup">
-        <h3>Two things the taxonomy has no axis for</h3>
+        <h3>What the taxonomy does not cover</h3>
         <p class="gd">Worth asking anyway, of anything you are considering.</p>
         <div class="flow"><a class="fn" href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/" target="_blank" rel="noopener noreferrer">Which accelerators</a>
           <p class="fd">CUDA, HIP, SYCL and OpenMP from one adaptor, through Kokkos. The
@@ -1737,8 +1737,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
     </div>
 
     <div class="lead" style="margin-top:2.6rem">
-      <h3 style="font:600 1rem var(--sans);color:var(--text);margin:0 0 .6rem">
-        The alternatives, and where each one fits</h3>
+      <h3 style="font:600 1rem var(--sans);color:var(--text);margin:0 0 .6rem">Other in situ systems, and where each fits</h3>
       <p>That survey covers fifteen systems properly, so read it rather than us on this.
         In short: <b class="norm">Ascent</b> is the closest equivalent, shipped alongside Catalyst by
         the same ECP programme and built for a smaller dependency footprint.
@@ -1950,7 +1949,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
     <div>
       <div class="pubgroups">
       <div class="pubgroup">
-        <h3>Design of the API itself</h3>
+        <h3>Design of the API</h3>
         <div class="pubs">
           <a class="pub" href="https://doi.org/10.2514/6.2026-0766" target="_blank" rel="noopener noreferrer">
             <span class="t">Catalyst: Expanding In Situ Analysis and Visualization Workflows for Exascale Computing</span>
@@ -1979,7 +1978,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
       </div>
 
       <div class="pubgroup">
-        <h3>Where the field stands</h3>
+        <h3>Surveys and comparisons</h3>
         <p>Start here if you are deciding between in situ approaches rather than
           evaluating Catalyst specifically.</p>
         <div class="pubs">
@@ -2019,7 +2018,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
       </div>
 
       <div class="pubgroup">
-        <h3>In situ is still an I/O problem</h3>
+        <h3>Writing extracts at scale</h3>
         <p>Extracts are smaller, not free. An isosurface can land almost entirely on a
           handful of ranks, and that imbalance defeats ordinary collective writes. Read
           this before assuming reduction ends the conversation.</p>
