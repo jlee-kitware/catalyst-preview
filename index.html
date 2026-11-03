@@ -70,6 +70,8 @@ a{color:inherit}
 
 .naming td:first-child{white-space:nowrap;font-family:var(--mono);font-size:.85rem}
 .naming td{vertical-align:top}
+/* the sticky nav wraps to two lines, so anchors land below it */
+section[id],header[id]{scroll-margin-top:7rem}
 .nav .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:.55rem 1.15rem;min-height:60px;padding-block:.5rem}
 .brand{
   font-weight:600;letter-spacing:-.02em;margin-right:.9rem;
