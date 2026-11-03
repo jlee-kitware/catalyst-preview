@@ -1700,15 +1700,19 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
       </div>
 
       <div class="flowgroup">
-        <h3>What the taxonomy does not cover</h3>
-        <p class="gd">Worth asking anyway, of anything you are considering.</p>
+        <h3>Two capabilities the taxonomy has no axis for</h3>
+        <p class="gd">Catalyst has both. Ask whatever else you are comparing whether it
+          does too.</p>
         <div class="flow"><a class="fn" href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/" target="_blank" rel="noopener noreferrer">Which accelerators</a>
-          <p class="fd">CUDA, HIP, SYCL and OpenMP from one adaptor, through Kokkos. The
-            axes assume you have chosen a machine; procurement does not.</p></div>
+          <p class="fd">One adaptor runs on NVIDIA, AMD and Intel GPUs: Viskores filters
+            target CUDA, HIP, SYCL or OpenMP without adaptor changes. The taxonomy
+            classifies a system on a machine already chosen, so it has no axis for
+            moving between vendors.</p></div>
         <div class="flow"><a class="fn" href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxSteering" target="_blank" rel="noopener noreferrer">Feedback into the solve</a>
-          <p class="fd">Operation controls describe who chooses what runs. They do not
-            describe results going back the other way, into the solver, tightly enough to
-            correct a closure every nonlinear iteration.</p></div>
+          <p class="fd">Catalyst returns results to the solver through
+            <code>catalyst_results</code>, often enough to correct a closure every
+            nonlinear iteration. The taxonomy&rsquo;s operation controls cover who decides
+            what runs, and have no entry for results flowing back into the solve.</p></div>
       </div>
     </div>
 
