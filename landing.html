@@ -265,6 +265,14 @@ details.more > summary .n{font:400 .78rem var(--mono);opacity:.75}
 .timing .idle{fill:none;stroke:var(--written);stroke-width:1;stroke-dasharray:2 2}
 
 /* ---------- decision guide ---------- */
+.guide + .evlabel{margin-top:2.2rem}
+.gq .picks{margin:.55rem 0 .75rem}
+.gq .mode{padding:.3rem .7rem;font-size:.82rem}
+.gq .ans + .ans{margin-top:.65rem}
+.gq .ans.dim{opacity:.35}
+.gsum{border-bottom:0;margin-top:1.4rem}
+@media (prefers-reduced-motion:no-preference){.gq .ans{transition:opacity .2s}}
+
 .guide{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(min(21rem,100%),1fr));
   gap:0 2.6rem;border-top:1px solid var(--rule);
@@ -924,6 +932,39 @@ if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     var src = f.getAttribute('data-src');
     f.src = reduce ? src : src + '&autoplay=1';
     f.removeAttribute('data-src');
+  });
+})();
+
+// decision guide: optional picks; every outcome is readable without them
+(function(){
+  var g = document.querySelector('#guide');
+  if (!g) return;
+  var sum = g.querySelector('[data-g="on"]'), sumv = g.querySelector('[data-g="v"]'),
+      sum0 = g.querySelector('[data-g="off"]');
+  g.querySelectorAll('.picks, [data-g="hint"]').forEach(function(el){ el.hidden = false; });
+  function update(){
+    var parts = [];
+    g.querySelectorAll('.gq').forEach(function(qq){
+      var on = qq.querySelector('.mode[aria-pressed="true"]');
+      if (!on) return;
+      var a = qq.querySelector('.ans[data-a="' + on.dataset.a + '"]');
+      var t = a && a.dataset.sum;
+      if (t && parts.indexOf(t) < 0) parts.push(t);
+    });
+    sumv.textContent = parts.join(' \u00b7 ');
+    sum.hidden = !parts.length;
+    sum0.hidden = !!parts.length;
+  }
+  g.addEventListener('click', function(e){
+    var b = e.target.closest('.picks .mode');
+    if (!b) return;
+    var qq = b.closest('.gq'), was = b.getAttribute('aria-pressed') === 'true';
+    qq.querySelectorAll('.picks .mode').forEach(function(x){ x.setAttribute('aria-pressed', 'false'); });
+    if (!was) b.setAttribute('aria-pressed', 'true');
+    qq.querySelectorAll('.ans').forEach(function(a){
+      a.classList.toggle('dim', !was && a.dataset.a !== b.dataset.a);
+    });
+    update();
   });
 })();
 </script>

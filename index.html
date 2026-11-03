@@ -266,6 +266,14 @@ details.more > summary .n{font:400 .78rem var(--mono);opacity:.75}
 .timing .idle{fill:none;stroke:var(--written);stroke-width:1;stroke-dasharray:2 2}
 
 /* ---------- decision guide ---------- */
+.guide + .evlabel{margin-top:2.2rem}
+.gq .picks{margin:.55rem 0 .75rem}
+.gq .mode{padding:.3rem .7rem;font-size:.82rem}
+.gq .ans + .ans{margin-top:.65rem}
+.gq .ans.dim{opacity:.35}
+.gsum{border-bottom:0;margin-top:1.4rem}
+@media (prefers-reduced-motion:no-preference){.gq .ans{transition:opacity .2s}}
+
 .guide{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(min(21rem,100%),1fr));
   gap:0 2.6rem;border-top:1px solid var(--rule);
@@ -533,7 +541,7 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
     8  ai           Can I trust the newest part?     AI models can query and steer a live run
     9  evidence     Is any of this real?             Catalyst runs in production today
    10  adopters     Who exactly?                     The adopters, each linked to its evidence
-   11  guide        Does it fit MY case?             Seven questions decide whether it fits
+   11  guide        Does it fit MY case?             Six questions settle whether it fits
    12  alternatives How does it compare?             How Catalyst compares, on the field taxonomy
    13  effort       What will it cost me?            What it costs to adopt
    14  licence      Can I ship it?                   It is BSD 3-Clause
@@ -740,7 +748,7 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
       <a class="route" href="#guide">
         <span class="who">Evaluating for your code</span>
         <span class="goes">Would it fit my problem, and what would it cost?</span>
-        <span class="cost">seven questions, the comparison axes, then the effort table &middot; ten minutes</span></a>
+        <span class="cost">six questions, the comparison axes, then the effort table &middot; ten minutes</span></a>
       <a class="route" href="#product">
         <span class="who">Shipping simulation software</span>
         <span class="goes">What does this do for my product and my licence?</span>
@@ -1533,59 +1541,66 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
 <section class="wide" id="guide">
   <div class="wrap">
     <div class="lead">
-      <h2>Seven questions decide whether it fits your case.</h2>
-      <p>The honest answer depends on your pipeline, and nobody can give it to you
-        without knowing it. But the published cost studies do narrow it down, and the
-        reasoning is worth having before you talk to anyone, including us.</p>
-      <p class="quiet">Every recommendation below cites the study it comes from.
-        <a href="#talk">Get a second opinion &rarr;</a></p>
+      <h2>Six questions settle whether it fits and how to run it.</h2>
+      <p>The answer depends on your pipeline. The published cost studies narrow it down,
+        and each outcome below cites the study it comes from.</p>
+      <p class="quiet">The first three decide whether in situ fits. The last three decide
+        how to run it. <span data-g="hint" hidden>Pick an answer to each and the
+        configuration they add up to appears at the end.</span></p>
     </div>
+    <p class="evlabel">Whether it fits</p>
     <div class="guide">
-
-      <div class="gq">
-        <h3><span class="n">01</span>Is your analysis cheap relative to your solve?</h3>
-        <p>Integrating a quantity of interest, thresholding, extracting a surface on a
-          modest mesh. These cost a fraction of a timestep.</p>
-        <p class="ans"><b>Yes &rarr; run it in line.</b> Sandia's conclusion after
-          10.58M processor-hours: for analysis that does not hinder solver scalability,
-          in situ is the simplest and best choice, because the analysis costs less than
-          allocating extra nodes and moving data to them.
+      <div class="gq" data-q="fs">
+        <h3><span class="n">01</span>Is your filesystem keeping up today?</h3>
+        <p>Measure it. Time how long one timestep takes to land, and what fraction of a solver cycle that is. At plenty of sites the filesystem still copes.</p>
+        <div class="modes picks" role="group" aria-label="Your answer" hidden><button class="mode" type="button" aria-pressed="false" data-a="yes">Yes</button><button class="mode" type="button" aria-pressed="false" data-a="no">No</button></div>
+        <p class="ans" data-a="yes" data-sum="post-processing plus in situ extracts"><b>Yes &rarr; keep post-processing, and use in situ to choose what you keep.</b> In situ adds to a post-processing workflow, and nothing here asks you to stop writing files. Sandia measured post-processing performing well on <b class="norm">Cielo in 2014</b>, with a strong Lustre filesystem and one moderate analysis every ten cycles, and concluded that all three approaches were needed. Cielo was retired in 2016, and the gap between compute and storage bandwidth has widened since.
           <span class="why"><a href="https://doi.org/10.1145/2597652.2597668" target="_blank" rel="noopener noreferrer">Oldfield et al., ICS 2014</a></span></p>
+        <p class="ans" data-a="no" data-sum="analysis inside the run"><b>No &rarr; move the analysis into the run.</b> Full state at the cadence you need is what the filesystem cannot absorb. Run the analysis while the data is in memory and write only its results: integrated quantities, extracts and images.</p>
       </div>
-
-      <div class="gq">
-        <h3><span class="n">02</span>Does your analysis scale as well as your solver?</h3>
-        <p>Parallel image compositing is the usual culprit. It is communication-bound,
-          and it degrades at high concurrency in a way the physics does not.</p>
-        <p class="ans"><b>No &rarr; move it in transit.</b> Rendering at lower
-          concurrency on dedicated nodes was measured at 4× cheaper for volume rendering
-          and 3–6× for isosurfacing. This is the fix for the compositing wall, not a
-          reason to avoid in situ.
-          <span class="why"><a href="https://www.osti.gov/servlets/purl/1649280" target="_blank" rel="noopener noreferrer">Kress et al., ISC HPC 2020</a></span></p>
+      <div class="gq" data-q="goal">
+        <h3><span class="n">02</span>What are you optimising for?</h3>
+        <p>Cost per run, time to answer, and capability you do not have today are three different goals with three different answers.</p>
+        <div class="modes picks" role="group" aria-label="Your answer" hidden><button class="mode" type="button" aria-pressed="false" data-a="cost">Cost per run</button><button class="mode" type="button" aria-pressed="false" data-a="time">Time to answer</button><button class="mode" type="button" aria-pressed="false" data-a="cap">Capability</button></div>
+        <p class="ans" data-a="cost" data-sum="judged on cost per run"><b>Cost per run &rarr; compare against the whole post-hoc pipeline.</b> The baseline is writing every timestep, moving it, reading it back and post-processing it. A solve with nothing attached is not an alternative, since the data still has to come out. Catalyst costs whatever your pipeline costs. <a href="#effort">What it costs to adopt</a>.</p>
+        <p class="ans" data-a="time" data-sum="results during the run"><b>Time to answer &rarr; get results during the run.</b> Quantities of interest every timestep, a live session on a running job, and triggers that act on what the analysis finds, so a diverging run is caught in the hour it diverges. <a href="#workflows">The workflows</a>.</p>
+        <p class="ans" data-a="cap" data-sum="a new capability"><b>Capability &rarr; start from the analysis you cannot do today.</b> Training data deleted at write time, a divergence nobody saw until Friday, an ensemble too large to keep. If one of those is the reason, the cost comparison is secondary. Most adopters come to in situ this way.
+          <span class="why">Kitware&rsquo;s reading of the adopters above; unpublished</span></p>
       </div>
-
-      <div class="gq">
-        <h3><span class="n">03</span>Are you scaling up, or already at the top end?</h3>
-        <p>In-line visualization cost grew from 0.6× to 2.2× of solver cycle time across
-          8 to 1024 nodes on the same problem, while data transfer cost barely moved.</p>
-        <p class="ans"><b>Scaling up &rarr; the case for in transit strengthens as you
-          grow.</b> With one caveat from Sandia: in transit only pays if the compute
-          nodes have enough work to hide the analysis. At 32K cores with too little work
-          per node, the wait time erased the benefit.
-          <span class="why"><a href="https://www.osti.gov/servlets/purl/1649280" target="_blank" rel="noopener noreferrer">Kress 2020</a> · <a href="https://doi.org/10.1145/2597652.2597668" target="_blank" rel="noopener noreferrer">Oldfield 2014</a></span></p>
+      <div class="gq" data-q="plan">
+        <h3><span class="n">03</span>Can you say in advance what you will need to see?</h3>
+        <p>The data is transient, so a timestep you let pass is gone. What runs at any moment can still change while the solver runs.</p>
+        <div class="modes picks" role="group" aria-label="Your answer" hidden><button class="mode" type="button" aria-pressed="false" data-a="yes">Yes</button><button class="mode" type="button" aria-pressed="false" data-a="partly">Not entirely</button></div>
+        <p class="ans" data-a="yes" data-sum="a fixed batch pipeline"><b>Yes &rarr; run a fixed pipeline.</b> Write the quantities and extracts you need on the stride you choose, in batch, with nothing attached. This is the simplest configuration, and where most teams start.</p>
+        <p class="ans" data-a="partly" data-sum="pipelines that change at run time"><b>Not entirely &rarr; keep the choice open at run time.</b> Swap pipelines while the solver runs; attach a live session and look at something you had not planned for; steer the solve from what the analysis finds; render an image database across many viewpoints and explore it afterwards; trigger on a detected feature; or write reduced extracts for post hoc work. Catalyst runs batch and interactive at the same time.
+          <span class="why"><a href="https://www.kennethmoreland.com/documents/InSituTensions.pdf" target="_blank" rel="noopener noreferrer">Moreland, IEEE CG&amp;A 2016</a></span></p>
       </div>
-
-      <div class="gq">
-        <h3><span class="n">04</span>Should the pipeline block the solver, or not?</h3>
-        <p>Since 2.1, <code>catalyst_execute</code> can snapshot the timestep onto a
-          bounded queue and return immediately, while a worker thread runs the pipeline
-          alongside the next solver step.</p>
-        <p class="ans"><b>Depends on the ratio of pipeline cost to step cost.</b> A
-          couple of reductions per step gains little and should stay synchronous. A
-          heavier pipeline gains a lot. In the 2.1 demonstration the solver went from
-          blocked <b>33%</b> of wall-clock to <b>6%</b>, completing <b>27% more
-          iterations</b>. GPU solvers usually leave CPU cores idle, which is exactly what
-          async is for. The trade is bounded memory for the queue.
+    </div>
+    <p class="evlabel">How to run it</p>
+    <div class="guide">
+      <div class="gq" data-q="cheap">
+        <h3><span class="n">04</span>Is your analysis cheap relative to your solve?</h3>
+        <p>Integrating a quantity of interest, thresholding, extracting a surface on a modest mesh: these cost a fraction of a timestep.</p>
+        <div class="modes picks" role="group" aria-label="Your answer" hidden><button class="mode" type="button" aria-pressed="false" data-a="yes">Yes</button><button class="mode" type="button" aria-pressed="false" data-a="no">No</button></div>
+        <p class="ans" data-a="yes" data-sum="in line"><b>Yes &rarr; run it in line.</b> Sandia&rsquo;s conclusion after 10.58M processor-hours: for analysis that does not hinder solver scalability, in situ is the simplest and best choice, because the analysis costs less than allocating extra nodes and moving data to them.
+          <span class="why"><a href="https://doi.org/10.1145/2597652.2597668" target="_blank" rel="noopener noreferrer">Oldfield et al., ICS 2014</a></span></p>
+        <p class="ans" data-a="no" data-sum="heavy analysis"><b>No &rarr; check how it scales.</b> Expensive analysis can still run in line if it scales with the solver. If it does not, the next question moves it to dedicated nodes.</p>
+      </div>
+      <div class="gq" data-q="scale">
+        <h3><span class="n">05</span>Does your analysis scale as well as your solver?</h3>
+        <p>Parallel image compositing is the usual cause. It is communication-bound and degrades at high concurrency where the physics does not. In-line visualization cost grew from 0.6&times; to 2.2&times; of solver cycle time across 8 to 1024 nodes on the same problem, while data transfer cost barely moved.</p>
+        <div class="modes picks" role="group" aria-label="Your answer" hidden><button class="mode" type="button" aria-pressed="false" data-a="yes">Yes</button><button class="mode" type="button" aria-pressed="false" data-a="no">No</button></div>
+        <p class="ans" data-a="yes" data-sum="in line"><b>Yes &rarr; keep it in line.</b> No extra nodes and no data movement. Sandia&rsquo;s measurements favour this whenever the analysis does not hold back solver scaling.
+          <span class="why"><a href="https://doi.org/10.1145/2597652.2597668" target="_blank" rel="noopener noreferrer">Oldfield et al., ICS 2014</a></span></p>
+        <p class="ans" data-a="no" data-sum="in transit"><b>No &rarr; move it in transit.</b> Rendering at lower concurrency on dedicated nodes was measured at 4&times; cheaper for volume rendering and 3&ndash;6&times; for isosurfacing, and the case grows with scale. It only pays if the compute nodes have enough work to hide the analysis: at 32K cores with too little work per node, Sandia found the wait time erased the benefit.
+          <span class="why"><a href="https://www.osti.gov/servlets/purl/1649280" target="_blank" rel="noopener noreferrer">Kress et al., ISC HPC 2020</a> &middot; <a href="https://doi.org/10.1145/2597652.2597668" target="_blank" rel="noopener noreferrer">Oldfield et al., ICS 2014</a></span></p>
+      </div>
+      <div class="gq" data-q="block">
+        <h3><span class="n">06</span>Should the pipeline block the solver?</h3>
+        <p>Since 2.1, <code>catalyst_execute</code> can snapshot the timestep onto a bounded queue and return immediately, while a worker thread runs the pipeline alongside the next solver step.</p>
+        <div class="modes picks" role="group" aria-label="Your answer" hidden><button class="mode" type="button" aria-pressed="false" data-a="light">Light pipeline</button><button class="mode" type="button" aria-pressed="false" data-a="heavy">Heavy pipeline</button></div>
+        <p class="ans" data-a="light" data-sum="synchronous"><b>Light pipeline &rarr; stay synchronous.</b> A couple of reductions per step gains little from overlapping, and the queue costs memory.</p>
+        <p class="ans" data-a="heavy" data-sum="asynchronous"><b>Heavy pipeline &rarr; run it asynchronously.</b> In the 2.1 demonstration the solver went from blocked <b class="norm">33%</b> of wall-clock to <b class="norm">6%</b>, completing <b class="norm">27% more iterations</b>. GPU solvers usually leave CPU cores idle, and the worker thread uses them. The cost is bounded memory for the queue.
           <span class="why"><a href="https://www.kitware.com/whats-new-in-in-situ-analysis-and-visualization-with-paraview-catalyst/" target="_blank" rel="noopener noreferrer">Catalyst 2.1 demonstration, 2026</a></span></p>
         <figure class="timing">
           <svg viewBox="0 0 400 128" xmlns="http://www.w3.org/2000/svg" role="img"
@@ -1634,51 +1649,10 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
           </svg>
         </figure>
       </div>
-
-      <div class="gq">
-        <h3><span class="n">05</span>Can you say in advance what you will need to see?</h3>
-        <p>The genuine constraint is narrower than it first looks. The data is
-          transient, so a timestep you let pass is gone. What runs at any moment,
-          though, is changeable.</p>
-        <p class="ans"><b>Not entirely &rarr; then do not try to.</b> Swap pipelines
-          while the solver runs; attach a live session and look at something you had not
-          planned for; steer the solve from what the analysis finds; render an image
-          database across many viewpoints and explore it afterwards; trigger on a
-          detected feature; or write reduced extracts for post hoc work. Catalyst
-          supports batch and interactive simultaneously, so the practical question is
-          only what to run first.
-          <span class="why"><a href="https://www.kennethmoreland.com/documents/InSituTensions.pdf" target="_blank" rel="noopener noreferrer">Moreland, IEEE CG&amp;A 2016</a></span></p>
-      </div>
-
-      <div class="gq">
-        <h3><span class="n">06</span>Is your filesystem keeping up today?</h3>
-        <p>Measure it rather than assume. Time how long one timestep takes to land, and
-          what fraction of a solver cycle that is. For plenty of sites the answer is
-          still that the filesystem copes.</p>
-        <p class="ans"><b>If yes &rarr; keep post-processing, and use in situ to choose
-          what you keep.</b> In situ is additive; nothing here asks you to stop writing
-          files. For context rather than as a benchmark: Sandia measured post-processing
-          performing well on <b class="norm">Cielo in 2014</b>, with a strong Lustre
-          filesystem and one moderate analysis every ten cycles, and concluded that all
-          three approaches were needed. That machine was retired in 2016 and the
-          compute-to-storage ratio has widened by orders of magnitude since, so read it
-          as the direction of travel rather than as a current answer.
-          <span class="why"><a href="https://doi.org/10.1145/2597652.2597668" target="_blank" rel="noopener noreferrer">Oldfield et al., ICS 2014</a></span></p>
-      </div>
-
-      <div class="gq">
-        <h3><span class="n">07</span>What are you optimising for?</h3>
-        <p>Cost per run, time to answer, and capability you do not currently have are
-          three different goals with three different answers.</p>
-        <p class="ans"><b>Capability is usually the real one.</b> Most teams do not adopt
-          in situ to save money on storage. They adopt it because there is an analysis
-          they cannot do at all: training data that was deleted at write time, a
-          divergence nobody saw until Friday, an ensemble too large to keep. If that is
-          your case, the cost comparison matters less than you think.
-          <span class="why">our read of the adoption corpus, not a published finding</span></p>
-      </div>
-
     </div>
+    <p class="readout gsum" data-g="on" hidden>Your starting point: <b data-g="v"></b>.
+      <a href="#talk" class="lk">Ask us about your case &rarr;</a></p>
+    <p class="readout gsum" data-g="off"><a href="#talk" class="lk">Ask us about your case &rarr;</a></p>
   </div>
 </section>
 
@@ -2297,6 +2271,39 @@ if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     var src = f.getAttribute('data-src');
     f.src = reduce ? src : src + '&autoplay=1';
     f.removeAttribute('data-src');
+  });
+})();
+
+// decision guide: optional picks; every outcome is readable without them
+(function(){
+  var g = document.querySelector('#guide');
+  if (!g) return;
+  var sum = g.querySelector('[data-g="on"]'), sumv = g.querySelector('[data-g="v"]'),
+      sum0 = g.querySelector('[data-g="off"]');
+  g.querySelectorAll('.picks, [data-g="hint"]').forEach(function(el){ el.hidden = false; });
+  function update(){
+    var parts = [];
+    g.querySelectorAll('.gq').forEach(function(qq){
+      var on = qq.querySelector('.mode[aria-pressed="true"]');
+      if (!on) return;
+      var a = qq.querySelector('.ans[data-a="' + on.dataset.a + '"]');
+      var t = a && a.dataset.sum;
+      if (t && parts.indexOf(t) < 0) parts.push(t);
+    });
+    sumv.textContent = parts.join(' \u00b7 ');
+    sum.hidden = !parts.length;
+    sum0.hidden = !!parts.length;
+  }
+  g.addEventListener('click', function(e){
+    var b = e.target.closest('.picks .mode');
+    if (!b) return;
+    var qq = b.closest('.gq'), was = b.getAttribute('aria-pressed') === 'true';
+    qq.querySelectorAll('.picks .mode').forEach(function(x){ x.setAttribute('aria-pressed', 'false'); });
+    if (!was) b.setAttribute('aria-pressed', 'true');
+    qq.querySelectorAll('.ans').forEach(function(a){
+      a.classList.toggle('dim', !was && a.dataset.a !== b.dataset.a);
+    });
+    update();
   });
 })();
 </script>
