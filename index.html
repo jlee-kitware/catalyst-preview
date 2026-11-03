@@ -5,7 +5,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ParaView Catalyst: in situ analysis for HPC simulations</title>
-<meta name="description" content="The simulation ends and the waiting begins: write it out, move it, read it back, post-process, then look. Catalyst runs your analysis inside the solve. Three function calls, an ABI-stable C API, and ParaView never enters your build. 28 adopting codes, every claim linked to its evidence.">
+<meta name="description" content="Most of the wait comes after the solve: write it out, move it, read it back, post-process, then look. Catalyst runs your analysis inside the solve. Three function calls, an ABI-stable C API, and ParaView never enters your build. 28 adopting codes, every claim linked to its evidence.">
 <meta property="og:title" content="ParaView Catalyst: analyse the data before it reaches the disk">
 <meta property="og:description" content="Something in your workflow decides what to throw away, before anyone has looked at the run. Catalyst does the analysis in memory, so that decision moves to after you have seen the data.">
 <meta property="og:type" content="website">
@@ -68,7 +68,10 @@ a{color:inherit}
   backdrop-filter:blur(10px);
   border-bottom:1px solid var(--rule);
 }
-.nav .wrap{display:flex;align-items:center;gap:1.3rem;height:60px;overflow-x:auto;scrollbar-width:none}
+
+.naming td:first-child{white-space:nowrap;font-family:var(--mono);font-size:.85rem}
+.naming td{vertical-align:top}
+.nav .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:.55rem 1.15rem;min-height:60px;padding-block:.5rem}
 .brand{
   font-weight:600;letter-spacing:-.02em;margin-right:.9rem;
   display:inline-flex;align-items:center;gap:.5rem;
@@ -519,7 +522,7 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
   If you add a section, decide which question it answers first. If it does not
   answer one, it does not belong.
 
-    1  top          What is my problem?              The simulation ends, the waiting begins
+    1  top          What is my problem?              Most of the wait comes after the solve
     2  running      Is it really that bad?           Watch the two numbers separate
        (router)     Which parts do I need?           A way through, after the hook
     3  why          Is it MY problem?                You probably arrived here with one of these
@@ -527,8 +530,8 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
     5  firststep    What must I commit to?           You can start without touching your solver
     6  product      What is in it for me? (ISV)      If you sell simulation software
     7  workflows    What can it do?                  Instrument once
-    8  ai           Can I trust the newest part?     A model is only as useful as what it can reach
-    9  evidence     Is any of this real?             Somebody already did the hard part
+    8  ai           Can I trust the newest part?     What a model can do depends on what it can reach
+    9  evidence     Is any of this real?             This is already running in production elsewhere
    10  adopters     Who exactly?                     Here is who, and how you can check
    11  papers       Has it been scrutinised?         And a decade of peer-reviewed work
    12  guide        Does it fit MY case?             Which of those applies to you
@@ -563,15 +566,16 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
     <a href="#guide">Does it fit</a>
     <a href="#effort">Cost</a>
     <a href="#talk">Talk to us</a>
+    <a href="#docs">Examples</a>
   </div>
 </nav>
 
 <header class="hero" id="top">
   <div class="wrap">
     <div>
-      <h1>The simulation ends. The waiting begins.</h1>
+      <h1>Most of the wait comes after the solve.</h1>
       <p class="lede">Write it all out, move it, read it back, post-process, and only
-        then look. That stretch is now most of the distance between a finished run and a
+        then look. That sequence is now most of the time between a finished run and a
         design decision, and it got longer while the solvers got faster.</p>
       <p class="lede">It is also why a number in a config file says every hundredth
         timestep. The filesystem sets the cadence, so what you keep is decided before
@@ -592,7 +596,7 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
         <a href="https://www.kennethmoreland.com/documents/InSituTensions.pdf"
            style="color:var(--muted);font:400 .8rem var(--mono);display:block;margin-top:.4rem" target="_blank" rel="noopener noreferrer">Moreland, IEEE CG&amp;A 36(2), 2016, Fig. 1</a>
       </p>
-      <p class="lede">Catalyst removes the middle. Your analysis runs inside the solve,
+      <p class="lede">Catalyst removes those steps. Your analysis runs inside the solve,
         while the data is still in memory: on the solver's own nodes, streamed to
         neighbouring ones, or both, and never by way of the filesystem.</p>
       <p class="lede">So instead of picking which timesteps to lose, you pick what to
@@ -711,13 +715,13 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
       cells, and as data with six fields at single precision that is roughly
       0.18&nbsp;GB. Writing everything is 1.16&nbsp;TB.
       <b class="norm">Six orders of magnitude separate the
-      first from the last, and the choice is yours, not the filesystem's.</b>
+      first from the last, and and you choose which of them you write.</b>
       Only the last option registers on the lower bar. The other three are drawn as a
       marker because at this scale they are a rounding error, which is the entire
       argument.</p>
-    <p class="sub mt5">This is not a choice between in situ visualization and
+    <p class="sub mt5">In situ analysis works alongside
       post-processing. You may still write files, still load them in ParaView, still explore
-      them afterwards. In situ lets you decide <em>what</em> gets extracted and <em>which</em> files, so what lands on disk is your say.</p>
+      them afterwards. In situ lets you decide <em>what</em> gets extracted and <em>which</em> files, so you decide what lands on disk.</p>
   </div>
 </section>
 
@@ -750,9 +754,9 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
   <div class="wrap">
     <div class="claim">
       <h2>You probably arrived here with one of these.</h2>
-      <p>Nobody goes looking for in situ analysis. They go looking because the
-        write-then-look workflow has started costing them something they can name.</p>
-      <p class="quiet">They are all the same problem wearing different clothes: the
+      <p>People go looking for in situ analysis when the
+        write-then-look workflow starts costing them something they can name.</p>
+      <p class="quiet">They are all the same problem: the
         decision about what to keep is made before anyone knows what matters.</p>
     </div>
     <ul class="symp">
@@ -814,15 +818,40 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
         The header defines a C API with a stable ABI, and the implementation is a separate
         shared library that the loader finds at run time. ParaView Catalyst is the
         implementation Kitware builds and supports.</p>
-      <p>Writing another is possible and rarely necessary, which is the reassuring
-        part. Kitware Europe built
+      <p>Writing another is possible and rarely necessary. Kitware Europe built
         <a href="https://www.kitware.com/catalyst-adios2-a-new-catalyst2-implementation-for-in-transit-analysis/" target="_blank" rel="noopener noreferrer">one over ADIOS2</a>
         (<a href="https://doi.org/10.1007/978-3-031-40843-4_20" target="_blank" rel="noopener noreferrer">ISC 2023</a>);
-        Fides now does that job inside the ParaView implementation, and the Ascent-backed
-        one is being retired for want of a gap to fill. Independently implementable, and
-        converging rather than splintering.</p>
-      <p>What runs at run time is a Python pipeline, and that is a wider door than it
-        sounds. Your solver's arrays arrive as NumPy, so NumPy, SciPy, pandas, PyTorch,
+        Fides now does that job inside the ParaView implementation. Independently
+        implementable, and converging rather than splintering.</p>
+
+      <p class="quiet"><b class="norm">Four names come up together, so here is which is which.</b>
+        You link the first one. The other three are implementations of it, and you pick
+        one at run time without rebuilding.</p>
+      <table class="thennow naming">
+        <tbody>
+          <tr>
+            <td><a href="https://gitlab.kitware.com/paraview/catalyst" class="lk" target="_blank" rel="noopener noreferrer">Catalyst</a></td>
+            <td>The API and the stub you link. One header, BSD, no ParaView anywhere near it.</td>
+          </tr>
+          <tr>
+            <td><a href="https://gitlab.kitware.com/paraview/paraview/-/tree/master/Clients/Catalyst" class="lk" target="_blank" rel="noopener noreferrer">ParaView Catalyst</a></td>
+            <td>The implementation Kitware builds and supports. Everything on this page runs on it.</td>
+          </tr>
+          <tr>
+            <td><a href="https://gitlab.kitware.com/paraview/adioscatalyst" class="lk" target="_blank" rel="noopener noreferrer">AdiosCatalyst</a></td>
+            <td>An implementation over ADIOS2 and Conduit, written for in-transit work.</td>
+          </tr>
+          <tr>
+            <td><a href="https://github.com/Alpine-DAV/ascent/tree/develop/src/libs/catalyst" class="lk" target="_blank" rel="noopener noreferrer">AscentCatalyst</a></td>
+            <td>An implementation backed by Ascent, from the Alpine project.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="quiet">Catalyst 1 worked differently: the implementation was linked into
+        your build, and a &ldquo;Catalyst build of ParaView&rdquo; was a stripped-down
+        ParaView you compiled against. Nothing on this page describes that. The current
+        API is Catalyst 2, and the library you link is <code>libcatalyst</code>.</p>
+      <p>What runs at run time is a Python pipeline, which covers more than the phrase suggests. Your solver's arrays arrive as NumPy, so NumPy, SciPy, pandas, PyTorch,
         scikit-learn, Matplotlib and any wrapped C++ library are all in scope, operating
         on live simulation state. Published in-situ training work does exactly this:
         <code>vtk_to_numpy</code> on the field, <code>torch.from_numpy</code>, train,
@@ -913,14 +942,14 @@ conduit_node_set_path_external_float64_ptr(
     <div class="claim">
       <h2>You can start without touching your solver.</h2>
       <p>This is the part most people do not know about. A file-based adaptor runs the
-        same pipelines against data already on disk, so an existing archive can be mined
-        with the analysis you were going to write anyway. No instrumentation, no code
+        same pipelines against data already on disk, so an existing archive can be analysed
+        with the pipeline you were going to write anyway. No instrumentation, no code
         owner to convince, no risk to a binary anyone has validated.</p>
       <p>The pipeline is the deliverable, and it does not change. Whatever you develop
         and check against last year&rsquo;s results is the identical script that later
         runs inside a live solve. So the evaluation produces the artefact rather than
-        just an opinion about it.</p>
-      <p class="quiet">For most teams this is the honest first step: find out what the
+        the pipeline you will use later.</p>
+      <p class="quiet">For most teams this is the first step: find out what the
         analysis actually tells you, and what it costs, before anyone commits engineering
         time to instrumenting a solver.
         <a href="#effort" class="lk">then what it costs to go further &rarr;</a></p>
@@ -940,8 +969,7 @@ conduit_node_set_path_external_float64_ptr(
           <tr class="changed"><td>The pipeline</td><td class="was">identical</td><td class="now">identical</td></tr>
         </tbody>
       </table>
-      <p class="note mt3">Worth saying plainly because it inverts the usual order:
-        the evidence comes first and the commitment second.
+      <p class="note mt3">You get the evidence before you commit engineering time.
         <a href="https://gitlab.kitware.com/paraview/catalyst-examples" target="_blank" rel="noopener noreferrer" class="lk">the examples run either way &rarr;</a></p>
     </div>
   </div>
@@ -975,9 +1003,9 @@ conduit_node_set_path_external_float64_ptr(
         <h3>You instrument against a stable API</h3>
         <p>What you instrument against is a documented C API with a stable ABI, and it
           has been implemented independently more than once. You are unlikely to want to
-          do that yourself, and the reason is the reassuring part: the alternatives keep
+          do that yourself, and the alternatives keep
           being absorbed rather than multiplying. If your requirements ever did diverge
-          from ours, the door is open and someone has walked through it.</p>
+          from ours, the API is documented and others have implemented against it.</p>
       </div>
       <div class="offer">
         <h3>New capability without a new release</h3>
@@ -1002,7 +1030,7 @@ conduit_node_set_path_external_float64_ptr(
         the same range: rendered frames, integrated engineering quantities, geometric
         extracts, explorable databases, training data, trained models, corrections steered
         back into the solver, and artifacts small enough to email a collaborator.</p>
-      <p>That is the part worth sitting with if you ship simulation software. You
+      <p>This matters most if you ship simulation software. You
         instrument once; your users reach all of it without another release from you.</p>
       <p>Roughly in the order teams adopt them. All of them run three ways without a
         code change: <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CxxAsyncExecute" class="lk" target="_blank" rel="noopener noreferrer">in line,
@@ -1087,8 +1115,8 @@ conduit_node_set_path_external_float64_ptr(
     <table class="tiers">
       <caption>These are not three ways of doing the same thing. A machine&rsquo;s
         bandwidth falls away in steps, and each placement reads the data at a different
-        one. The whole in situ argument is that the analysis should meet the data high on
-        this ladder rather than at the bottom of it. Titan, from
+        one. The whole in situ argument is that the analysis should read the data where
+        the bandwidth is highest. Titan, from
         <a href="https://www.kennethmoreland.com/documents/InSituTensions.pdf" target="_blank" rel="noopener noreferrer">Moreland</a>, reproduced in the
         <a href="https://doi.org/10.1111/cgf.12930" target="_blank" rel="noopener noreferrer">2016 survey</a>, Fig. 1.</caption>
       <thead>
@@ -1105,7 +1133,7 @@ conduit_node_set_path_external_float64_ptr(
     </table>
     <p class="note mt3">Computation on that machine ran at 125&nbsp;PB/s, five orders of
       magnitude above storage. That gap is the reason any of this exists. The hybrid path
-      is the arithmetic taken seriously: reduce at 4.5&nbsp;PB/s where the data already
+      follows from those numbers: reduce at 4.5&nbsp;PB/s where the data already
       sits, then move only the reduction across an interconnect that is 188 times slower
       than memory and 17 times faster than disk.</p>
 
@@ -1159,7 +1187,7 @@ conduit_node_set_path_external_float64_ptr(
 
     </div>
     <details class="more">
-      <summary>Four more rungs <span class="n">steering, AI in the loop, coupling, exascale</span></summary>
+      <summary>Four more capabilities <span class="n">steering, AI in the loop, coupling, exascale</span></summary>
       <div class="flows">
       <div class="flowgroup">
         <h3>Then get into the loop</h3>
@@ -1227,12 +1255,12 @@ conduit_node_set_path_external_float64_ptr(
 <section class="row2" id="ai">
   <div class="wrap">
     <div class="claim">
-      <h2>A model is only as useful as what it can reach.</h2>
+      <h2>What a model can do depends on what it can reach.</h2>
       <p>Point a language model at a finished run and it can read the files somebody
         already decided to write, at the cadence somebody already chose. It can summarise
         them. It cannot ask for the extract nobody planned, cannot see the timestep that
         was skipped, and cannot change anything.</p>
-      <p>A Catalyst session is a different proposition. The model gets a live handle on
+      <p>A Catalyst session gives the model a live handle on
         the run: it can request a quantity that was not in the original pipeline, watch a
         trace form, add or remove a pipeline stage, and hand a value back to the solver.
         Asking a question in plain language is one use of that, and not the most
@@ -1245,8 +1273,7 @@ conduit_node_set_path_external_float64_ptr(
         what is being kept, so an extract that turns out to matter starts being written
         from timestep four hundred rather than never. Choose where the next ensemble member
         should sit. All of it through the same three calls.</p>
-      <p>The objection is trust, and the architecture answers it rather than asking for
-        faith. The model interprets and plans; deterministic ParaView filters do the
+      <p>The objection is trust, and the architecture is built around it. The model interprets and plans; deterministic ParaView filters do the
         computing; it never writes the analysis code. A domain ontology constrains
         planning to valid analysis chains, so whole classes of failure disappear by
         construction: no hallucinated API calls, no silently missing pipeline stage, no
@@ -1319,7 +1346,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
 <section class="kpiband" id="evidence">
   <div class="wrap">
     <div class="kpihead">
-      <h2>Somebody already did the hard part.</h2>
+      <h2>This is already running in production elsewhere.</h2>
       <p>Every capability above is running in production, at scale, in codes you have
         heard of, on machines you can name. <b>Every number and every name on this page
         links to its source</b>: a paper, a lab report, or the adaptor's own code. Where
@@ -1358,10 +1385,9 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
         workstation to exascale on the same three calls.</p>
       <p class="quiet">Every linked name goes straight to its evidence: a paper, a lab
         report, or the adaptor source. Dashed ones are integrations we know of and could
-        not verify in public. We would rather show you the gap than fill it with
-        something you cannot check.</p>
+        not verify in public. Unverified entries are marked rather than left out.</p>
       <p class="quiet">Some of these integrations began on the 1.0 API, before 2021.
-        Read that as durability rather than staleness: these teams have been running in
+        Those teams have been running in
         situ analysis through more than one machine generation and more than one version
         of the library. Moving an adaptor forward is small when it happens, and LULESH
         got shorter doing it, from 325 lines to 155.</p>
@@ -1478,7 +1504,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
       <h2>And a decade of peer-reviewed work behind it.</h2>
       <p>The papers below are the ones to read before committing engineering time. Every
         entry links to its DOI or an open-access copy.</p>
-      <p>Much of this predates the current API, and that is the point. Catalyst&nbsp;2
+      <p>Much of this predates the current API. Catalyst&nbsp;2
         arrived with ParaView&nbsp;5.9 in 2021; the work before it is a decade of
         independent evidence that analysing data in memory holds up, at scale, across
         domains, on machines that no longer exist. <b class="norm">The
@@ -1865,13 +1891,13 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
 
     <div class="lead" style="margin-top:2.6rem">
       <h3 style="font:600 1rem var(--sans);color:var(--text);margin:0 0 .6rem">
-        The others are real, and one of them is underneath us</h3>
+        The alternatives, and where each one fits</h3>
       <p>That survey covers fifteen systems properly, so read it rather than us on this.
-        In short: <b class="norm">Ascent</b> is the sibling, shipped alongside Catalyst by
+        In short: <b class="norm">Ascent</b> is the closest equivalent, shipped alongside Catalyst by
         the same ECP programme and built for a smaller dependency footprint.
-        <b class="norm">SENSEI</b> is a layer above rather than a rival and can drive
+        <b class="norm">SENSEI</b> is a layer above, and it can drive
         Catalyst underneath. <b class="norm">libsim</b> is the same idea in
-        VisIt&rsquo;s ecosystem; the argument between them is which application your
+        VisIt&rsquo;s ecosystem; the choice between them is which application your
         scientists already have open. <b class="norm">ADIOS2</b> is not an alternative at
         all, it is the transport our off-node path runs on.
         <a href="https://doi.org/10.1177/10943420241286521" target="_blank" rel="noopener noreferrer">ECP ALPINE</a> covers the first properly.</p>
@@ -1903,7 +1929,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
         six stages</a>, from an uninstrumented solver to a steered one. Read it before
         estimating your own.</p>
       <p class="quiet">On runtime cost, be careful what you compare against. A solve with
-        nothing attached is a floor, not an option. You still have to get the data out.
+        nothing attached is not an alternative. You still have to get the data out.
         The real comparison is the whole post-hoc pipeline: write every timestep, move it,
         read it back, then post-process. Amortised over a run, in situ usually wins by a
         lot.</p>
@@ -2012,13 +2038,13 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
     <div class="claim">
       <h2>Or have the people who wrote it do the integration.</h2>
       <p>Kitware develops ParaView and Catalyst, and has maintained them for a quarter
-        century. That is worth exactly as much as what you do with them.</p>
+        century.</p>
       <p>The library is the easy part. It is free, it is BSD, and plenty of teams
         instrument their own solver without ever talking to us; a graduate student did
         PLUTO in 273 lines. What takes longer to learn is the rest: which pipeline
         answers your question, what it costs at your concurrency, where it stops scaling,
-        and what to keep when you cannot keep everything. That knowledge lives in
-        somebody's process, not in a header file.</p>
+        and what to keep when you cannot keep everything. That knowledge comes from
+        having done it before.</p>
       <p>So start with a bounded piece of work rather than an open-ended project.</p>
       <p class="quiet">Every engagement begins with the assessment, so you get an
         architecture and an effort estimate before committing to the larger work.</p>
@@ -2057,10 +2083,18 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
   <div class="wrap">
     <div class="claim">
       <h2>Everything above is a published example.</h2>
-      <p>The same repository this page has been linking to all the way down. Clone it and
+      <p>The repository linked throughout this page. Clone it and
         run the integration patterns described here: sync and async execution, GPU device pointers,
         closed-loop steering, dynamic pipelines, high-order and discontinuous elements,
         adaptors in four languages.</p>
+      <p class="quiet"><b class="norm">Three documentation sites, and they do not overlap.</b>
+        <a href="https://catalyst-in-situ.readthedocs.io/" class="lk" target="_blank" rel="noopener noreferrer">catalyst-in-situ</a>
+        is the API reference: the C calls, the Conduit protocols, and what any
+        implementation has to provide.
+        <a href="https://docs.paraview.org/en/latest/Catalyst/index.html" class="lk" target="_blank" rel="noopener noreferrer">docs.paraview.org/Catalyst</a>
+        covers using it with ParaView: getting started, blueprints, debugging.
+        <a href="https://kitware.github.io/paraview-catalyst/" class="lk" target="_blank" rel="noopener noreferrer">kitware.github.io/paraview-catalyst</a>
+        walks through the examples below.</p>
       <p class="quiet">Start with the LULESH tutorial if you want the graduated path, the
         LBM cylinder if you want all three GPU patterns at once, or
         <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CellGridMiniapp" class="lk" target="_blank" rel="noopener noreferrer">the CellGrid miniapp</a>

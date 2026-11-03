@@ -5,9 +5,9 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ParaView Catalyst: in situ analysis, from the solve to the decision</title>
-<meta name="description" content="The simulation ends and the waiting begins: write it out, move it, read it back, post-process, then look. Catalyst runs your analysis inside the solve, so the results are there while the run is still going.">
+<meta name="description" content="Most of the wait comes after the solve: write it out, move it, read it back, post-process, then look. Catalyst runs your analysis inside the solve, so the results are there while the run is still going.">
 <meta property="og:title" content="ParaView Catalyst">
-<meta property="og:description" content="The simulation ends. The waiting begins. Catalyst runs your analysis inside the solve, so the results are there while the run is still going.">
+<meta property="og:description" content="Most of the wait comes after the solve. Catalyst runs your analysis inside the solve, so the results are there while the run is still going.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://jlee-kitware.github.io/catalyst-preview/assets/ge-fan.jpg">
 <meta name="twitter:card" content="summary_large_image">
@@ -67,7 +67,10 @@ a{color:inherit}
   backdrop-filter:blur(10px);
   border-bottom:1px solid var(--rule);
 }
-.nav .wrap{display:flex;align-items:center;gap:1.3rem;height:60px;overflow-x:auto;scrollbar-width:none}
+
+.naming td:first-child{white-space:nowrap;font-family:var(--mono);font-size:.85rem}
+.naming td{vertical-align:top}
+.nav .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:.55rem 1.15rem;min-height:60px;padding-block:.5rem}
 .brand{
   font-weight:600;letter-spacing:-.02em;margin-right:.9rem;
   display:inline-flex;align-items:center;gap:.5rem;
@@ -591,6 +594,8 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
     <a class="brand" href="#running"><img src="assets/favicon-32x32.png" alt="" width="20"
        height="20" decoding="async">ParaView&nbsp;<span>Catalyst</span></a>
     <a href="index.html">Read the evidence</a>
+    <a href="index.html#architecture">How it works</a>
+    <a href="index.html#docs">Examples</a>
     <a href="https://www.kitware.com/catalyst-assessment" target="_blank" rel="noopener noreferrer">Book a review</a>
   </div>
 </nav>
@@ -598,12 +603,12 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
 <header class="counter" id="running" style="border-top:0">
   <div class="wrap">
     <div class="lead-in">
-      <h1>The simulation ends. The waiting begins.</h1>
+      <h1>Most of the wait comes after the solve.</h1>
       <p>Solvers got orders of magnitude faster over the last decade and their output
         grew with them. Everything after stayed exactly where it was: write it all out,
-        move it, read it back, post-process, and only then look. That stretch is now most
-        of the distance between a run and a design decision.</p>
-      <p>In situ analysis removes the middle of it. Catalyst runs your analysis inside
+        move it, read it back, post-process, and only then look. That sequence is now most
+        of the time between a run and a design decision.</p>
+      <p>In situ analysis removes those steps. Catalyst runs your analysis inside
         the solve, so the results are there while the run is still going.</p>
     </div>
     <figure class="herofig">
@@ -660,13 +665,13 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
       cells, and as data with six fields at single precision that is roughly
       0.18&nbsp;GB. Writing everything is 1.16&nbsp;TB.
       <b class="norm">Six orders of magnitude separate the
-      first from the last, and the choice is yours, not the filesystem's.</b>
+      first from the last, and and you choose which of them you write.</b>
       Only the last option registers on the lower bar. The other three are drawn as a
       marker because at this scale they are a rounding error, which is the entire
       argument.</p>
-    <p class="sub mt5">This is not a choice between in situ visualization and
+    <p class="sub mt5">In situ analysis works alongside
       post-processing. You may still write files, still load them in ParaView, still explore
-      them afterwards. In situ lets you decide <em>what</em> gets extracted and <em>which</em> files, so what lands on disk is your say.</p>
+      them afterwards. In situ lets you decide <em>what</em> gets extracted and <em>which</em> files, so you decide what lands on disk.</p>
   
   </div>
 </header>
@@ -675,7 +680,7 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
   <div class="wrap">
     <div class="subtract">
       <div><b>no round trip</b>Nothing is written, moved and read back before anyone can
-        look at it. The analysis meets the data where it already is.</div>
+        look at it. The analysis runs where the data already is.</div>
       <div><b>no queue for the answer</b>Engineering quantities land every timestep while
         the run is going, not after it and not on a stride you had to guess.</div>
       <div><b>no wasted machine time</b>See a diverging run in hour four of three days.
@@ -684,9 +689,9 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
     <div class="firststep">
       <p><b>And you can start without touching your solver at all.</b> A file-based
         adaptor runs the same pipelines against data you already have, so an existing
-        archive can be mined this afternoon with the analysis you were going to write
-        anyway. Whatever you build against yesterday&rsquo;s files is the same thing that
-        runs inside tomorrow&rsquo;s solve, unchanged. Most people do not know Catalyst
+        archive can be analysed now with the pipeline you were going to write
+        anyway. What you build against existing files is the same thing that later
+        runs inside a live solve, unchanged. Most people do not know Catalyst
         does this, and it is the cheapest way to find out whether any of the rest is
         worth it.</p>
     </div>
@@ -696,10 +701,10 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
 <section class="wide">
   <div class="wrap">
     <div class="lead">
-      <h2>However you work, it is the same middle you are waiting on.</h2>
+      <h2>The same delay sits in all of these workflows.</h2>
       <p>Steering a live run, sweeping a design space, leaving a job unattended, training
         a model on the output, or going back through an archive you already have.
-        Different workflows, one bottleneck, one place to remove it.</p>
+        Different workflows, the same bottleneck.</p>
     </div>
     <div class="ways">
       <div class="way">
@@ -712,7 +717,7 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
         <h3>Run hundreds, compare all of them</h3>
         <p>Ensembles and design sweeps where full output per member is out of the
           question. Every member emits its quantities of interest at full temporal
-          fidelity, so the comparison exists the moment the last run does.</p>
+          fidelity, so the comparison is ready as soon as the last run finishes.</p>
       </div>
       <div class="way">
         <h3>Let it decide when to look</h3>
@@ -738,7 +743,7 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
     <div class="lead">
       <h2>Whatever you are designing.</h2>
       <p>29 simulation codes across eight domains already ship a
-        Catalyst adaptor, from a workstation to Frontier. A few of them, running.</p>
+        Catalyst adaptor, from a workstation to Frontier. A few of them running, below.</p>
     </div>
     <div class="domains-strip">
       <figure class="dtile"><video src="assets/warpx.mp4" poster="assets/warpx.jpg" data-lazy muted loop playsinline preload="none" aria-hidden="true"></video><figcaption>Plasma and accelerators</figcaption></figure>
@@ -754,7 +759,7 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
 <section class="wide">
   <div class="wrap">
     <div class="lead">
-      <h2>Somebody already did the hard part.</h2>
+      <h2>This is already running in production elsewhere.</h2>
       <p>All of it is in production, at scale, in codes you have heard of. Every number
         links to its source, and most of the sources are not ours.</p>
     </div>
@@ -769,7 +774,7 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
 <section class="wide">
   <div class="wrap">
     <div class="lead">
-      <h2>Two ways in, and one of them needs nothing from us.</h2>
+      <h2>Two ways to start. One of them needs nothing from us.</h2>
     </div>
     <div class="exits">
       <div class="exit">
