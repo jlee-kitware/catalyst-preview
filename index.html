@@ -893,6 +893,14 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
         removed while the solver runs</a>.</p>
     </div>
     <div>
+      <figure class="figure">
+        <img src="assets/two-layers.svg" width="1696" height="734" loading="lazy"
+             alt="Four stacked layers: the solver calls the adaptor, the adaptor builds a Conduit node and calls libcatalyst, libcatalyst passes the same node to ParaView Catalyst, and the field arrays are shared without a copy">
+        <figcaption>Two layers you write, two you link. The solver knows the adaptor;
+          the adaptor knows Conduit and the three calls; nothing above libcatalyst knows
+          which implementation answered. From the
+          <a href="https://gitlab.kitware.com/jeff.lee/amrex_catalyst_plugin/-/tree/walkthrough" class="lk" target="_blank" rel="noopener noreferrer">AMReX walkthrough</a>.</figcaption>
+      </figure>
 <pre><span class="c">/* the entire integration surface */</span>
 #include &lt;catalyst.h&gt;
 
@@ -935,6 +943,14 @@ conduit_node_set_path_external_float64_ptr(
                aria-label="Isosurface evolving inside a translucent adaptive mesh refinement grid"></video>
         <figcaption>An isosurface tracked through a live AMReX run. The AMR block
           structure is the solver's own, read in place, refining as the front moves.</figcaption>
+      </figure>
+      <figure class="figure mt5">
+        <img src="assets/ghost-methods.png" width="1734" height="696" loading="lazy"
+             alt="The same isosurface rendered three ways: torn into strips without ghost cells, and continuous with ghost cells from either VTK or AMReX">
+        <figcaption>What the adaptor has to get right. The same isosurface at step 100,
+          coloured by MPI rank across four ranks and three refinement levels. Without
+          ghost cells the surface tears at every block boundary. Either source of ghosts
+          closes it.</figcaption>
       </figure>
     </div>
   </div>
@@ -2099,6 +2115,13 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
         covers using it with ParaView: getting started, blueprints, debugging.
         <a href="https://kitware.github.io/paraview-catalyst/" class="lk" target="_blank" rel="noopener noreferrer">kitware.github.io/paraview-catalyst</a>
         walks through the examples below.</p>
+      <p class="quiet">For AMReX there is a second graduated path: the
+        <a href="https://gitlab.kitware.com/jeff.lee/amrex_catalyst_plugin/-/tree/walkthrough" class="lk" target="_blank" rel="noopener noreferrer">AMReX walkthrough</a>
+        takes an unmodified <code>Advection_AmrCore</code> to a steered run over six tags,
+        one step each, so <code>git diff step-0 step-1</code> is the solver change on its
+        own and <code>git diff step-1 step-2</code> is the adaptor. The
+        <a href="https://gitlab.kitware.com/jeff.lee/amrex_catalyst_plugin/-/blob/walkthrough/docs/webinar-2026-10-28-slides.pdf" class="lk" target="_blank" rel="noopener noreferrer">webinar slides</a>
+        follow the same order.</p>
       <p class="quiet">Start with the LULESH tutorial if you want the graduated path, the
         LBM cylinder if you want all three GPU patterns at once, or
         <a href="https://gitlab.kitware.com/paraview/catalyst-examples/-/tree/master/ParaView/CellGridMiniapp" class="lk" target="_blank" rel="noopener noreferrer">the CellGrid miniapp</a>

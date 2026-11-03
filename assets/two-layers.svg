@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" aria-label="Data flow: solver to adaptor to libcatalyst to ParaView Catalyst, with the field arrays shared without a copy" width="1696" height="734" viewBox="-16 -16 1696 734">
+<rect x="-16" y="-16" width="1696" height="734" fill="#FFFFFF"/>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#006AB6"/></marker><marker id="ahg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker></defs>
+<rect x="1" y="1" width="1178" height="118" rx="14" fill="#F4F6FB" stroke="#CBD5E1" stroke-width="1"/>
+<text x="32" y="48" font-family="IBM Plex Sans, Helvetica, Arial, sans-serif" font-size="30" font-weight="600" fill="#0B1220">Solver</text>
+<text x="32" y="88" font-family="IBM Plex Sans, Helvetica, Arial, sans-serif" font-size="22" fill="#64748B">your code</text>
+<text x="420" y="48" font-family="JetBrains Mono, Menlo, Consolas, Courier New, monospace" font-size="24" fill="#006AB6">AmrCoreAdv::Evolve()</text>
+<text x="420" y="90" font-family="IBM Plex Sans, Helvetica, Arial, sans-serif" font-size="24" fill="#475569">Owns the MultiFabs. No Conduit or Catalyst headers.</text>
+<text x="1156" y="48" text-anchor="end" font-family="IBM Plex Sans, Helvetica, Arial, sans-serif" font-size="18" fill="#64748B">same role as FEDriver.cxx in catalyst-examples</text>
+<rect x="1" y="195" width="1178" height="118" rx="14" fill="#F4F6FB" stroke="#006AB6" stroke-width="3"/>
+<text x="32" y="242" font-family="IBM Plex Sans, Helvetica, Arial, sans-serif" font-size="30" font-weight="600" fill="#0B1220">Adaptor</text>
+<text x="32" y="282" font-family="IBM Plex Sans, Helvetica, Arial, sans-serif" font-size="22" fill="#64748B">you write</text>
+<text x="420" y="242" font-family="JetBrains Mono, Menlo, Consolas, Courier New, monospace" font-size="24" fill="#006AB6">amrex_catalyst</text>
+<text x="420" y="284" font-family="IBM Plex Sans, Helvetica, Arial, sans-serif" font-size="24" fill="#475569">Builds a Conduit node: state, channel, mesh. Includes catalyst.hpp.</text>
+<text x="1156" y="242" text-anchor="end" font-family="IBM Plex Sans, Helvetica, Arial, sans-serif" font-size="18" fill="#64748B">same role as CatalystAdaptor in catalyst-examples</text>
+<rect x="1" y="389" width="1178" height="118" rx="14" fill="#E8ECF4" stroke="#CBD5E1" stroke-width="1"/>
+<text x="32" y="436" font-family="IBM Plex Sans, Helvetica, Arial, sans-serif" font-size="30" font-weight="600" fill="#0B1220">libcatalyst</text>
+<text x="32" y="476" font-family="IBM Plex Sans, Helvetica, Arial, sans-serif" font-size="22" fill="#64748B">links into your build</text>
+<text x="420" y="436" font-family="JetBrains Mono, Menlo, Consolas, Courier New, monospace" font-size="24" fill="#006AB6">catalyst_initialize / execute / finalize</text>
+<text x="420" y="478" font-family="IBM Plex Sans, Helvetica, Arial, sans-serif" font-size="24" fill="#475569">Loads an implementation at run time; the stub if none.</text>
+<rect x="1" y="583" width="1178" height="118" rx="14" fill="#F4F6FB" stroke="#CBD5E1" stroke-width="1"/>
+<text x="32" y="630" font-family="IBM Plex Sans, Helvetica, Arial, sans-serif" font-size="30" font-weight="600" fill="#0B1220">ParaView Catalyst</text>
+<text x="32" y="670" font-family="IBM Plex Sans, Helvetica, Arial, sans-serif" font-size="22" fill="#64748B">chosen at run time</text>
+<text x="420" y="630" font-family="JetBrains Mono, Menlo, Consolas, Courier New, monospace" font-size="24" fill="#006AB6">node to vtkOverlappingAMR</text>
+<text x="420" y="672" font-family="IBM Plex Sans, Helvetica, Arial, sans-serif" font-size="24" fill="#475569">Runs the script: TrivialProducer “grid”, then images and extracts.</text>
+<line x1="200" y1="124" x2="200" y2="188" stroke="#006AB6" stroke-width="3" marker-end="url(#ah)"/>
+<text x="226" y="165.0" font-family="JetBrains Mono, Menlo, Consolas, Courier New, monospace" font-size="20" fill="#0B1220">Initialize(scripts) · Execute(step, time, MultiFabs) · Finalize()</text>
+<line x1="200" y1="318" x2="200" y2="382" stroke="#006AB6" stroke-width="3" marker-end="url(#ah)"/>
+<text x="226" y="359.0" font-family="JetBrains Mono, Menlo, Consolas, Courier New, monospace" font-size="20" fill="#0B1220">catalyst_initialize(node) · catalyst_execute(node) · catalyst_finalize(node)</text>
+<line x1="200" y1="512" x2="200" y2="576" stroke="#006AB6" stroke-width="3" marker-end="url(#ah)"/>
+<text x="226" y="553.0" font-family="JetBrains Mono, Menlo, Consolas, Courier New, monospace" font-size="20" fill="#0B1220">the same node, to the implementation in CATALYST_IMPLEMENTATION_PATHS</text>
+<path d="M1180,60.0 H1300 V642.0 H1188" fill="none" stroke="#475569" stroke-width="3" stroke-dasharray="10 8" marker-end="url(#ahg)"/>
+<text x="1328" y="271.0" font-family="IBM Plex Sans, Helvetica, Arial, sans-serif" font-size="26" font-weight="600" fill="#0B1220">Field data, no copy</text>
+<text x="1328" y="339.0" font-family="IBM Plex Sans, Helvetica, Arial, sans-serif" font-size="26" fill="#475569">set_external puts pointers</text>
+<text x="1328" y="373.0" font-family="IBM Plex Sans, Helvetica, Arial, sans-serif" font-size="26" fill="#475569">to the solver's arrays</text>
+<text x="1328" y="407.0" font-family="IBM Plex Sans, Helvetica, Arial, sans-serif" font-size="26" fill="#475569">in the node. VTK's arrays</text>
+<text x="1328" y="441.0" font-family="IBM Plex Sans, Helvetica, Arial, sans-serif" font-size="26" fill="#475569">use the same memory.</text>
+</svg>
