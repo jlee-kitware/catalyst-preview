@@ -945,12 +945,14 @@ conduit_node_set_path_external_float64_ptr(
         change the analysis, and nothing stopping you importing whatever the rest of your
         field already uses.</p>
       <figure class="figure mt5">
-        <video src="assets/amrex.mp4" poster="assets/amrex.jpg"
+        <video src="assets/amrex-scalar.mp4" poster="assets/amrex-scalar.jpg"
                autoplay muted loop playsinline preload="none"
-               width="1100" height="619"
-               aria-label="Isosurface evolving inside a translucent adaptive mesh refinement grid"></video>
-        <figcaption>An isosurface tracked through a live AMReX run. The AMR block
-          structure is the solver's own, read in place, refining as the front moves.</figcaption>
+               width="560" height="560"
+               aria-label="A passive scalar isosurface stretched into a thin sheet inside adaptive mesh refinement block outlines"></video>
+        <figcaption>A passive scalar carried by an incompressible 3D flow, stretched into
+          a thin sheet. Adaptive mesh refinement follows the sharp features, and the whole
+          field is visualized in situ through Catalyst as the AMReX code runs on 8 MPI
+          ranks.</figcaption>
       </figure>
       <figure class="figure mt5">
         <img src="assets/ghost-methods.png" width="1734" height="696" loading="lazy"
