@@ -533,13 +533,16 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
     8  ai           Can I trust the newest part?     What a model can do depends on what it can reach
     9  evidence     Is any of this real?             This is already running in production elsewhere
    10  adopters     Who exactly?                     Here is who, and how you can check
-   11  papers       Has it been scrutinised?         And a decade of peer-reviewed work
-   12  guide        Does it fit MY case?             Which of those applies to you
-   13  alternatives How does it compare?             If you are comparing, compare on these
-   14  effort       What will it cost me?            What it actually costs to adopt
-   15  licence      Can I ship it?                   BSD 3-Clause
-   16  talk         Can I get help?                  Or have the people who wrote it do it
+   11  guide        Does it fit MY case?             Which of those applies to you
+   12  alternatives How does it compare?             If you are comparing, compare on these
+   13  effort       What will it cost me?            What it actually costs to adopt
+   14  licence      Can I ship it?                   BSD 3-Clause
+   15  talk         Can I get help?                  Or have the people who wrote it do it
+   16  papers       Has it been scrutinised?         And a decade of peer-reviewed work
    17  docs         Can I try it myself first?       Everything above is a published example
+
+  The last two are reference. They sit after the argument rather than inside it,
+  so a reader following the spine is not handed a bibliography halfway down.
 
   Three rules that follow from this:
   - Proof belongs in the evidence block, together. Do not scatter evidence earlier
@@ -1498,188 +1501,6 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
   </div>
 </section>
 
-<section class="wide" id="papers">
-  <div class="wrap">
-    <div class="lead">
-      <h2>And a decade of peer-reviewed work behind it.</h2>
-      <p>The papers below are the ones to read before committing engineering time. Every
-        entry links to its DOI or an open-access copy.</p>
-      <p>Much of this predates the current API. Catalyst&nbsp;2
-        arrived with ParaView&nbsp;5.9 in 2021; the work before it is a decade of
-        independent evidence that analysing data in memory holds up, at scale, across
-        domains, on machines that no longer exist. <b class="norm">The
-        older papers make the case for in situ. The current API is what you would
-        actually build against.</b> Tagged below so you can tell which is which, and so
-        that nothing a 1.0 paper says about build complexity or binary size gets mistaken
-        for a description of Catalyst today.</p>
-      <div class="cite">
-        <h3>Citing Catalyst</h3>
-        <p>Cite the AIAA 2026 paper for current capability, the 2021 ISC paper for the
-          API itself, and the 2015 ISAV paper for the original design. If you publish
-          work that uses Catalyst, tell us, and we will add it.</p>
-      </div>
-    </div>
-    <div>
-      <div class="pubgroups">
-      <div class="pubgroup">
-        <h3>Design of the API itself</h3>
-        <div class="pubs">
-          <a class="pub" href="https://doi.org/10.2514/6.2026-0766" target="_blank" rel="noopener noreferrer">
-            <span class="t">Catalyst: Expanding In Situ Analysis and Visualization Workflows for Exascale Computing</span>
-            <span class="m">Wetterer-Nelson, Tsolakis, Lee, Tsalikis, Wittenburg, Yenpure, Ross, Lipsa, Panchumarti, Geveci · AIAA SCITECH 2026 · where Catalyst is now</span></a>
-          <a class="pub" href="https://doi.org/10.1007/978-3-030-90539-2_33" target="_blank" rel="noopener noreferrer">
-            <span class="t">Catalyst Revised: Rethinking the ParaView in Situ Analysis and Visualization API</span>
-            <span class="m">Ayachit et al. · ISC High Performance 2021 · LNCS 12761 · the 2.0 API</span></a>
-          <a class="pub" href="https://doi.org/10.1145/2828612.2828624" target="_blank" rel="noopener noreferrer">
-            <span class="t">ParaView Catalyst: Enabling In Situ Data Analysis and Visualization<span class="era old">Catalyst 1.0</span></span>
-            <span class="m">Ayachit, Bauer, Geveci, O'Leary, Moreland, Fabian, Mauldin · ISAV 2015 · the original design</span></a>
-        </div>
-      </div>
-
-      <div class="pubgroup">
-        <h3>Driving a live run with AI</h3>
-        <p>The architecture behind the section above, and independent work on the same
-          idea.</p>
-        <div class="pubs">
-          <a class="pub" href="https://arxiv.org/abs/2608.30696" target="_blank" rel="noopener noreferrer">
-            <span class="t">Domain-Grounded Tool Orchestration for LLM-Guided Scientific Analysis</span>
-            <span class="m">Lee, Jourdain, Quammen, O'Leary, Geveci · arXiv:2608.30696 · 2026 · ontology-grounded MCP over ParaView and Catalyst; interpretation accuracy 0.41 → 0.91</span></a>
-          <a class="pub" href="https://hal.science/hal-04692246/file/Ribes-Mazen-Meyer-ISAV-2022_in_situ_metamodel_training-v2.pdf" target="_blank" rel="noopener noreferrer">
-            <span class="t">In situ monitoring and steering deep learning training from numerical simulations in ParaView-Catalyst</span>
-            <span class="m">Ribés, Mazen, Meyer · EDF R&amp;D · ISAV 2022 · built on Catalyst 2; watching a surrogate converge in space, not just as a loss curve</span></a>
-        </div>
-      </div>
-
-      <div class="pubgroup">
-        <h3>Where the field stands</h3>
-        <p>Start here if you are deciding between in situ approaches rather than
-          evaluating Catalyst specifically.</p>
-        <div class="pubs">
-          <a class="pub" href="https://www.kennethmoreland.com/documents/InSituTensions.pdf" target="_blank" rel="noopener noreferrer">
-            <span class="t">The tensions of in situ visualization<span class="era old">Catalyst 1.0</span></span>
-            <span class="m">Moreland · IEEE Computer Graphics and Applications 36(2) · 2016 · the tradeoffs named honestly, by one of Catalyst's own authors. Describes the 1.0 API; read it alongside the 2021 redesign above.</span></a>
-          <a class="pub" href="https://doi.org/10.1177/1094342020935991" target="_blank" rel="noopener noreferrer">
-            <span class="t">A terminology for in situ visualization and analysis systems</span>
-            <span class="m">Childs et al. &middot; over fifty authors from across the field &middot; IJHPCA 34(6) &middot; 2020 &middot; a year of meetings to agree six axes, then fifteen systems classified against them. The place to start if you are comparing anything. <a href="https://cdux.cs.uoregon.edu/pubs/ChildsIJHPCA.pdf" target="_blank" rel="noopener noreferrer">open copy</a></span></a>
-          <a class="pub" href="https://doi.org/10.1111/cgf.12930" target="_blank" rel="noopener noreferrer">
-            <span class="t">In situ methods, infrastructures, and applications on high performance computing platforms<span class="era old">Catalyst 1.0</span></span>
-            <span class="m">Bauer et al. · Computer Graphics Forum 35(3) · 2016 · state-of-the-art report</span></a>
-          <a class="pub" href="https://doi.org/10.1145/2597652.2597668" target="_blank" rel="noopener noreferrer">
-            <span class="t">Evaluation of methods to integrate analysis into a large-scale shock physics code<span class="era old">Catalyst 1.0</span></span>
-            <span class="m">Oldfield, Moreland, Fabian, Rogers · ICS 2014 · the rigorous three-way comparison of in situ, in transit and post-processing, on CTH over 10.58M processor-hours. Measured on Cielo, retired 2016, so the I/O balance is a generation behind; the structural findings hold, the verdict on post-processing is of its time.</span></a>
-          <a class="pub" href="https://www.osti.gov/servlets/purl/1649280" target="_blank" rel="noopener noreferrer">
-            <span class="t">Opportunities for cost savings with in-transit visualization<span class="era other">measured on Ascent</span></span>
-            <span class="m">Kress et al. · ISC HPC 2020 · the cost model: in-line visualization cost grows 0.6× → 2.2× of solver cycle time with scale while transfer cost barely moves; volume rendering 4× cheaper at lower concurrency</span></a>
-          <a class="pub" href="https://doi.org/10.1177/10943420241286521" target="_blank" rel="noopener noreferrer">
-            <span class="t">The ECP ALPINE project: in situ and post hoc visualization infrastructure for exascale</span>
-            <span class="m">Ahrens et al. · Int. J. High Performance Computing Applications · 2024</span></a>
-        </div>
-      </div>
-
-      </div>
-      <details class="more">
-        <summary>The rest of the reading list <span class="n">I/O, integrations, and tools built on Catalyst</span></summary>
-        <div class="pubgroups">
-      <div class="pubgroup">
-        <h3>Coupled systems</h3>
-        <p>Instrumenting the coupler instead of the models.</p>
-        <div class="pubs">
-          <a class="pub" href="https://doi.org/10.5194/gmd-12-233-2019" target="_blank" rel="noopener noreferrer">
-            <span class="t">Toward modular in situ visualization in Earth system models: RegESM 1.1<span class="era old">Catalyst 1.0</span></span>
-            <span class="m">Turuncoglu &middot; NCAR &middot; Geoscientific Model Development 12:233-259, 2019 &middot; open access &middot; the first in situ integration in a fully coupled Earth system model, and an honest account of what the 1.0 API cost to do it</span></a>
-        </div>
-      </div>
-
-      <div class="pubgroup">
-        <h3>In situ is still an I/O problem</h3>
-        <p>Extracts are smaller, not free. An isosurface can land almost entirely on a
-          handful of ranks, and that imbalance defeats ordinary collective writes. Read
-          this before assuming reduction ends the conversation.</p>
-        <div class="pubs">
-          <a class="pub" href="https://doi.org/10.1145/2828612.2828620" target="_blank" rel="noopener noreferrer">
-            <span class="t">In situ analysis as a parallel I/O problem<span class="era old">Catalyst 1.0</span></span>
-            <span class="m">Ziegeler, Atkins, Bauer, Pettey &middot; DoD HPCMP and Kitware &middot; ISAV 2015 &middot; open access &middot; treats extract output as an I/O problem in its own right, and adds dynamic aggregation in ADIOS2 to handle it</span></a>
-        </div>
-      </div>
-
-      <div class="pubgroup">
-        <h3>Teams reporting their own integration</h3>
-        <p>Written by the people who did the work, not by us.</p>
-        <div class="pubs">
-          <a class="pub" href="https://doi.org/10.1007/s11227-021-03990-3" target="_blank" rel="noopener noreferrer">
-            <span class="t">In situ visualization of large-scale turbulence simulations in Nek5000 with ParaView Catalyst<span class="era old">Catalyst 1.0</span></span>
-            <span class="m">Atzori et al. · Journal of Supercomputing · 2021 · where the time goes in a compositing-heavy pipeline, and how to tune it</span></a>
-          <a class="pub" href="https://doi.org/10.1007/978-3-662-44900-4_2" target="_blank" rel="noopener noreferrer">
-            <span class="t">In-situ visualization in CFD using open-source tools: integration of Catalyst into Code_Saturne<span class="era old">Catalyst 1.0</span></span>
-            <span class="m">Ribés, Lorendeau, Fournier · EDF R&amp;D · 2015</span></a>
-          <a class="pub" href="https://doi.org/10.1007/978-3-030-48340-1_31" target="_blank" rel="noopener noreferrer">
-            <span class="t">In situ visualization of performance-related data in parallel CFD applications<span class="era old">Catalyst 1.0</span></span>
-            <span class="m">Score-P plugin routing profiling data through Catalyst · 2020</span></a>
-          <a class="pub" href="https://superfri.org/index.php/superfri/article/view/317" target="_blank" rel="noopener noreferrer">
-            <span class="t">Enhancing the in situ visualization of performance data in parallel CFD applications<span class="era old">Catalyst 1.0</span></span>
-            <span class="m">Supercomputing Frontiers and Innovations · 2020 · follow-on work</span></a>
-          <a class="pub" href="https://arxiv.org/abs/2110.15427" target="_blank" rel="noopener noreferrer">
-            <span class="t">High resolution calibration of cosmic string network evolution<span class="era old">Catalyst 1.0</span></span>
-            <span class="m">arXiv:2110.15427 · Catalyst v5.8.0 used to reduce output at 4096³</span></a>
-          <a class="pub" href="https://arxiv.org/abs/2208.07767" target="_blank" rel="noopener noreferrer">
-            <span class="t">Enhancing dynamic mode decomposition workflow with in-situ visualization and data compression<span class="era old">Catalyst 1.0</span></span>
-            <span class="m">arXiv:2208.07767 · adaptor written against the initialize / co-process / finalize cycle</span></a>
-        </div>
-      </div>
-
-      <div class="pubgroup">
-        <h3>Built on top of Catalyst</h3>
-        <p>Evidence that the API is stable enough for other people to build products
-          against.</p>
-        <div class="pubs">
-          <a class="pub" href="https://arxiv.org/abs/2406.18112" target="_blank" rel="noopener noreferrer">
-            <span class="t">In situ, in transit hybrid analysis with Catalyst-ADIOS2</span>
-            <span class="m">arXiv:2406.18112 · 2024 · relies explicitly on the ABI guarantee to swap implementations per cluster</span></a>
-          <a class="pub" href="https://doi.org/10.1007/978-3-032-07612-0_6" target="_blank" rel="noopener noreferrer">
-            <span class="t">Enabling modular in-situ workflows through CatalystMaestro and CatalystComposer</span>
-            <span class="m">2025</span></a>
-          <a class="pub" href="https://doi.org/10.1007/978-3-031-73716-9_33" target="_blank" rel="noopener noreferrer">
-            <span class="t">InsitUE: enabling hybrid in-situ visualizations through Unreal Engine and Catalyst</span>
-            <span class="m">2024</span></a>
-          <a class="pub" href="https://doi.org/10.1007/978-3-030-81627-8_10" target="_blank" rel="noopener noreferrer">
-            <span class="t">Leveraging production visualization tools in situ</span>
-            <span class="m">2021</span></a>
-          <a class="pub" href="https://doi.org/10.1007/978-3-031-40843-4_19" target="_blank" rel="noopener noreferrer">
-            <span class="t">Inshimtu: a lightweight in situ visualization shim</span>
-            <span class="m">KAUST · 2023 · in situ without modifying the solver</span></a>
-        </div>
-      </div>
-
-      <!-- PENDING / VERIFY BEFORE PUBLISHING.
-           In review, do not list publicly until accepted:
-             Yousef, Lee, Wittenburg, Randles, "A Lightweight, Modular In Transit Data
-             Framework for Interactive, Interpretable AI-Coupled Workflows", IPDPS '27
-             (submitted). Repo is public: github.com/aymanzyy/catalystml
-           Published but no DOI confirmed in this pass:
-             Ross, Wittenburg, Eisenhauer, Wetterer-Nelson, "A Data-Size Adaptive
-             Approach to I/O of Poorly Load Balanced In Situ Data Extracts", SC 25
-             Workshops, 2025. Direct successor to Ziegeler 2015, same problem ten years
-             on, Kitware authors. Get the DOI and add it beside the 2015 paper.
-             Yousef, Wetterer-Nelson, Han, Mateevitsi, Insley, Rizzi, Knowles, Papka,
-             Randles, "Instrumenting lightweight, modular ML training and inference in
-             parallel solvers", ICCS 2026, Springer, pp. 123-137
-             Pugmire, Ross, Thompson, Kress, Atkins, Klasky, Geveci, "Fides: a general
-             purpose data model library for streaming data", HPC 2021, pp. 495-507
-             Jourdain, O'Leary, Schroeder, "Trame", IEEE CG&A, March 2025
-             Mazen, Gombert, Givord, Gueunet, Catalyst-ADIOS2, HPC 2023, pp. 482-489
-             (arXiv version already linked above)
-           Strong candidates from the corpus, DOI not confirmed:
-             Fabian et al., The ParaView Coprocessing Library, LDAV 2011
-             Oldfield/Moreland/Fabian/Rogers, shock physics in situ/in-transit, ICS 2014
-             O'Leary et al., In-situ visualization for global hybrid simulations, XSEDE 2013
-             Woodring et al., MPAS-Ocean in situ eddy analysis (LDAV/ISAV)
-           Also: SPARC/Nalu/CTH items are OSTI reports, not papers - consider a separate
-           "lab reports" group rather than mixing them in here. -->
-    </div>
-        </details>
-    </div>
-  </div>
-</section>
 
 <section class="wide" id="guide">
   <div class="wrap">
@@ -2075,6 +1896,189 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
         <a class="btn solid" href="https://www.kitware.com/catalyst-assessment" target="_blank" rel="noopener noreferrer">Book an assessment</a>
         <a class="btn" href="#docs">Try it yourself first</a>
       </div>
+    </div>
+  </div>
+</section>
+
+<section class="wide" id="papers">
+  <div class="wrap">
+    <div class="lead">
+      <h2>And a decade of peer-reviewed work behind it.</h2>
+      <p>The papers below are the ones to read before committing engineering time. Every
+        entry links to its DOI or an open-access copy.</p>
+      <p>Much of this predates the current API. Catalyst&nbsp;2
+        arrived with ParaView&nbsp;5.9 in 2021; the work before it is a decade of
+        independent evidence that analysing data in memory holds up, at scale, across
+        domains, on machines that no longer exist. <b class="norm">The
+        older papers make the case for in situ. The current API is what you would
+        actually build against.</b> Tagged below so you can tell which is which, and so
+        that nothing a 1.0 paper says about build complexity or binary size gets mistaken
+        for a description of Catalyst today.</p>
+      <div class="cite">
+        <h3>Citing Catalyst</h3>
+        <p>Cite the AIAA 2026 paper for current capability, the 2021 ISC paper for the
+          API itself, and the 2015 ISAV paper for the original design. If you publish
+          work that uses Catalyst, tell us, and we will add it.</p>
+      </div>
+    </div>
+    <div>
+      <div class="pubgroups">
+      <div class="pubgroup">
+        <h3>Design of the API itself</h3>
+        <div class="pubs">
+          <a class="pub" href="https://doi.org/10.2514/6.2026-0766" target="_blank" rel="noopener noreferrer">
+            <span class="t">Catalyst: Expanding In Situ Analysis and Visualization Workflows for Exascale Computing</span>
+            <span class="m">Wetterer-Nelson, Tsolakis, Lee, Tsalikis, Wittenburg, Yenpure, Ross, Lipsa, Panchumarti, Geveci · AIAA SCITECH 2026 · where Catalyst is now</span></a>
+          <a class="pub" href="https://doi.org/10.1007/978-3-030-90539-2_33" target="_blank" rel="noopener noreferrer">
+            <span class="t">Catalyst Revised: Rethinking the ParaView in Situ Analysis and Visualization API</span>
+            <span class="m">Ayachit et al. · ISC High Performance 2021 · LNCS 12761 · the 2.0 API</span></a>
+          <a class="pub" href="https://doi.org/10.1145/2828612.2828624" target="_blank" rel="noopener noreferrer">
+            <span class="t">ParaView Catalyst: Enabling In Situ Data Analysis and Visualization<span class="era old">Catalyst 1.0</span></span>
+            <span class="m">Ayachit, Bauer, Geveci, O'Leary, Moreland, Fabian, Mauldin · ISAV 2015 · the original design</span></a>
+        </div>
+      </div>
+
+      <div class="pubgroup">
+        <h3>Driving a live run with AI</h3>
+        <p>The architecture behind the section above, and independent work on the same
+          idea.</p>
+        <div class="pubs">
+          <a class="pub" href="https://arxiv.org/abs/2608.30696" target="_blank" rel="noopener noreferrer">
+            <span class="t">Domain-Grounded Tool Orchestration for LLM-Guided Scientific Analysis</span>
+            <span class="m">Lee, Jourdain, Quammen, O'Leary, Geveci · arXiv:2608.30696 · 2026 · ontology-grounded MCP over ParaView and Catalyst; interpretation accuracy 0.41 → 0.91</span></a>
+          <a class="pub" href="https://hal.science/hal-04692246/file/Ribes-Mazen-Meyer-ISAV-2022_in_situ_metamodel_training-v2.pdf" target="_blank" rel="noopener noreferrer">
+            <span class="t">In situ monitoring and steering deep learning training from numerical simulations in ParaView-Catalyst</span>
+            <span class="m">Ribés, Mazen, Meyer · EDF R&amp;D · ISAV 2022 · built on Catalyst 2; watching a surrogate converge in space, not just as a loss curve</span></a>
+        </div>
+      </div>
+
+      <div class="pubgroup">
+        <h3>Where the field stands</h3>
+        <p>Start here if you are deciding between in situ approaches rather than
+          evaluating Catalyst specifically.</p>
+        <div class="pubs">
+          <a class="pub" href="https://www.kennethmoreland.com/documents/InSituTensions.pdf" target="_blank" rel="noopener noreferrer">
+            <span class="t">The tensions of in situ visualization<span class="era old">Catalyst 1.0</span></span>
+            <span class="m">Moreland · IEEE Computer Graphics and Applications 36(2) · 2016 · the tradeoffs named honestly, by one of Catalyst's own authors. Describes the 1.0 API; read it alongside the 2021 redesign above.</span></a>
+          <a class="pub" href="https://doi.org/10.1177/1094342020935991" target="_blank" rel="noopener noreferrer">
+            <span class="t">A terminology for in situ visualization and analysis systems</span>
+            <span class="m">Childs et al. &middot; over fifty authors from across the field &middot; IJHPCA 34(6) &middot; 2020 &middot; a year of meetings to agree six axes, then fifteen systems classified against them. The place to start if you are comparing anything. <a href="https://cdux.cs.uoregon.edu/pubs/ChildsIJHPCA.pdf" target="_blank" rel="noopener noreferrer">open copy</a></span></a>
+          <a class="pub" href="https://doi.org/10.1111/cgf.12930" target="_blank" rel="noopener noreferrer">
+            <span class="t">In situ methods, infrastructures, and applications on high performance computing platforms<span class="era old">Catalyst 1.0</span></span>
+            <span class="m">Bauer et al. · Computer Graphics Forum 35(3) · 2016 · state-of-the-art report</span></a>
+          <a class="pub" href="https://doi.org/10.1145/2597652.2597668" target="_blank" rel="noopener noreferrer">
+            <span class="t">Evaluation of methods to integrate analysis into a large-scale shock physics code<span class="era old">Catalyst 1.0</span></span>
+            <span class="m">Oldfield, Moreland, Fabian, Rogers · ICS 2014 · the rigorous three-way comparison of in situ, in transit and post-processing, on CTH over 10.58M processor-hours. Measured on Cielo, retired 2016, so the I/O balance is a generation behind; the structural findings hold, the verdict on post-processing is of its time.</span></a>
+          <a class="pub" href="https://www.osti.gov/servlets/purl/1649280" target="_blank" rel="noopener noreferrer">
+            <span class="t">Opportunities for cost savings with in-transit visualization<span class="era other">measured on Ascent</span></span>
+            <span class="m">Kress et al. · ISC HPC 2020 · the cost model: in-line visualization cost grows 0.6× → 2.2× of solver cycle time with scale while transfer cost barely moves; volume rendering 4× cheaper at lower concurrency</span></a>
+          <a class="pub" href="https://doi.org/10.1177/10943420241286521" target="_blank" rel="noopener noreferrer">
+            <span class="t">The ECP ALPINE project: in situ and post hoc visualization infrastructure for exascale</span>
+            <span class="m">Ahrens et al. · Int. J. High Performance Computing Applications · 2024</span></a>
+        </div>
+      </div>
+
+      </div>
+      <details class="more">
+        <summary>The rest of the reading list <span class="n">I/O, integrations, and tools built on Catalyst</span></summary>
+        <div class="pubgroups">
+      <div class="pubgroup">
+        <h3>Coupled systems</h3>
+        <p>Instrumenting the coupler instead of the models.</p>
+        <div class="pubs">
+          <a class="pub" href="https://doi.org/10.5194/gmd-12-233-2019" target="_blank" rel="noopener noreferrer">
+            <span class="t">Toward modular in situ visualization in Earth system models: RegESM 1.1<span class="era old">Catalyst 1.0</span></span>
+            <span class="m">Turuncoglu &middot; NCAR &middot; Geoscientific Model Development 12:233-259, 2019 &middot; open access &middot; the first in situ integration in a fully coupled Earth system model, and an honest account of what the 1.0 API cost to do it</span></a>
+        </div>
+      </div>
+
+      <div class="pubgroup">
+        <h3>In situ is still an I/O problem</h3>
+        <p>Extracts are smaller, not free. An isosurface can land almost entirely on a
+          handful of ranks, and that imbalance defeats ordinary collective writes. Read
+          this before assuming reduction ends the conversation.</p>
+        <div class="pubs">
+          <a class="pub" href="https://doi.org/10.1145/2828612.2828620" target="_blank" rel="noopener noreferrer">
+            <span class="t">In situ analysis as a parallel I/O problem<span class="era old">Catalyst 1.0</span></span>
+            <span class="m">Ziegeler, Atkins, Bauer, Pettey &middot; DoD HPCMP and Kitware &middot; ISAV 2015 &middot; open access &middot; treats extract output as an I/O problem in its own right, and adds dynamic aggregation in ADIOS2 to handle it</span></a>
+        </div>
+      </div>
+
+      <div class="pubgroup">
+        <h3>Teams reporting their own integration</h3>
+        <p>Written by the people who did the work, not by us.</p>
+        <div class="pubs">
+          <a class="pub" href="https://doi.org/10.1007/s11227-021-03990-3" target="_blank" rel="noopener noreferrer">
+            <span class="t">In situ visualization of large-scale turbulence simulations in Nek5000 with ParaView Catalyst<span class="era old">Catalyst 1.0</span></span>
+            <span class="m">Atzori et al. · Journal of Supercomputing · 2021 · where the time goes in a compositing-heavy pipeline, and how to tune it</span></a>
+          <a class="pub" href="https://doi.org/10.1007/978-3-662-44900-4_2" target="_blank" rel="noopener noreferrer">
+            <span class="t">In-situ visualization in CFD using open-source tools: integration of Catalyst into Code_Saturne<span class="era old">Catalyst 1.0</span></span>
+            <span class="m">Ribés, Lorendeau, Fournier · EDF R&amp;D · 2015</span></a>
+          <a class="pub" href="https://doi.org/10.1007/978-3-030-48340-1_31" target="_blank" rel="noopener noreferrer">
+            <span class="t">In situ visualization of performance-related data in parallel CFD applications<span class="era old">Catalyst 1.0</span></span>
+            <span class="m">Score-P plugin routing profiling data through Catalyst · 2020</span></a>
+          <a class="pub" href="https://superfri.org/index.php/superfri/article/view/317" target="_blank" rel="noopener noreferrer">
+            <span class="t">Enhancing the in situ visualization of performance data in parallel CFD applications<span class="era old">Catalyst 1.0</span></span>
+            <span class="m">Supercomputing Frontiers and Innovations · 2020 · follow-on work</span></a>
+          <a class="pub" href="https://arxiv.org/abs/2110.15427" target="_blank" rel="noopener noreferrer">
+            <span class="t">High resolution calibration of cosmic string network evolution<span class="era old">Catalyst 1.0</span></span>
+            <span class="m">arXiv:2110.15427 · Catalyst v5.8.0 used to reduce output at 4096³</span></a>
+          <a class="pub" href="https://arxiv.org/abs/2208.07767" target="_blank" rel="noopener noreferrer">
+            <span class="t">Enhancing dynamic mode decomposition workflow with in-situ visualization and data compression<span class="era old">Catalyst 1.0</span></span>
+            <span class="m">arXiv:2208.07767 · adaptor written against the initialize / co-process / finalize cycle</span></a>
+        </div>
+      </div>
+
+      <div class="pubgroup">
+        <h3>Built on top of Catalyst</h3>
+        <p>Evidence that the API is stable enough for other people to build products
+          against.</p>
+        <div class="pubs">
+          <a class="pub" href="https://arxiv.org/abs/2406.18112" target="_blank" rel="noopener noreferrer">
+            <span class="t">In situ, in transit hybrid analysis with Catalyst-ADIOS2</span>
+            <span class="m">arXiv:2406.18112 · 2024 · relies explicitly on the ABI guarantee to swap implementations per cluster</span></a>
+          <a class="pub" href="https://doi.org/10.1007/978-3-032-07612-0_6" target="_blank" rel="noopener noreferrer">
+            <span class="t">Enabling modular in-situ workflows through CatalystMaestro and CatalystComposer</span>
+            <span class="m">2025</span></a>
+          <a class="pub" href="https://doi.org/10.1007/978-3-031-73716-9_33" target="_blank" rel="noopener noreferrer">
+            <span class="t">InsitUE: enabling hybrid in-situ visualizations through Unreal Engine and Catalyst</span>
+            <span class="m">2024</span></a>
+          <a class="pub" href="https://doi.org/10.1007/978-3-030-81627-8_10" target="_blank" rel="noopener noreferrer">
+            <span class="t">Leveraging production visualization tools in situ</span>
+            <span class="m">2021</span></a>
+          <a class="pub" href="https://doi.org/10.1007/978-3-031-40843-4_19" target="_blank" rel="noopener noreferrer">
+            <span class="t">Inshimtu: a lightweight in situ visualization shim</span>
+            <span class="m">KAUST · 2023 · in situ without modifying the solver</span></a>
+        </div>
+      </div>
+
+      <!-- PENDING / VERIFY BEFORE PUBLISHING.
+           In review, do not list publicly until accepted:
+             Yousef, Lee, Wittenburg, Randles, "A Lightweight, Modular In Transit Data
+             Framework for Interactive, Interpretable AI-Coupled Workflows", IPDPS '27
+             (submitted). Repo is public: github.com/aymanzyy/catalystml
+           Published but no DOI confirmed in this pass:
+             Ross, Wittenburg, Eisenhauer, Wetterer-Nelson, "A Data-Size Adaptive
+             Approach to I/O of Poorly Load Balanced In Situ Data Extracts", SC 25
+             Workshops, 2025. Direct successor to Ziegeler 2015, same problem ten years
+             on, Kitware authors. Get the DOI and add it beside the 2015 paper.
+             Yousef, Wetterer-Nelson, Han, Mateevitsi, Insley, Rizzi, Knowles, Papka,
+             Randles, "Instrumenting lightweight, modular ML training and inference in
+             parallel solvers", ICCS 2026, Springer, pp. 123-137
+             Pugmire, Ross, Thompson, Kress, Atkins, Klasky, Geveci, "Fides: a general
+             purpose data model library for streaming data", HPC 2021, pp. 495-507
+             Jourdain, O'Leary, Schroeder, "Trame", IEEE CG&A, March 2025
+             Mazen, Gombert, Givord, Gueunet, Catalyst-ADIOS2, HPC 2023, pp. 482-489
+             (arXiv version already linked above)
+           Strong candidates from the corpus, DOI not confirmed:
+             Fabian et al., The ParaView Coprocessing Library, LDAV 2011
+             Oldfield/Moreland/Fabian/Rogers, shock physics in situ/in-transit, ICS 2014
+             O'Leary et al., In-situ visualization for global hybrid simulations, XSEDE 2013
+             Woodring et al., MPAS-Ocean in situ eddy analysis (LDAV/ISAV)
+           Also: SPARC/Nalu/CTH items are OSTI reports, not papers - consider a separate
+           "lab reports" group rather than mixing them in here. -->
+    </div>
+        </details>
     </div>
   </div>
 </section>
