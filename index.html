@@ -523,23 +523,23 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
   answer one, it does not belong.
 
     1  top          What is my problem?              Most of the wait comes after the solve
-    2  running      Is it really that bad?           Watch the two numbers separate
+    2  running      Is it really that bad?           In situ writes only the results you ask for
        (router)     Which parts do I need?           A way through, after the hook
-    3  why          Is it MY problem?                You probably arrived here with one of these
-    4  architecture What is this thing?              You link a stub
-    5  firststep    What must I commit to?           You can start without touching your solver
-    6  product      What is in it for me? (ISV)      If you sell simulation software
-    7  workflows    What can it do?                  Instrument once
-    8  ai           Can I trust the newest part?     What a model can do depends on what it can reach
-    9  evidence     Is any of this real?             This is already running in production elsewhere
-   10  adopters     Who exactly?                     Here is who, and how you can check
-   11  guide        Does it fit MY case?             Which of those applies to you
-   12  alternatives How does it compare?             If you are comparing, compare on these
-   13  effort       What will it cost me?            What it actually costs to adopt
-   14  licence      Can I ship it?                   BSD 3-Clause
-   15  talk         Can I get help?                  Or have the people who wrote it do it
-   16  papers       Has it been scrutinised?         And a decade of peer-reviewed work
-   17  docs         Can I try it myself first?       Everything above is a published example
+    3  why          Is it MY problem?                Six ways the write-then-look workflow costs you
+    4  architecture What is this thing?              Catalyst connects through three calls
+    5  firststep    What must I commit to?           The first step runs on data you already have
+    6  product      What is in it for me? (ISV)      For software vendors, one adaptor
+    7  workflows    What can it do?                  One integration supports every workflow below
+    8  ai           Can I trust the newest part?     AI models can query and steer a live run
+    9  evidence     Is any of this real?             Catalyst runs in production today
+   10  adopters     Who exactly?                     The adopters, each linked to its evidence
+   11  guide        Does it fit MY case?             Seven questions decide whether it fits
+   12  alternatives How does it compare?             How Catalyst compares, on the field taxonomy
+   13  effort       What will it cost me?            What it costs to adopt
+   14  licence      Can I ship it?                   It is BSD 3-Clause
+   15  talk         Can I get help?                  Kitware can do the integration for you
+   16  papers       Has it been scrutinised?         A decade of peer-reviewed work on Catalyst
+   17  docs         Can I try it myself first?       Every pattern above is a published example
 
   The last two are reference. They sit after the argument rather than inside it,
   so a reader following the spine is not handed a bibliography halfway down.
@@ -683,7 +683,7 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
 
 <section class="counter" id="running">
   <div class="wrap">
-    <h2>Watch the two numbers separate.</h2>
+    <h2>In situ writes only the results you ask for.</h2>
     <p class="sub">A WarpX timestep on Frontier produces a 5.75&nbsp;billion element mesh,
       1.16&nbsp;TB. Post-hoc, all of it has to land on disk before you can look at any of
       it, and then be read back again to do the analysis. In situ, only the results you
@@ -711,7 +711,7 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
     <p class="readout">timestep <b id="ts">0</b> &nbsp;·&nbsp; reduction <b id="rx">n/a</b>
       &nbsp;·&nbsp; pipeline <b id="pl">render one frame + integrate a scalar</b></p>
     <p class="sub mono-note">
-      Where these numbers come from. The published WarpX timestep is a 5.75&nbsp;billion
+      The figures come from the published WarpX timestep, a 5.75&nbsp;billion
       element mesh at 1.16&nbsp;TB, so N&nbsp;&asymp;&nbsp;1,792 on a side. Twenty
       integrated quantities are 160&nbsp;bytes. A 1920&times;1080 frame is about
       2&nbsp;MB whatever the mesh size. A slice is N&sup2;&nbsp;=&nbsp;3.2&nbsp;million
@@ -756,7 +756,7 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
 <section class="row2" id="why">
   <div class="wrap">
     <div class="claim">
-      <h2>You probably arrived here with one of these.</h2>
+      <h2>Six ways the write-then-look workflow costs you.</h2>
       <p>People go looking for in situ analysis when the
         write-then-look workflow starts costing them something they can name.</p>
       <p class="quiet">They are all the same problem: the
@@ -815,7 +815,7 @@ caption{caption-side:bottom;text-align:left;padding-top:.85rem;color:var(--muted
 <section class="row2" id="architecture">
   <div class="wrap">
     <div class="claim">
-      <h2>You link a stub. ParaView loads at runtime.</h2>
+      <h2>Catalyst connects through three calls, and ParaView never enters your build.</h2>
       <p>The Catalyst API is an ABI-stable C interface. Your solver links
         <code>libcatalyst</code>, a small BSD-licensed library with one header. The
         ParaView implementation is discovered at run time.</p>
@@ -967,7 +967,7 @@ conduit_node_set_path_external_float64_ptr(
 <section class="row2" id="firststep">
   <div class="wrap">
     <div class="claim">
-      <h2>You can start without touching your solver.</h2>
+      <h2>The first step runs on data you already have.</h2>
       <p>This is the part most people do not know about. A file-based adaptor runs the
         same pipelines against data already on disk, so an existing archive can be analysed
         with the pipeline you were going to write anyway. No instrumentation, no code
@@ -1007,10 +1007,10 @@ conduit_node_set_path_external_float64_ptr(
 <section class="row2" id="product">
   <div class="wrap">
     <div class="claim">
-      <h2>If you sell simulation software, the argument is different.</h2>
-      <p>Your problem isn't the filesystem. It's that post-processing (plots, exports,
+      <h2>For software vendors, one adaptor lets customers write their own analysis.</h2>
+      <p>Post-processing (plots, exports,
         derived quantities, comparison tooling, rendering) is a permanent line item on
-        your roadmap and it never stops asking for headcount.</p>
+        your roadmap, and it keeps needing headcount.</p>
       <p class="quiet">Catalyst is BSD, so it ships inside your product with no royalty
         and no copyleft. See the licence table below.</p>
     </div>
@@ -1053,7 +1053,7 @@ conduit_node_set_path_external_float64_ptr(
 <section class="wide" id="workflows">
   <div class="wrap">
     <div class="lead">
-      <h2>Instrument once. All of this follows.</h2>
+      <h2>One integration supports every workflow below.</h2>
       <p>These are not separate products or separate integrations. Each one is a Python
         pipeline against the same three calls, chosen at run time. The products span
         the same range: rendered frames, integrated engineering quantities, geometric
@@ -1284,7 +1284,7 @@ conduit_node_set_path_external_float64_ptr(
 <section class="row2" id="ai">
   <div class="wrap">
     <div class="claim">
-      <h2>What a model can do depends on what it can reach.</h2>
+      <h2>AI models can query and steer a live run through the same calls.</h2>
       <p>Point a language model at a finished run and it can read the files somebody
         already decided to write, at the cadence somebody already chose. It can summarise
         them. It cannot ask for the extract nobody planned, cannot see the timestep that
@@ -1375,7 +1375,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
 <section class="kpiband" id="evidence">
   <div class="wrap">
     <div class="kpihead">
-      <h2>This is already running in production elsewhere.</h2>
+      <h2>Catalyst runs in production today.</h2>
       <p>Every capability above is running in production, at scale, in codes you have
         heard of, on machines you can name. <b>Every number and every name on this page
         links to its source</b>: a paper, a lab report, or the adaptor's own code. Where
@@ -1402,7 +1402,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
 <section class="wide" id="adopters">
   <div class="wrap">
     <div class="lead">
-      <h2>Here is who, and how you can check.</h2>
+      <h2>The adopters, each linked to its evidence.</h2>
       <p>Across CFD, combustion, shock physics, plasma, climate, biomedical,
         rotorcraft and astrophysics, in national labs, national weather services,
         universities and commercial products.</p>
@@ -1531,7 +1531,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
 <section class="wide" id="guide">
   <div class="wrap">
     <div class="lead">
-      <h2>Which of those applies to you.</h2>
+      <h2>Seven questions decide whether it fits your case.</h2>
       <p>The honest answer depends on your pipeline, and nobody can give it to you
         without knowing it. But the published cost studies do narrow it down, and the
         reasoning is worth having before you talk to anyone, including us.</p>
@@ -1683,7 +1683,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
 <section class="wide" id="alternatives">
   <div class="wrap">
     <div class="lead">
-      <h2>Compare on the field&rsquo;s own axes, not ours.</h2>
+      <h2>How Catalyst compares, on the field&rsquo;s published taxonomy.</h2>
       <p>In 2020 more than fifty people from across this field spent a year agreeing on
         how to describe in situ systems, because the words had stopped meaning the same
         thing to everyone. The result is
@@ -1760,7 +1760,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
 <section class="row2" id="effort">
   <div class="wrap">
     <div class="claim">
-      <h2>What it actually costs to adopt.</h2>
+      <h2>What it costs to adopt.</h2>
       <p>Effort scales with mesh complexity, not with how much analysis you want.
         A structured-mesh adaptor is a few hundred lines. Unstructured with AMR is more.</p>
       <p>Once the adaptor exists, every pipeline your users will ever want is a Python
@@ -1860,7 +1860,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
 <section class="row2" id="licence">
   <div class="wrap">
     <div class="claim">
-      <h2>BSD 3-Clause. Ship it in your product.</h2>
+      <h2>It is BSD 3-Clause, so it can ship inside your product.</h2>
       <p>Catalyst and ParaView are both BSD 3-Clause. Redistribute inside a commercial
         product, royalty free, with no copyleft obligation and no per-seat licence.</p>
     </div>
@@ -1883,7 +1883,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
 <section class="row2" id="talk">
   <div class="wrap">
     <div class="claim">
-      <h2>Or have the people who wrote it do the integration.</h2>
+      <h2>Kitware can do the integration for you.</h2>
       <p>Kitware develops ParaView and Catalyst, and has maintained them for a quarter
         century.</p>
       <p>The library is the easy part. It is free, it is BSD, and plenty of teams
@@ -1929,7 +1929,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
 <section class="wide" id="papers">
   <div class="wrap">
     <div class="lead">
-      <h2>And a decade of peer-reviewed work behind it.</h2>
+      <h2>A decade of peer-reviewed work on Catalyst.</h2>
       <p>The papers below are the ones to read before committing engineering time. Every
         entry links to its DOI or an open-access copy.</p>
       <p>Much of this predates the current API. Catalyst&nbsp;2
@@ -2112,7 +2112,7 @@ engineer  <span class="fn">&rarr;</span>  LLM plans        <span class="c">(cons
 <section class="row2" id="docs">
   <div class="wrap">
     <div class="claim">
-      <h2>Everything above is a published example.</h2>
+      <h2>Every pattern above is a published example you can run.</h2>
       <p>They all live in the repository linked throughout this page. Clone it and
         run the integration patterns described here: sync and async execution, GPU device pointers,
         closed-loop steering, dynamic pipelines, high-order and discontinuous elements,
